@@ -2,7 +2,6 @@ package live.easytrain.application.entity;
 
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -29,7 +28,7 @@ public class User {
     private List<Role> roles;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Ticket> tickets = new ArrayList<>();
+    private List<Ticket> tickets;
 
     public List<Ticket> getTickets() {
         return tickets;

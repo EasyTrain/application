@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -14,34 +13,41 @@ public class Booking {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
-
-    private String from;
-    private String to;
+    //@Column(name = "\"from\"")
+    @Column(name = "from_location")
+    private String fromLocation;
+    @Column(name = "to_location")
+    private String toLocation;
     private LocalDate date;
     private LocalTime time;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Connection> connections = new ArrayList<>();
+    @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL)
+    private List<Connection> connections;
+
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "ticket_id", referencedColumnName = "id")
+    private Ticket ticket;
 
     //    Constructors
     public Booking() {
     }
 
     //    Getters and Setters
-    public String getFrom() {
-        return from;
+    public String getFromLocation() {
+        return fromLocation;
     }
 
-    public void setFrom(String from) {
-        this.from = from;
+    public void setFromLocation(String fromLocation) {
+        this.fromLocation = fromLocation;
     }
 
-    public String getTo() {
-        return to;
+    public String getToLocation() {
+        return toLocation;
     }
 
-    public void setTo(String to) {
-        this.to = to;
+    public void setToLocation(String toLocation) {
+        this.toLocation = toLocation;
     }
 
     public LocalDate getDate() {

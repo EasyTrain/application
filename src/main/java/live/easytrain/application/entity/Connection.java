@@ -17,6 +17,10 @@ public class Connection {
     private LocalDate date;
     private LocalTime time;
 
+    @ManyToOne
+    @JoinColumn(name = "booking_id", nullable = false)
+    private Booking booking;
+
     //    Constructors
     public Connection() {
     }
@@ -52,6 +56,14 @@ public class Connection {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Booking getBooking() {
+        return booking;
+    }
+
+    public void setBooking(Booking booking) {
+        this.booking = booking;
     }
 
 }

@@ -3,7 +3,7 @@ package live.easytrain.application.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "ticket")
+@Table(name = "tickets")
 public class Ticket {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -13,14 +13,13 @@ public class Ticket {
     private String journey;
     private double price;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "booking_id")
+    @OneToOne(mappedBy = "ticket")
     private Booking booking;
 
     private double discount;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
     private Boolean roundTrip;
 
