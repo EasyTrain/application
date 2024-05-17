@@ -1,7 +1,10 @@
 
 package live.easytrain.application.external.entity;
 
-import jakarta.xml.bind.annotation.*;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlAttribute;
+import jakarta.xml.bind.annotation.XmlType;
 
 import java.util.List;
 
@@ -19,6 +22,7 @@ import java.util.List;
  *         &lt;element name="s" type="{}sType" maxOccurs="unbounded" minOccurs="0"/&gt;
  *       &lt;/sequence&gt;
  *       &lt;attribute name="station" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
+ *       &lt;attribute name="eva" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
@@ -30,12 +34,13 @@ import java.util.List;
 @XmlType(name = "timetableType", propOrder = {
     "s"
 })
-@XmlRootElement(name="timetable")
 public class TimetableType {
 
     protected List<SType> s;
     @XmlAttribute(name = "station")
     protected String station;
+    @XmlAttribute(name = "eva")
+    protected String eva;
 
     /**
      * Gets the value of the s property.
@@ -90,11 +95,36 @@ public class TimetableType {
         this.station = value;
     }
 
+    /**
+     * Gets the value of the eva property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getEva() {
+        return eva;
+    }
+
+    /**
+     * Sets the value of the eva property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setEva(String value) {
+        this.eva = value;
+    }
+
     @Override
     public String toString() {
         return "TimetableType{" +
                 "s=" + s +
                 ", station='" + station + '\'' +
+                ", eva='" + eva + '\'' +
                 '}';
     }
 }

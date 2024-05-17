@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="timetable" type="timetableType"/>
+  <xs:complexType name="mType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="id" use="optional"/>
+        <xs:attribute type="xs:string" name="t" use="optional"/>
+        <xs:attribute type="xs:string" name="c" use="optional"/>
+        <xs:attribute type="xs:string" name="ts" use="optional"/>
+        <xs:attribute type="xs:string" name="ts-tts" use="optional"/>
+        <xs:attribute type="xs:string" name="from" use="optional"/>
+        <xs:attribute type="xs:string" name="to" use="optional"/>
+        <xs:attribute type="xs:string" name="cat" use="optional"/>
+        <xs:attribute type="xs:string" name="pr" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="arType" mixed="true">
+    <xs:sequence>
+      <xs:element type="mType" name="m" maxOccurs="unbounded" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute type="xs:string" name="ct" use="optional"/>
+    <xs:attribute type="xs:string" name="l" use="optional"/>
+    <xs:attribute type="xs:string" name="ppth" use="optional"/>
+    <xs:attribute type="xs:string" name="pp" use="optional"/>
+    <xs:attribute type="xs:string" name="pt" use="optional"/>
+    <xs:attribute type="xs:string" name="cp" use="optional"/>
+    <xs:attribute type="xs:string" name="cpth" use="optional"/>
+    <xs:attribute type="xs:string" name="cs" use="optional"/>
+    <xs:attribute type="xs:string" name="clt" use="optional"/>
+  </xs:complexType>
+  <xs:complexType name="dpType" mixed="true">
+    <xs:sequence>
+      <xs:element type="mType" name="m" maxOccurs="unbounded" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute type="xs:string" name="ct" use="optional"/>
+    <xs:attribute type="xs:string" name="l" use="optional"/>
+    <xs:attribute type="xs:string" name="ppth" use="optional"/>
+    <xs:attribute type="xs:string" name="pp" use="optional"/>
+    <xs:attribute type="xs:string" name="pt" use="optional"/>
+    <xs:attribute type="xs:string" name="hi" use="optional"/>
+    <xs:attribute type="xs:string" name="cp" use="optional"/>
+    <xs:attribute type="xs:string" name="cpth" use="optional"/>
+    <xs:attribute type="xs:string" name="cs" use="optional"/>
+    <xs:attribute type="xs:string" name="clt" use="optional"/>
+  </xs:complexType>
+  <xs:complexType name="sType">
+    <xs:sequence>
+      <xs:element type="mType" name="m" maxOccurs="unbounded" minOccurs="0"/>
+      <xs:element type="arType" name="ar" minOccurs="0"/>
+      <xs:element type="dpType" name="dp" minOccurs="0"/>
+      <xs:element type="tlType" name="tl" minOccurs="0"/>
+      <xs:element type="refType" name="ref" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute type="xs:string" name="id" use="optional"/>
+    <xs:attribute type="xs:string" name="eva" use="optional"/>
+  </xs:complexType>
+  <xs:complexType name="tlType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="f" use="optional"/>
+        <xs:attribute type="xs:string" name="t" use="optional"/>
+        <xs:attribute type="xs:string" name="o" use="optional"/>
+        <xs:attribute type="xs:string" name="c" use="optional"/>
+        <xs:attribute type="xs:string" name="n" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="refType">
+    <xs:sequence>
+      <xs:element type="tlType" name="tl"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="timetableType">
+    <xs:sequence>
+      <xs:element type="sType" name="s" maxOccurs="unbounded" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute type="xs:string" name="station"/>
+    <xs:attribute type="xs:string" name="eva"/>
+  </xs:complexType>
+</xs:schema>

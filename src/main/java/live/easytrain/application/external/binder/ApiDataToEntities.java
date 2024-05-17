@@ -7,7 +7,6 @@ import live.easytrain.application.external.entity.TimetableType;
 import live.easytrain.application.external.entity.TlType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +15,7 @@ import java.util.List;
 public class ApiDataToEntities {
 
     private XmlResponse xmlResponse;
+    private static final String ICE = "ICE";
 
     @Autowired
     public ApiDataToEntities(XmlResponse xmlResponse) {
@@ -45,45 +45,56 @@ public class ApiDataToEntities {
 
         for (SType sType : timetableType.getS()) {
             TlType tlType = sType.getTl();
-            if (tlType != null && tlType.getC().equals("ICE")) {
+            if (tlType != null && tlType.getC().equals(ICE)) {
                 sTypesICE.add(sType);
             }
         }
 
         if (sTypesICE.isEmpty()) {
             throw new RuntimeException("No ICE found on trajectory");
-        } else{
-            for(SType sTypeIce : sTypesICE){
+        } else {
+            for (SType sTypeIce : sTypesICE) {
 
-                String startingStation ="";
+                String startingStation = "";
                 String endingStation = "";
+                String delay = "On time";
+
+                String planedArrivalTime = "";
+                String planedDepartureTime = "";
 
                 // The train start stations are on <ar> tag and the destination on <dp> tag
-                // The stations are separated by | and regex doesn't like this special char
-                if(sTypeIce.getAr() == null) {
+                // The stations are separated by "|" and regex doesn't like this special char
+                if (sTypeIce.getAr() == null) {
                     startingStation = String.valueOf(stationNumber);
                 } else {
                     String arStations = sTypeIce.getAr().getPpth().replace("|", "@");
                     String[] arStartingStation = arStations.split("@");
                     startingStation = arStartingStation[0];
+
+                    planedArrivalTime = sTypeIce.getAr().getPt();
                 }
 
-                if (sTypeIce.getDp() == null){
+                if (sTypeIce.getDp() == null) {
                     endingStation = String.valueOf(stationNumber);
                 } else {
                     String dpStations = sTypeIce.getDp().getPpth().replace("|", "@");
-                    String [] dpEndStation   = dpStations.split("@");
-                    endingStation = dpEndStation[dpEndStation.length-1];
+                    String[] dpEndStation = dpStations.split("@");
+                    endingStation = dpEndStation[dpEndStation.length - 1];
+
+                    planedDepartureTime = sTypeIce.getDp().getPt();
                 }
 
-                String delay = "Störung"; // map the delay field
-                String estimatedTime = sTypeIce.getAr().getPt();
-                String arrivalTime = sTypeIce.getAr().getPt(); // To confirm we can request rchg/{evaNo}
-                String departureTime = sTypeIce.getDp().getPt();
+                if (!sTypeIce.getM().isEmpty()) {
+                    delay = "Delayed";
+                }
+
+                String estimatedTime = sTypeIce.getAr().getCt();
+                String arrivalTime = sTypeIce.getAr().getCt(); // To confirm we can request rchg/{evaNo}
+                String departureTime = sTypeIce.getDp().getCt();
                 String scheduledId = sTypeIce.getId();
 
-                timetables.add(new Timetable(startingStation, endingStation, delay, estimatedTime,arrivalTime,
-                        departureTime ,scheduledId));
+                timetables.add(new Timetable(startingStation, endingStation, delay, estimatedTime, arrivalTime,
+                        departureTime, scheduledId));
             }
         }
 

@@ -1,8 +1,11 @@
 package live.easytrain.application.config;
 
 import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBElement;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
+import live.easytrain.application.external.entity.ArType;
+import live.easytrain.application.external.entity.DpType;
 import live.easytrain.application.external.entity.TimetableType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -52,9 +55,13 @@ public class XmlResponse {
 
     private TimetableType parseXmlResponse(String xmlResponse) {
         try {
-            JAXBContext jaxbContext = JAXBContext.newInstance(TimetableType.class);
+            JAXBContext jaxbContext = JAXBContext.newInstance(TimetableType.class, ArType.class, DpType.class);
             Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-            return (TimetableType) unmarshaller.unmarshal(new StringReader(xmlResponse));
+
+            JAXBElement<TimetableType> typeJAXBElement = (JAXBElement<TimetableType>) unmarshaller.unmarshal( new StringReader(xmlResponse));
+
+            return typeJAXBElement.getValue();
+
         } catch (JAXBException e) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
         }
