@@ -1,26 +1,19 @@
 package live.easytrain.application.security;
 
+import live.easytrain.application.service.JpaUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-import javax.sql.DataSource;
-
 @Configuration
 public class SecurityConfig {
+    private final JpaUserDetailsService jpaUserDetailsService;
 
-    private DataSource dataSource;
-
-    public void configureGlobal(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
-        authenticationManagerBuilder.jdbcAuthentication()
-                .dataSource(dataSource)
-                .usersByUsernameQuery("SELECT name, password, true FROM users WHERE name=?")
-                .authoritiesByUsernameQuery("SELECT name from roles WHERE name=?")
-                .passwordEncoder(passwordEncoder());
+    public SecurityConfig(JpaUserDetailsService jpaUserDetailsService) {
+        this.jpaUserDetailsService = jpaUserDetailsService;
     }
 
     @Bean
@@ -34,6 +27,8 @@ public class SecurityConfig {
         httpSecurity.authorizeHttpRequests(
                 customizer -> customizer.requestMatchers("/").authenticated()
         );
+
+        httpSecurity.userDetailsService(jpaUserDetailsService);
 
         return httpSecurity.build();
     }
