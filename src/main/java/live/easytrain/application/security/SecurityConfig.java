@@ -1,19 +1,22 @@
 package live.easytrain.application.security;
 
-import live.easytrain.application.service.JpaUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 public class SecurityConfig {
-    private final JpaUserDetailsService jpaUserDetailsService;
+    private UserDetailsService userDetailsService;
 
-    public SecurityConfig(JpaUserDetailsService jpaUserDetailsService) {
-        this.jpaUserDetailsService = jpaUserDetailsService;
+    public void configurationGlobal(AuthenticationManagerBuilder auth) throws Exception {
+
+        auth.userDetailsService(userDetailsService)
+                .passwordEncoder(passwordEncoder());
     }
 
     @Bean
@@ -28,7 +31,7 @@ public class SecurityConfig {
                 customizer -> customizer.requestMatchers("/").authenticated()
         );
 
-        httpSecurity.userDetailsService(jpaUserDetailsService);
+        httpSecurity.userDetailsService(userDetailsService);
 
         return httpSecurity.build();
     }
