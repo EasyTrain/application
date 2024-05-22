@@ -1,5 +1,6 @@
 package live.easytrain.application.service;
 
+import live.easytrain.application.entity.SecurityUser;
 import live.easytrain.application.entity.User;
 import live.easytrain.application.repository.UserRepository;
 import org.springframework.security.authentication.DisabledException;
@@ -28,6 +29,12 @@ public class JpaUserDetailsService implements UserDetailsService {
         } else if (user.isEmpty()) {
             throw new DisabledException("User not verified, please verify your email before login.");
         }
-        return new org.springframework.security.core.userdetails.User(user.get().getEmail(), user.get().getPassword(), getAuthorities(user.get().getRoles()));
+
+        SecurityUser securityUser = new SecurityUser(user.get());
+
+        return new org.springframework.security.core.userdetails.User(
+                securityUser.getUser().getEmail(),
+                securityUser.getUser().getPassword(),
+                securityUser.getAuthorities());
     }
 }
