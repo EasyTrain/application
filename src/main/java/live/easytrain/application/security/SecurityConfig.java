@@ -31,8 +31,6 @@ public class SecurityConfig {
                 customizer -> customizer.requestMatchers("/").authenticated()
         );
 
-        httpSecurity.userDetailsService(userDetailsService);
-
         return httpSecurity.build();
     }
 }

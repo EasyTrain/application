@@ -16,13 +16,13 @@ public class JpaUserDetailsService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
-    private JpaUserDetailsService(UserRepository userRepository) {
+    public JpaUserDetailsService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Optional<User> user = userRepository.findByUserEmail(email);
+        Optional<User> user = userRepository.findByEmail(email);
 
         if (user == null) {
             throw new UsernameNotFoundException("Invalid username or password.");
