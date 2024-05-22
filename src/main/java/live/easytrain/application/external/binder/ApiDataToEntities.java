@@ -24,8 +24,8 @@ public class ApiDataToEntities {
 
     /*
      * stationNumber = evaNo, so it is mandatory.
-     * recentChanges = true -> for Recent changes Timetables API requests and
-     * recentChanges = false -> for other requests
+     * recentChanges (rchg/{evaNo) = true -> for Recent changes Timetables API requests and
+     * recentChanges (rchg/{evaNo) = false -> for other requests
      * */
     public List<Timetable> apiDataToTimetable(Integer stationNumber, String date, String hour, boolean recentChanges) {
 
@@ -40,6 +40,7 @@ public class ApiDataToEntities {
         } else if (date.isEmpty() && hour.isEmpty()) {
             timetableType = xmlResponse.fetchXmlResponse("rchg" + "/" + stationNumber);
         } else {
+            //plan/{evaNo}/{date}/{hour}
             timetableType = xmlResponse.fetchXmlResponse("plan" + "/" + stationNumber + "/" + date + "/" + hour);
         }
 
@@ -59,8 +60,10 @@ public class ApiDataToEntities {
                 String endingStation = "";
                 String delay = "On time";
 
+                //Fields to retrieve
                 String planedArrivalTime = "";
                 String planedDepartureTime = "";
+
 
                 // The train start stations are on <ar> tag and the destination on <dp> tag
                 // The stations are separated by "|" and regex doesn't like this special char
@@ -93,6 +96,9 @@ public class ApiDataToEntities {
                 String departureTime = sTypeIce.getDp().getCt();
                 String scheduledId = sTypeIce.getId();
 
+                String trainNumber = sTypeIce.getTl().getN();
+
+                // Journey duration
                 timetables.add(new Timetable(startingStation, endingStation, delay, estimatedTime, arrivalTime,
                         departureTime, scheduledId));
             }

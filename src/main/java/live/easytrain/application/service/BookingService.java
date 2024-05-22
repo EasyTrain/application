@@ -3,6 +3,7 @@ package live.easytrain.application.service;
 import jakarta.transaction.Transactional;
 import live.easytrain.application.entity.Booking;
 import live.easytrain.application.entity.Connection;
+import live.easytrain.application.exceptions.BookingNotFoundException;
 import live.easytrain.application.repository.BookingRepo;
 import live.easytrain.application.repository.ConnectionRepo;
 import live.easytrain.application.repository.TicketRepo;
@@ -58,7 +59,7 @@ public class BookingService implements BookingServiceInterface {
     public Booking getBookingWithConnections(Long bookingId) {
 
             return bookingRepo.findById(bookingId)
-                    .orElseThrow(() -> new RuntimeException("Booking not found!"));
+                    .orElseThrow(() -> new BookingNotFoundException("Booking not found!"));
     }
 
     // CRUD operations: Create Booking
@@ -88,7 +89,7 @@ public class BookingService implements BookingServiceInterface {
             bookingRepo.delete(booking.get());
             message = "Booking with id " + id + " deleted successfully!";
         } else {
-            throw new RuntimeException("Booking not found!");
+            throw new BookingNotFoundException("Booking not found!");
         }
 
         return message;

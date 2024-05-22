@@ -6,6 +6,7 @@ import live.easytrain.application.config.XmlResponse;
 
 import live.easytrain.application.entity.Station;
 import live.easytrain.application.entity.Timetable;
+import live.easytrain.application.exceptions.EvaNumberNotFoundException;
 import live.easytrain.application.external.binder.ApiDataToEntities;
 import live.easytrain.application.repository.StationRepo;
 import live.easytrain.application.repository.TimetableRepo;
@@ -63,7 +64,7 @@ public class TimetableStationService implements TimetableServiceInterface {
 
         Station station = stationRepo.findByEvaNumber(evaNumber);
         if (station == null) {
-            throw new RuntimeException("Station not found for the given Eva number");
+            throw new EvaNumberNotFoundException("Station not found for the given Eva number");
         }
 
         List<Timetable> timetables = apiDataToEntities.apiDataToTimetable(Integer.parseInt(evaNumber), "", "", false);

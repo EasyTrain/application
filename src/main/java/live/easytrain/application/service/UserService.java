@@ -2,6 +2,7 @@ package live.easytrain.application.service;
 
 import jakarta.transaction.Transactional;
 import live.easytrain.application.entity.User;
+import live.easytrain.application.exceptions.UserNotFoundException;
 import live.easytrain.application.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,7 +43,7 @@ public class UserService implements UserServiceInterface {
             userRepository.delete(user.get());
             message = "User with " + id + " deleted successfully!";
         } else {
-            throw new RuntimeException("User not found!");
+            throw new UserNotFoundException("User not found!");
         }
         return message;
     }

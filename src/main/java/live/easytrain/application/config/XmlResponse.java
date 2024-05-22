@@ -100,7 +100,10 @@ public class XmlResponse {
             }
 
         } catch (IOException e) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
+            // prd
+//            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
+            // dev
+            Logger.getLogger(this.getClass().getName()).log(Level.FINE, e.getMessage(), e);
         }
 
         return parseXmlResponse(xml);
