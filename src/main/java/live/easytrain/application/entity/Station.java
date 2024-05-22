@@ -19,14 +19,6 @@ public class Station {
     @OneToMany(mappedBy = "station", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Timetable> timetables = new ArrayList<>();
 
-    public List<Timetable> getTimetables() {
-        return timetables;
-    }
-
-    public void setTimetables(List<Timetable> timetables) {
-        this.timetables = timetables;
-    }
-
     //    Constructors
     public Station() {
     }
@@ -62,5 +54,12 @@ public class Station {
 
     public void setEvaNumber(String evaNumber) {
         this.evaNumber = evaNumber;
+    }
+    public List<Timetable> getTimetables() {
+        return timetables;
+    }
+
+    public void setTimetables(List<Timetable> timetables) {
+        this.timetables = timetables;
     }
 }

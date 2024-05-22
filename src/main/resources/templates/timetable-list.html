@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Timetable List</title>
+</head>
+<body>
+<h2>Retrieved Timetables</h2>
+<table>
+    <thead>
+    <tr>
+        <th>Starting Point</th>
+        <th>Destination</th>
+        <th>Delay</th>
+        <th>Estimated Trip Time</th>
+        <th>Arrival Time</th>
+        <th>Departure Time</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="timetable : ${timetables}">
+        <td th:text="${timetable.startingPoint}"></td>
+        <td th:text="${timetable.destination}"></td>
+        <td th:text="${timetable.delay}"></td>
+        <td th:text="${timetable.estimatedTripTime}"></td>
+        <td th:text="${timetable.arrivalTime}"></td>
+        <td th:text="${timetable.departureTime}"></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

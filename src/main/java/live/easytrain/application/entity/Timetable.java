@@ -37,6 +37,10 @@ public class Timetable {
         this.scheduleId = scheduleId;
     }
 
+    public Timetable() {
+
+    }
+
     public Station getStation() {
         return station;
     }

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Retrieve Timetables</title>
+</head>
+<body>
+<h2>Retrieve Timetables</h2>
+<form th:action="@{/timetables/retrieve}" th:object="${timetableRequest}" method="post">
+  <label for="evaNumber">EVA Number:</label>
+  <input type="text" id="evaNumber" name="evaNumber" required>
+  <button type="submit">Retrieve</button>
+</form>
+</body>
+</html>
