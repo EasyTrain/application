@@ -48,6 +48,7 @@ public class User {
 
     private Boolean enabled;
 
+    @Column(name = "verification_code", length = 64)
     private String verificationCode;
 
     @NotNull(message = "Please enter the street name.")
