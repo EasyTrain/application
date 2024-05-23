@@ -28,8 +28,13 @@ public class SecurityConfig {
     SecurityFilterChain configure(HttpSecurity httpSecurity) throws Exception {
 
         httpSecurity.authorizeHttpRequests(
-                customizer -> customizer.anyRequest().permitAll()
-        );
+                        customizer -> customizer.anyRequest().permitAll()
+                )
+                .formLogin(login ->
+                        login.usernameParameter("email")
+                                .defaultSuccessUrl("/")
+                                .permitAll()
+                );
 
         return httpSecurity.build();
     }
