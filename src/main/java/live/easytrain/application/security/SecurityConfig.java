@@ -35,6 +35,8 @@ public class SecurityConfig {
                         .loginProcessingUrl("/authenticate_user")
                         .permitAll()
                         .usernameParameter("email")
+                )
+                .logout(logout -> logout.permitAll()
                 );
 
         return httpSecurity.build();

@@ -16,6 +16,10 @@
     <em>Please enter a valid username and password!</em>
 </div>
 
+<div th:if="${param.logout}">
+    You have been logged out.
+</div>
+
 <form action="#" th:action="@{/authenticate_user}" method="POST">
     <div>
         <input type="text" name="email" placeholder="Email">
