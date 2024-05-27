@@ -30,10 +30,11 @@ public class SecurityConfig {
         httpSecurity.authorizeHttpRequests(
                         customizer -> customizer.anyRequest().permitAll()
                 )
-                .formLogin(login ->
-                        login.usernameParameter("email")
-                                .defaultSuccessUrl("/")
-                                .permitAll()
+                .formLogin(login -> login
+                        .loginPage("/login")
+                        .loginProcessingUrl("/authenticate_user")
+                        .permitAll()
+                        .usernameParameter("email")
                 );
 
         return httpSecurity.build();
