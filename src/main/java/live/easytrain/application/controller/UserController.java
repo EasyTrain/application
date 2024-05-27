@@ -55,4 +55,10 @@ public class UserController {
         String siteURL = request.getRequestURL().toString();
         return siteURL.replace(request.getServletPath(), "");
     }
+
+    @GetMapping("/login")
+    public String displayLogin() {
+        return "login";
+    }
+
 }
