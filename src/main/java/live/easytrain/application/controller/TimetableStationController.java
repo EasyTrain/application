@@ -1,8 +1,8 @@
 package live.easytrain.application.controller;
 
-
+import live.easytrain.application.entity.Station;
 import live.easytrain.application.entity.Timetable;
-import live.easytrain.application.service.TimetableStationService;
+import live.easytrain.application.service.TimetableStationServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,48 +10,39 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
 @Controller
 @RequestMapping("/timetables")
 public class TimetableStationController {
-
-    private final TimetableStationService timetableService;
-
+    private TimetableStationServiceInterface timetableStationService;
     @Autowired
-    public TimetableStationController(TimetableStationService timetableService) {
-        this.timetableService = timetableService;
+    public TimetableStationController(TimetableStationServiceInterface timetableStationService) {
+        this.timetableStationService = timetableStationService;
     }
-
-    @GetMapping("/retrieve") // showing the retrieve form
-    public String showRetrieveForm(Model model) {
-        return "timetable";
-    }
-
-    @PostMapping("/retrieve")
-    public String retrieveTimetables(@RequestParam("evaNumber") String evaNumber, Model model) {
-        List<Timetable> retrievedTimetables = timetableService.retrieveTimetables(evaNumber);
-        model.addAttribute("timetables", retrievedTimetables);
-        return "timetable-list";
-    }
-
-    @PostMapping("/{evaNumber}")
-    public String saveTimetables(@PathVariable String evaNumber, Model model) {
+    @PostMapping("/save")
+    public @ResponseBody String saveTimetablesData(@RequestParam String stationName,
+                                                   @RequestParam(required = false) String date,
+                                                   @RequestParam(required = false) String hour,
+                                                   @RequestParam(required = false, defaultValue = "false") boolean recentChanges) {
         try {
-            List<Timetable> savedTimetables = timetableService.saveAllTimetables(evaNumber);
-            model.addAttribute("timetables", savedTimetables);
-            return "timetable-list";
-        } catch (IllegalArgumentException e) {
-            model.addAttribute("error", e.getMessage());
-            return "error";
-        } catch (RuntimeException e) {
-            model.addAttribute("error", e.getMessage());
-            return "error";
+            System.out.println("Hello");
+            timetableStationService.saveTimetableData(stationName, date, hour, recentChanges);
+            return "Timetables saved successfully.";
+        } catch (Exception e) {
+            return "Error saving timetables: " + e.getMessage();
         }
     }
-
-    @GetMapping("/list")
-    public String getAllTimetables(Model model) {
-        List<Timetable> timetables = timetableService.getAllTimetables();
-        model.addAttribute("timetables", timetables);
-        return "timetable-list";
+    @GetMapping("/add")
+    public String showTimetableForm(Model model) {
+        model.addAttribute("timetable", new Timetable());
+        return "timetable-form";
     }
+
+    @PostMapping("/search")
+    public String searchStations(@RequestParam String stationName, Model model) {
+        List<Station> stations = timetableStationService.findAllEvaNumberByStationName(stationName);
+        model.addAttribute("stations", stations);
+        return "station-list";
+    }
+
 }

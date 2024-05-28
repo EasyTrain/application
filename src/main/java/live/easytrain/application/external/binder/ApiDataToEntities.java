@@ -99,12 +99,19 @@ public class ApiDataToEntities {
                 String trainNumber = sTypeIce.getTl().getN();
 
                 // Journey duration
-                timetables.add(new Timetable(startingStation, endingStation, delay, estimatedTime, arrivalTime,
-                        departureTime, scheduledId));
+                timetables.add(new Timetable(startingStation, endingStation, delay, timeBuilder(estimatedTime),timeBuilder(arrivalTime),
+                        timeBuilder(departureTime), scheduledId));
             }
         }
 
         return timetables;
+    }
+
+    private String timeBuilder(String strTime) {
+        String str = strTime.substring(6);
+        StringBuilder sb = new StringBuilder(str);
+        sb.insert(2, ':');
+        return sb.toString();
     }
 
 }

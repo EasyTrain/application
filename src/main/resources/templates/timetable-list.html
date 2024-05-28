@@ -3,30 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <title>Timetable List</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-<h2>Retrieved Timetables</h2>
-<table>
-    <thead>
-    <tr>
-        <th>Starting Point</th>
-        <th>Destination</th>
-        <th>Delay</th>
-        <th>Estimated Trip Time</th>
-        <th>Arrival Time</th>
-        <th>Departure Time</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="timetable : ${timetables}">
-        <td th:text="${timetable.startingPoint}"></td>
-        <td th:text="${timetable.destination}"></td>
-        <td th:text="${timetable.delay}"></td>
-        <td th:text="${timetable.estimatedTripTime}"></td>
-        <td th:text="${timetable.arrivalTime}"></td>
-        <td th:text="${timetable.departureTime}"></td>
-    </tr>
-    </tbody>
-</table>
+<div class="container">
+    <h2>Timetable List</h2>
+    <ul>
+        <th:block th:each="timetable : ${timetables}">
+            <li th:text="${timetable.startTime} + ' - ' + ${timetable.endTime}"></li>
+        </th:block>
+    </ul>
+</div>
 </body>
 </html>

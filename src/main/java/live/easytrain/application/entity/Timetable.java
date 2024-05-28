@@ -2,6 +2,8 @@ package live.easytrain.application.entity;
 
 import jakarta.persistence.*;
 
+import java.util.Objects;
+
 @Entity
 @Table(name = "timetable")
 public class Timetable {
@@ -9,17 +11,24 @@ public class Timetable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
+    @Column(name = "starting_point")
     private String startingPoint;
+    @Column(name = "destination")
     private String destination;
+    @Column(name = "delay")
     private String delay;
+    @Column(name = "estimated_trip_time")
     private String estimatedTripTime;
+    @Column(name = "arrival_time")
     private String arrivalTime;
+    @Column(name = "departure_time")
     private String departureTime;
 
     /*
     * Unique id provided by API to identify train scheduled time
     * Is used to update the timetable requesting https://apis.deutschebahn.com/db-api-marketplace/apis/timetables/v1/rchg/{evaNo}
     * */
+    @Column(name = "schedule_id")
     private String scheduleId;
 
     @ManyToOne(cascade = CascadeType.ALL)
@@ -111,5 +120,20 @@ public class Timetable {
 
     public void setScheduleId(String scheduleId) {
         this.scheduleId = scheduleId;
+    }
+
+    // equals() and hashCode() for proper functionality in collections
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Timetable timetable = (Timetable) o;
+        return Objects.equals(id, timetable.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
