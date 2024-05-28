@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <title>Register</title>
+</head>
+<body>
+
+<h1>Register</h1>
+<form th:action="@{/process_registration}" th:object="${user}" method="POST">
+    <div>
+        <input type="text" th:field="*{email}" placeholder="Email">
+    </div>
+    <div>
+        <input type="text" th:field="*{password}" placeholder="Password">
+    </div>
+    <div>
+        <input type="text" th:field="*{firstName}" placeholder="First Name">
+    </div>
+    <div>
+        <input type="text" th:field="*{lastName}" placeholder="Last Name">
+    </div>
+    <div>
+        <input type="number" th:field="*{age}" placeholder="Age">
+    </div>
+    <div>
+        <input type="text" th:field="*{phoneNumber}" placeholder="Phone Number">
+    </div>
+    <div>
+        <input type="text" th:field="*{streetName}" placeholder="Street Name">
+    </div>
+    <div>
+        <input type="text" th:field="*{StreetNumber}" placeholder="Street Number">
+    </div>
+    <div>
+        <input type="text" th:field="*{city}" placeholder="City">
+    </div>
+    <div>
+        <input type="text" th:field="*{postalCode}" placeholder="Postal Code">
+    </div>
+    <button type="input">Submit</button>
+</form>
+
+</body>
+</html>

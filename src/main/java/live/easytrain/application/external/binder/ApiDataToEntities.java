@@ -35,9 +35,9 @@ public class ApiDataToEntities {
 
         if (stationNumber == null) {
             throw new IllegalArgumentException("stationNumber must not be null");
-        } else if (date.isEmpty() && hour.isEmpty() && !recentChanges) {
+        } else if (date == null && hour == null && !recentChanges) {
             timetableType = xmlResponse.fetchXmlResponse("fchg" + "/" + stationNumber);
-        } else if (date.isEmpty() && hour.isEmpty()) {
+        } else if (date == null && hour == null) {
             timetableType = xmlResponse.fetchXmlResponse("rchg" + "/" + stationNumber);
         } else {
             //plan/{evaNo}/{date}/{hour}
@@ -51,7 +51,7 @@ public class ApiDataToEntities {
             }
         }
 
-        if (sTypesICE.isEmpty()) {
+        if (sTypesICE == null) {
             throw new RuntimeException("No ICE found on trajectory");
         } else {
             for (SType sTypeIce : sTypesICE) {
@@ -99,12 +99,19 @@ public class ApiDataToEntities {
                 String trainNumber = sTypeIce.getTl().getN();
 
                 // Journey duration
-                timetables.add(new Timetable(startingStation, endingStation, delay, estimatedTime, arrivalTime,
-                        departureTime, scheduledId));
+                timetables.add(new Timetable(startingStation, endingStation, delay, timeBuilder(estimatedTime),timeBuilder(arrivalTime),
+                        timeBuilder(departureTime), scheduledId));
             }
         }
 
         return timetables;
+    }
+
+    private String timeBuilder(String strTime) {
+        String str = strTime.substring(6);
+        StringBuilder sb = new StringBuilder(str);
+        sb.insert(2, ':');
+        return sb.toString();
     }
 
 }

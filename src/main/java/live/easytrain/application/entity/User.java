@@ -1,9 +1,9 @@
 package live.easytrain.application.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
@@ -26,7 +26,7 @@ public class User {
     private String lastName;
 
     @NotNull(message = "Please enter the age.")
-    @Size(min = 1, message = "Please enter the age.")
+//    @Size(min = 1, message = "Please enter the age.")
     private int age;
 
     @NotNull(message = "Please enter the email.")
@@ -35,19 +35,20 @@ public class User {
     private String email;
 
     @NotNull(message = "Please enter the phone number.")
-    @Size(min = 1, message = "Please enter the phone number.")
-    @Pattern(regexp = "^(\\d{3}[- .]?){2}\\d{4}$", message = "Please enter a valid phone number.")
+//    @Size(min = 1, message = "Please enter the phone number.")
+//    @Pattern(regexp = "^(\\d{3}[- .]?){2}\\d{4}$", message = "Please enter a valid phone number.")
     private String phoneNumber;
 
     @NotNull(message = "Please enter the password.")
-    @Pattern(
+/*    @Pattern(
             regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]+$",
             message = "Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character."
-    )
+    )*/
     private String password;
 
     private Boolean enabled;
 
+    @Column(name = "verification_code", length = 64)
     private String verificationCode;
 
     @NotNull(message = "Please enter the street name.")
@@ -66,7 +67,7 @@ public class User {
     @Size(min = 1, message = "Please enter the postal code.")
     private String postalCode;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Role> roles;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
