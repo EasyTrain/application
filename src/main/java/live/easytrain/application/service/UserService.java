@@ -3,6 +3,7 @@ package live.easytrain.application.service;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.transaction.Transactional;
+import live.easytrain.application.entity.ChangePasswordRequest;
 import live.easytrain.application.entity.User;
 import live.easytrain.application.exceptions.UserNotFoundException;
 import live.easytrain.application.repository.UserRepository;
@@ -10,6 +11,8 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -120,5 +123,28 @@ public class UserService implements UserServiceInterface {
     @Override
     public boolean isPasswordConfirmed(User user) {
         return false;
+    }
+
+    public void changePassword(ChangePasswordRequest changePasswordRequest) {
+
+        var userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Optional<User> user = userRepository.findByEmail(userDetails.getUsername());
+
+        System.out.println("User: " + user.get().getPassword());
+        System.out.println("ChangePasswordRequest: " + changePasswordRequest.getCurrentPassword());
+
+        if(!passwordEncoder.matches(changePasswordRequest.getCurrentPassword(), user.get().getPassword())) {
+            throw new IllegalStateException("Wrong password");
+        }
+
+        if(!changePasswordRequest.getNewPassword().equals(changePasswordRequest.getConfirmationPassword())) {
+            throw new IllegalStateException("Passwords don't match");
+        }
+
+        if (user.isPresent()) {
+            user.get().setPassword(passwordEncoder.encode(changePasswordRequest.getNewPassword()));
+            userRepository.save(user.get());
+        }
+
     }
 }

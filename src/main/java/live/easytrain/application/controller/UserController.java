@@ -2,6 +2,7 @@ package live.easytrain.application.controller;
 
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
+import live.easytrain.application.entity.ChangePasswordRequest;
 import live.easytrain.application.entity.User;
 import live.easytrain.application.repository.UserRepository;
 import live.easytrain.application.service.UserService;
@@ -9,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.io.UnsupportedEncodingException;
@@ -59,6 +61,21 @@ public class UserController {
     @GetMapping("/login")
     public String displayLogin() {
         return "login";
+    }
+
+    @GetMapping("/change_password")
+    public String displayChangePasswordForm(Model model) {
+        model.addAttribute("changePasswordRequest", new ChangePasswordRequest());
+
+        return "change_password_form";
+    }
+
+    @PostMapping("/change_password")
+    public String changePassword(@ModelAttribute("changePasswordRequest") ChangePasswordRequest changePasswordRequest) {
+        // This changePasswordRequest object is null
+        System.out.println("POST: " + changePasswordRequest);
+        userService.changePassword(changePasswordRequest);
+        return "password_change_success";
     }
 
 }

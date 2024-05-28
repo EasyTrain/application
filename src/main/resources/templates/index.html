@@ -9,7 +9,9 @@
 <body>
 <h1>Index</h1>
 <p>Insert Home page content</p>
-
+<form action="#" th:action="@{/change_password}" method="PATCH">
+    <button type="submit">Update</button>
+</form>
 <form action="#" th:action="@{/logout}" method="POST">
     <button type="submit">Logout</button>
 </form>
