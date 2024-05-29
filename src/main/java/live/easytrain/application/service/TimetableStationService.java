@@ -17,13 +17,13 @@ import java.util.List;
 public class TimetableStationService implements TimetableStationServiceInterface {
     private TimetableRepo timetableRepo;
     private ApiDataToEntities apiDataToEntities;
-    private StationRepo stationRepo;
+    private StationServiceInterface stationInterface;
 
     @Autowired
-    public TimetableStationService(StationRepo stationRepo, TimetableRepo timetableRepo, ApiDataToEntities apiDataToEntities) {
+    public TimetableStationService(StationServiceInterface stationInterface, TimetableRepo timetableRepo, ApiDataToEntities apiDataToEntities) {
         this.timetableRepo = timetableRepo;
         this.apiDataToEntities = apiDataToEntities;
-        this.stationRepo = stationRepo;
+        this.stationInterface = stationInterface;
     }
 
 
@@ -42,13 +42,13 @@ public class TimetableStationService implements TimetableStationServiceInterface
 
     @Override
     public void saveTimetableData(String stationName, String date, String hour, boolean recentChanges) {
-        List<Station> stations = findAllEvaNumberByStationName(stationName);
+        List<Station> stations = stationInterface.findAllEvaNumberByStationName(stationName);
         if (stations.isEmpty()) {
             throw new StationNotFoundException("Station not found: " + stationName);
         }
 
 
-        Integer evaNumber = evaNumberByStationName(findAllEvaNumberByStationName(stationName), stationName);
+        Integer evaNumber = stationInterface.evaNumberByStationName(stationInterface.findAllEvaNumberByStationName(stationName), stationName);
 
         List<Timetable> timetables = apiDataToEntities.apiDataToTimetable(evaNumber, date, hour, false);
         for (Timetable timetable : timetables) {
@@ -56,27 +56,8 @@ public class TimetableStationService implements TimetableStationServiceInterface
         }
     }
 
-    @Override
-    public List<Station> findAllEvaNumberByStationName(String stationName) {
-        return stationRepo.findByStationNameStartingWith(stationName);
-    }
-    private Integer evaNumberByStationName(List<Station> stations, String stationName) {
-        Station stationTarget = null;
-        if (stations.isEmpty()) {
-            throw new StationNotFoundException("Station not found! 1,2");
-        } else {
-            for (Station station : stations) {
-                if (station.getStationName().equalsIgnoreCase(stationName)) {
-                    stationTarget = station;
-                }
-            }
-        }
-        if (stationTarget == null) {
-            throw new StationNotFoundException("Station not found hello");
-        }
-        return Integer.valueOf(stationTarget.getEvaNumber());
-    }
 
+ /*
     @Override
     public Integer evaNumberByStationName(String stationName) {
         List<Station> stations = findAllEvaNumberByStationName(stationName);
@@ -86,7 +67,7 @@ public class TimetableStationService implements TimetableStationServiceInterface
             }
         }
         throw new StationNotFoundException("Station not found: " + stationName);
-    }
+    }*/
 
 }
 

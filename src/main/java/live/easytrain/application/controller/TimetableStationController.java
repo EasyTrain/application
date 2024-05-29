@@ -2,6 +2,8 @@ package live.easytrain.application.controller;
 
 import live.easytrain.application.entity.Station;
 import live.easytrain.application.entity.Timetable;
+import live.easytrain.application.service.StationService;
+import live.easytrain.application.service.StationServiceInterface;
 import live.easytrain.application.service.TimetableStationServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,10 +16,15 @@ import java.util.List;
 @Controller
 @RequestMapping("/timetables")
 public class TimetableStationController {
+
     private TimetableStationServiceInterface timetableStationService;
+
+    private StationServiceInterface stationService;
+
     @Autowired
-    public TimetableStationController(TimetableStationServiceInterface timetableStationService) {
+    public TimetableStationController(TimetableStationServiceInterface timetableStationService, StationServiceInterface stationService) {
         this.timetableStationService = timetableStationService;
+        this.stationService = stationService;
     }
     @PostMapping("/save")
     public @ResponseBody String saveTimetablesData(@RequestParam String stationName,
@@ -40,7 +47,7 @@ public class TimetableStationController {
 
     @PostMapping("/search")
     public String searchStations(@RequestParam String stationName, Model model) {
-        List<Station> stations = timetableStationService.findAllEvaNumberByStationName(stationName);
+        List<Station> stations = stationService.findAllEvaNumberByStationName(stationName);
         model.addAttribute("stations", stations);
         return "station-list";
     }

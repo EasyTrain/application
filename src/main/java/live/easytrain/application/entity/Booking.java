@@ -1,6 +1,8 @@
 package live.easytrain.application.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -14,15 +16,27 @@ public class Booking {
     @Column(name = "id", nullable = false)
     private Long id;
     //@Column(name = "\"from\"")
+    @NotNull(message = "Please enter the departure station name.")
+    @Size(min = 1, message = "Please enter the departure station name.")
     @Column(name = "from_location")
     private String fromLocation;
+
     @Column(name = "to_location")
     private String toLocation;
+
     private LocalDate startDate;
+
     private LocalTime startTime;
+
     private LocalDate endDate;
+
     private LocalTime endTime;
+
     private double duration;
+
+    private String trainNumber;
+
+    private String platformNumber;
 
     @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL)
     private List<Connection> connections;
@@ -34,6 +48,15 @@ public class Booking {
 
     //    Constructors
     public Booking() {
+    }
+
+    public Booking(String fromLocation, String toLocation, LocalDate startDate, LocalTime startTime, String trainNumber, String platformNumber) {
+        this.fromLocation = fromLocation;
+        this.toLocation = toLocation;
+        this.startDate = startDate;
+        this.startTime = startTime;
+        this.trainNumber = trainNumber;
+        this.platformNumber = platformNumber;
     }
 
     //    Getters and Setters
@@ -117,4 +140,19 @@ public class Booking {
         this.id = id;
     }
 
+    public String getTrainNumber() {
+        return trainNumber;
+    }
+
+    public void setTrainNumber(String trainNumber) {
+        this.trainNumber = trainNumber;
+    }
+
+    public String getPlatformNumber() {
+        return platformNumber;
+    }
+
+    public void setPlatformNumber(String platformNumber) {
+        this.platformNumber = platformNumber;
+    }
 }

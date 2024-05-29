@@ -24,6 +24,13 @@ public class Timetable {
     @Column(name = "departure_time")
     private String departureTime;
 
+    private String trainNumber;
+
+    private String platformNumber;
+
+    String planedArrivalTime ;
+    String planedDepartureTime;
+
     /*
     * Unique id provided by API to identify train scheduled time
     * Is used to update the timetable requesting https://apis.deutschebahn.com/db-api-marketplace/apis/timetables/v1/rchg/{evaNo}
@@ -36,7 +43,7 @@ public class Timetable {
     private Station station;
 
     public Timetable(String startingPoint, String destination, String delay, String estimatedTripTime, String arrivalTime,
-                     String departureTime, String scheduleId) {
+                     String departureTime, String scheduleId, String platformNumber, String trainNumber, String planedArrivalTime, String planedDepartureTime) {
         this.startingPoint = startingPoint;
         this.destination = destination;
         this.delay = delay;
@@ -44,6 +51,10 @@ public class Timetable {
         this.arrivalTime = arrivalTime;
         this.departureTime = departureTime;
         this.scheduleId = scheduleId;
+        this.platformNumber = platformNumber;
+        this.trainNumber = trainNumber;
+        this.planedArrivalTime = planedArrivalTime;
+        this.planedDepartureTime = planedDepartureTime;
     }
 
     public Timetable() {
@@ -135,5 +146,37 @@ public class Timetable {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public String getTrainNumber() {
+        return trainNumber;
+    }
+
+    public void setTrainNumber(String trainNumber) {
+        this.trainNumber = trainNumber;
+    }
+
+    public String getPlatformNumber() {
+        return platformNumber;
+    }
+
+    public void setPlatformNumber(String platformNumber) {
+        this.platformNumber = platformNumber;
+    }
+
+    public String getPlanedArrivalTime() {
+        return planedArrivalTime;
+    }
+
+    public void setPlanedArrivalTime(String planedArrivalTime) {
+        this.planedArrivalTime = planedArrivalTime;
+    }
+
+    public String getPlanedDepartureTime() {
+        return planedDepartureTime;
+    }
+
+    public void setPlanedDepartureTime(String planedDepartureTime) {
+        this.planedDepartureTime = planedDepartureTime;
     }
 }

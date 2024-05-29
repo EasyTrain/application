@@ -44,63 +44,83 @@ public class ApiDataToEntities {
             timetableType = xmlResponse.fetchXmlResponse("plan" + "/" + stationNumber + "/" + date + "/" + hour);
         }
 
-        for (SType sType : timetableType.getS()) {
-            TlType tlType = sType.getTl();
-            if (tlType != null && tlType.getC().equals(ICE)) {
-                sTypesICE.add(sType);
-            }
-        }
-
-        if (sTypesICE == null) {
-            throw new RuntimeException("No ICE found on trajectory");
+        if (timetableType == null) {
+            throw new RuntimeException("No data found for entered information." +
+                    " Try to change the date to today's date or change the hour to today's hour.");
         } else {
-            for (SType sTypeIce : sTypesICE) {
-
-                String startingStation = "";
-                String endingStation = "";
-                String delay = "On time";
-
-                //Fields to retrieve
-                String planedArrivalTime = "";
-                String planedDepartureTime = "";
-
-
-                // The train start stations are on <ar> tag and the destination on <dp> tag
-                // The stations are separated by "|" and regex doesn't like this special char
-                if (sTypeIce.getAr() == null) {
-                    startingStation = String.valueOf(stationNumber);
-                } else {
-                    String arStations = sTypeIce.getAr().getPpth().replace("|", "@");
-                    String[] arStartingStation = arStations.split("@");
-                    startingStation = arStartingStation[0];
-
-                    planedArrivalTime = sTypeIce.getAr().getPt();
+            for (SType sType : timetableType.getS()) {
+                TlType tlType = sType.getTl();
+                if (tlType != null && tlType.getC().equals(ICE)) {
+                    sTypesICE.add(sType);
                 }
+            }
 
-                if (sTypeIce.getDp() == null) {
-                    endingStation = String.valueOf(stationNumber);
-                } else {
-                    String dpStations = sTypeIce.getDp().getPpth().replace("|", "@");
-                    String[] dpEndStation = dpStations.split("@");
-                    endingStation = dpEndStation[dpEndStation.length - 1];
+            if (sTypesICE.isEmpty()) {
+                throw new RuntimeException("No ICE found on trajectory");
+            } else {
+                for (SType sTypeIce : sTypesICE) {
 
-                    planedDepartureTime = sTypeIce.getDp().getPt();
+                    String startingStation = "";
+                    String endingStation = "";
+                    String delay = "On time";
+
+                    //Fields to retrieve
+                    String planedArrivalTime = "";
+                    String planedDepartureTime = "";
+                    String platformNumber = "";
+                    String trainNumber = "";
+                    String estimatedTime = "";
+                    String arrivalTime = "";
+                    String departureTime = "";
+
+
+                    // The train start stations are on <ar> tag and the destination on <dp> tag
+                    // The stations are separated by "|" and regex doesn't like this special char
+                    // ar tag null means that the start station of the train is the departure station
+                    if (sTypeIce.getAr() == null) {
+                        startingStation = String.valueOf(stationNumber);
+                        estimatedTime = sTypeIce.getDp().getCt();
+                        arrivalTime = sTypeIce.getDp().getCt();
+                        planedArrivalTime = sTypeIce.getDp().getPt();
+                        platformNumber = sTypeIce.getDp().getPp();
+                    } else {
+                        String arStations = sTypeIce.getAr().getPpth().replace("|", "@");
+                        String[] arStartingStation = arStations.split("@");
+                        startingStation = arStartingStation[0];
+
+                        planedArrivalTime = sTypeIce.getAr().getPt();
+                        estimatedTime = sTypeIce.getAr().getCt();
+                        arrivalTime = sTypeIce.getAr().getCt();
+                        platformNumber = sTypeIce.getAr().getPp();
+                    }
+
+                    if (sTypeIce.getDp() == null) {
+                        endingStation = String.valueOf(stationNumber);
+                        planedDepartureTime = sTypeIce.getAr().getPt();
+                        departureTime = sTypeIce.getAr().getCt();
+                        platformNumber = sTypeIce.getAr().getPp();
+                    } else {
+                        String dpStations = sTypeIce.getDp().getPpth().replace("|", "@");
+                        String[] dpEndStation = dpStations.split("@");
+                        endingStation = dpEndStation[dpEndStation.length - 1];
+
+                        planedDepartureTime = sTypeIce.getDp().getPt();
+                        departureTime = sTypeIce.getDp().getCt();
+                        platformNumber = sTypeIce.getDp().getPp();
+                    }
+
+                    if (!sTypeIce.getM().isEmpty()) {
+                        delay = "Delayed";
+                    }
+
+                    trainNumber = sTypeIce.getTl().getC() + sTypeIce.getTl().getN();
+                    String scheduledId = sTypeIce.getId();
+
+                    // Journey duration
+                    timetables.add(new Timetable(startingStation, endingStation, delay, timeBuilder(estimatedTime),
+                            timeBuilder(arrivalTime), timeBuilder(departureTime), scheduledId, platformNumber, trainNumber,
+                            timeBuilder(planedArrivalTime),timeBuilder(planedDepartureTime)));
                 }
-
-                if (!sTypeIce.getM().isEmpty()) {
-                    delay = "Delayed";
-                }
-
-                String estimatedTime = sTypeIce.getAr().getCt();
-                String arrivalTime = sTypeIce.getAr().getCt(); // To confirm we can request rchg/{evaNo}
-                String departureTime = sTypeIce.getDp().getCt();
-                String scheduledId = sTypeIce.getId();
-
-                String trainNumber = sTypeIce.getTl().getN();
-
-                // Journey duration
-                timetables.add(new Timetable(startingStation, endingStation, delay, timeBuilder(estimatedTime),timeBuilder(arrivalTime),
-                        timeBuilder(departureTime), scheduledId));
             }
         }
 
