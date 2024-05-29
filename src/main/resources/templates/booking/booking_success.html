@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmation Page</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+<body>
+<div class="container">
+    <h2>Booking</h2>
+    <p>Booking created successfully!</p>
+    <p>Name: <span th:text="${employeeModel.fullName}"/></p>
+    <p>Email address: <span th:text="${employeeModel.email}"/></p>
+    <p>Salary: <span th:text="${employeeModel.salary} + ' Euros per year'"/></p>
+    <p>Department: <span th:text="${employeeModel.department}"/></p>
+    <p>Super user: <span th:text="${employeeModel.superUser}"/></p>
+</div>
+</body>
+</html>
