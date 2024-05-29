@@ -37,10 +37,8 @@
         </div>
 
         <div class="form-container text-center mt-auto mb-5">
-
-            <div class="form-row">
-
-                <form action="#" th:action="@{/authenticate_user}" method="POST">
+            <form action="#" th:action="@{/authenticate_user}" method="POST">
+                <div class="form-row">
                     <div class="form-group">
                         <label for="email" class="form-label">Email</label>
                         <input type="text" id="email" class="form-control custom-input" placeholder="Email">
@@ -55,9 +53,9 @@
                     <div class="btn-container">
                         <button type="submit" class="btn btn-custom">Sign In</button>
                     </div>
-                </form>
 
-            </div>
+                </div>
+            </form>
         </div>
     </main>
 
