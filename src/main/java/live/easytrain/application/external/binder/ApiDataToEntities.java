@@ -62,7 +62,7 @@ public class ApiDataToEntities {
 
                     String startingStation = "";
                     String endingStation = "";
-                    String delay = "On time";
+                    String delay = "Information";
 
                     //Fields to retrieve
                     String planedArrivalTime = "";
@@ -79,8 +79,15 @@ public class ApiDataToEntities {
                     // ar tag null means that the start station of the train is the departure station
                     if (sTypeIce.getAr() == null) {
                         startingStation = String.valueOf(stationNumber);
-                        estimatedTime = sTypeIce.getDp().getCt();
-                        arrivalTime = sTypeIce.getDp().getCt();
+
+                        if(sTypeIce.getDp().getCt() == null){
+                            estimatedTime = sTypeIce.getDp().getPt();
+                            arrivalTime = sTypeIce.getDp().getPt();
+                        } else{
+                            estimatedTime = sTypeIce.getDp().getCt();
+                            arrivalTime = sTypeIce.getDp().getCt();
+                        }
+
                         planedArrivalTime = sTypeIce.getDp().getPt();
                         platformNumber = sTypeIce.getDp().getPp();
                     } else {
@@ -89,15 +96,28 @@ public class ApiDataToEntities {
                         startingStation = arStartingStation[0];
 
                         planedArrivalTime = sTypeIce.getAr().getPt();
-                        estimatedTime = sTypeIce.getAr().getCt();
-                        arrivalTime = sTypeIce.getAr().getCt();
+
+                        if(sTypeIce.getAr().getCt() == null){
+                            estimatedTime = sTypeIce.getAr().getPt();
+                            arrivalTime = sTypeIce.getAr().getPt();
+                        } else {
+                            estimatedTime = sTypeIce.getAr().getCt();
+                            arrivalTime = sTypeIce.getAr().getCt();
+                        }
+
                         platformNumber = sTypeIce.getAr().getPp();
                     }
 
                     if (sTypeIce.getDp() == null) {
                         endingStation = String.valueOf(stationNumber);
                         planedDepartureTime = sTypeIce.getAr().getPt();
-                        departureTime = sTypeIce.getAr().getCt();
+
+                        if(sTypeIce.getDp().getCt() == null){
+                            departureTime = sTypeIce.getAr().getPt();
+                        }else{
+                            departureTime = sTypeIce.getAr().getCt();
+                        }
+
                         platformNumber = sTypeIce.getAr().getPp();
                     } else {
                         String dpStations = sTypeIce.getDp().getPpth().replace("|", "@");
@@ -105,7 +125,13 @@ public class ApiDataToEntities {
                         endingStation = dpEndStation[dpEndStation.length - 1];
 
                         planedDepartureTime = sTypeIce.getDp().getPt();
-                        departureTime = sTypeIce.getDp().getCt();
+
+                        if (sTypeIce.getDp().getCt() == null){
+                            departureTime = sTypeIce.getDp().getPt();
+                        }else{
+                            departureTime = sTypeIce.getDp().getCt();
+                        }
+
                         platformNumber = sTypeIce.getDp().getPp();
                     }
 
@@ -119,7 +145,7 @@ public class ApiDataToEntities {
                     // Journey duration
                     timetables.add(new Timetable(startingStation, endingStation, delay, timeBuilder(estimatedTime),
                             timeBuilder(arrivalTime), timeBuilder(departureTime), scheduledId, platformNumber, trainNumber,
-                            timeBuilder(planedArrivalTime),timeBuilder(planedDepartureTime)));
+                            timeBuilder(planedArrivalTime), timeBuilder(planedDepartureTime)));
                 }
             }
         }
@@ -128,6 +154,10 @@ public class ApiDataToEntities {
     }
 
     private String timeBuilder(String strTime) {
+        if (strTime == null) {
+            return null;
+        }
+
         String str = strTime.substring(6);
         StringBuilder sb = new StringBuilder(str);
         sb.insert(2, ':');

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -42,27 +43,36 @@ public class BookingController {
             return "booking/booking";
         } else {
 
-           String id = booking.getFromLocation();
-            List<Station> stations = stationService.findAllEvaNumberByStationName(id);
-            model.addAttribute("stations", stations);
-            model.addAttribute("booking", booking);
+            // create a method for this logic
+            List<Station> stationObjects = stationService.findAllEvaNumberByStationName(booking.getFromLocation());
+            List<String> stationNames = new ArrayList<>();
+            if (stationObjects != null) {
+                for (Station station : stationObjects) {
+                    stationNames.add(station.getStationName());
+                }
+            }else{
+                throw new RuntimeException("Station not found!");
+            }
+
+            model.addAttribute("stationNames", stationNames);
 
             return "booking/booking_options";
         }
     }
 
     @PostMapping("/processBooking")
-    public String processBooking(@Valid @ModelAttribute("booking") Booking booking,
+    public String processBooking( @ModelAttribute("booking") Booking booking, Model model,
                                  BindingResult bindingResult) {
 
-//        if (bindingResult.hasErrors()) {
-//            return "booking/booking_options";
-//        } else {
+        if (bindingResult.hasErrors()) {
+            return "booking/booking_options";
+        } else {
 
-//        booking.setFromLocation(id);
+        model.addAttribute("data", booking);
+        System.out.println(booking.getFromLocation() + " From");
         bookingService.createBooking(booking);
 
         return "booking/booking_success";
-//        }
+        }
     }
 }

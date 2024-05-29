@@ -9,6 +9,7 @@ import live.easytrain.application.external.binder.ApiDataToEntities;
 import live.easytrain.application.repository.BookingRepo;
 import live.easytrain.application.repository.ConnectionRepo;
 import live.easytrain.application.repository.TicketRepo;
+import live.easytrain.application.repository.TimetableRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,14 +26,19 @@ public class BookingService implements BookingServiceInterface {
     private ApiDataToEntities apiData;
     private StationServiceInterface stationService;
 
+    //Only for tests
+    private TimetableRepo timetableRepo;
+
     @Autowired
     public BookingService(BookingRepo bookingRepo, ConnectionRepo connectionRepo, TicketRepo ticketRepo,
-                          ApiDataToEntities apiData, StationServiceInterface stationService) {
+                          ApiDataToEntities apiData, StationServiceInterface stationService,
+                          TimetableRepo timetableRepo) {
         this.bookingRepo = bookingRepo;
         this.connectionRepo = connectionRepo;
         this.ticketRepo = ticketRepo;
         this.apiData = apiData;
         this.stationService = stationService;
+        this.timetableRepo = timetableRepo;
     }
 
     // Logic to calculate the price of a booking
@@ -88,9 +94,11 @@ public class BookingService implements BookingServiceInterface {
         List<Timetable> timetables = apiData.apiDataToTimetable(stationService.evaNumberByStationName(modelBooking.getFromLocation()),
                 startDate, startTime, false);
 
+        timetableRepo.saveAll(timetables);
+
         Booking booking = null;
 
-        return bookingRepo.save(booking);
+        return booking;
     }
 
     // CRUD operations: Update Booking

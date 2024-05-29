@@ -12,9 +12,9 @@
 <h1>Booking</h1>
 <form th:action="@{/processBooking}" th:object="${booking}" method="POST">
     <div>
-        <select class="form-control">
+        <select class="form-control" name="fromLocation">
             <option value="0">Select a station from bellow list</option>
-            <option th:each="station : ${stations}" th:value="${station.stationName}" th:text="${station.stationName}"></option>
+            <option th:each="fromLocation : ${stationNames}" th:value="${fromLocation}" th:text="${fromLocation}"></option>
         </select>
     </div>
     <div>
