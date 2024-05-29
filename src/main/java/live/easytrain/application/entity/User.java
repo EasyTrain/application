@@ -25,8 +25,6 @@ public class User {
     @Size(min = 1, message = "Please enter the last name.")
     private String lastName;
 
-    @NotNull(message = "Please enter the age.")
-//    @Size(min = 1, message = "Please enter the age.")
     private int age;
 
     @NotNull(message = "Please enter the email.")
@@ -34,8 +32,6 @@ public class User {
     @Pattern(regexp = "^[A-Za-z0-9+_.-]+@(.+)$", message = "Please enter a valid email.")
     private String email;
 
-    @NotNull(message = "Please enter the phone number.")
-//    @Size(min = 1, message = "Please enter the phone number.")
 //    @Pattern(regexp = "^(\\d{3}[- .]?){2}\\d{4}$", message = "Please enter a valid phone number.")
     private String phoneNumber;
 
@@ -51,19 +47,13 @@ public class User {
     @Column(name = "verification_code", length = 64)
     private String verificationCode;
 
-    @NotNull(message = "Please enter the street name.")
     @Size(min = 1, message = "Please enter the street name.")
     private String streetName;
 
-    @NotNull(message = "Please enter the street number.")
-    @Size(min = 1, message = "Please enter the street number.")
     private String streetNumber;
 
-    @NotNull(message = "Please enter the city.")
-    @Size(min = 1, message = "Please enter the city.")
     private String city;
 
-    @NotNull(message = "Please enter the postal code.")
     @Size(min = 1, message = "Please enter the postal code.")
     private String postalCode;
 
@@ -83,6 +73,21 @@ public class User {
 
     //    Constructors
     public User() {
+    }
+
+    public User(String firstName, String lastName, String email, String password) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+    }
+
+    public User(String firstName, String lastName, String email, String phoneNumber, String password) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.password = password;
     }
 
     //    Getters and Setters
