@@ -27,14 +27,19 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain configure(HttpSecurity httpSecurity) throws Exception {
 
+        String[] staticResources = {"/images/**", "/css/**", "/scripts/**"};
+
         httpSecurity.authorizeHttpRequests(
-                        customizer -> customizer.anyRequest().permitAll()
+                        customizer -> customizer
+                                .requestMatchers(staticResources).permitAll()
+                                .anyRequest().permitAll()
                 )
                 .formLogin(login -> login
                         .loginPage("/login")
                         .loginProcessingUrl("/authenticate_user")
-                        .permitAll()
                         .usernameParameter("email")
+                        .defaultSuccessUrl("/")
+                        .permitAll()
                 )
                 .logout(logout -> logout.permitAll()
                 );
