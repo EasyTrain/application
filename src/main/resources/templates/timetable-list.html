@@ -2,17 +2,46 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Timetable List</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/styles.css" rel="stylesheet">
 </head>
 <body>
 <div class="container">
-    <h2>Timetable List</h2>
-    <ul>
-        <th:block th:each="timetable : ${timetables}">
-            <li th:text="${timetable.startTime} + ' - ' + ${timetable.endTime}"></li>
-        </th:block>
-    </ul>
+    <h1>Timetable List</h1>
+    <div th:if="${success != null}">
+        <p th:text="${success}" class="alert alert-success"></p>
+    </div>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Train Number</th>
+            <th>Starting Point</th>
+            <th>Destination</th>
+            <th>Arrival Time</th>
+            <th>Planned Arrival Time</th>
+            <th>Delay</th>
+            <th>Departure Time</th>
+            <th>Planned Departure Time</th>
+            <th>Platform Number</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="timetable : ${timetables}">
+            <td th:text="${timetable.trainNumber}"></td>
+            <td th:text="${timetable.startingPoint}"></td>
+            <td th:text="${timetable.destination}"></td>
+            <td th:text="${timetable.arrivalTime}"></td>
+            <td th:text="${timetable.plannedArrivalTime}"></td>
+            <td th:text="${timetable.delay}"></td>
+            <td th:text="${timetable.departureTime}"></td>
+            <td th:text="${timetable.plannedDepartureTime}"></td>
+            <td th:text="${timetable.platformNumber}"></td>
+        </tr>
+        </tbody>
+    </table>
 </div>
 </body>
 </html>
