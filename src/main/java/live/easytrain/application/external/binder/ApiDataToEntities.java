@@ -33,20 +33,26 @@ public class ApiDataToEntities {
         List<SType> sTypesICE = new ArrayList<>();
         TimetableType timetableType = null;
 
+        // Represents the changes
+        boolean reqTypeChg = false;
+
         if (stationNumber == null) {
             throw new IllegalArgumentException("stationNumber must not be null");
         } else if (date == null && hour == null && !recentChanges) {
             timetableType = xmlResponse.fetchXmlResponse("fchg" + "/" + stationNumber);
+            reqTypeChg = true;
         } else if (date == null && hour == null) {
             timetableType = xmlResponse.fetchXmlResponse("rchg" + "/" + stationNumber);
+            reqTypeChg = true;
         } else {
             //plan/{evaNo}/{date}/{hour}
             timetableType = xmlResponse.fetchXmlResponse("plan" + "/" + stationNumber + "/" + date + "/" + hour);
         }
 
         if (timetableType == null) {
-            throw new RuntimeException("No data found for entered information." +
-                    " Try to change the date to today's date or change the hour to today's hour.");
+//            throw new RuntimeException("No data found for entered information." +
+//                    " Try to change the date to today's date or change the hour to today's hour.");
+            return timetables;
         } else {
             for (SType sType : timetableType.getS()) {
                 TlType tlType = sType.getTl();
@@ -65,39 +71,44 @@ public class ApiDataToEntities {
                     String delay = "Information";
 
                     //Fields to retrieve
-                    String planedArrivalTime = "";
-                    String planedDepartureTime = "";
+                    String plannedArrivalTime = "";
+                    String plannedDepartureTime = "";
                     String platformNumber = "";
                     String trainNumber = "";
                     String estimatedTime = "";
                     String arrivalTime = "";
                     String departureTime = "";
 
+                    // Previous seasons
+                    String arStations = "";
+
+                    // Following stations until the last one
+                    String dpStations = "";
 
                     // The train start stations are on <ar> tag and the destination on <dp> tag
                     // The stations are separated by "|" and regex doesn't like this special char
                     // ar tag null means that the start station of the train is the departure station
                     if (sTypeIce.getAr() == null) {
-                        startingStation = String.valueOf(stationNumber);
+                        startingStation = timetableType.getStation();
 
-                        if(sTypeIce.getDp().getCt() == null){
+                        if (sTypeIce.getDp().getCt() == null) {
                             estimatedTime = sTypeIce.getDp().getPt();
                             arrivalTime = sTypeIce.getDp().getPt();
-                        } else{
+                        } else {
                             estimatedTime = sTypeIce.getDp().getCt();
                             arrivalTime = sTypeIce.getDp().getCt();
                         }
 
-                        planedArrivalTime = sTypeIce.getDp().getPt();
+                        plannedArrivalTime = sTypeIce.getDp().getPt();
                         platformNumber = sTypeIce.getDp().getPp();
                     } else {
-                        String arStations = sTypeIce.getAr().getPpth().replace("|", "@");
-                        String[] arStartingStation = arStations.split("@");
+                        arStations = sTypeIce.getAr().getPpth().replace("|", " -> ");
+                        String[] arStartingStation = arStations.split(" -> ");
                         startingStation = arStartingStation[0];
 
-                        planedArrivalTime = sTypeIce.getAr().getPt();
+                        plannedArrivalTime = sTypeIce.getAr().getPt();
 
-                        if(sTypeIce.getAr().getCt() == null){
+                        if (sTypeIce.getAr().getCt() == null) {
                             estimatedTime = sTypeIce.getAr().getPt();
                             arrivalTime = sTypeIce.getAr().getPt();
                         } else {
@@ -109,30 +120,34 @@ public class ApiDataToEntities {
                     }
 
                     if (sTypeIce.getDp() == null) {
-                        endingStation = String.valueOf(stationNumber);
-                        planedDepartureTime = sTypeIce.getAr().getPt();
+                        endingStation = timetableType.getStation();
+                        plannedDepartureTime = sTypeIce.getAr().getPt();
 
-                        if(sTypeIce.getDp().getCt() == null){
+                        if (sTypeIce.getDp().getCt() == null) {
                             departureTime = sTypeIce.getAr().getPt();
-                        }else{
+                        } else {
                             departureTime = sTypeIce.getAr().getCt();
                         }
 
                         platformNumber = sTypeIce.getAr().getPp();
                     } else {
-                        String dpStations = sTypeIce.getDp().getPpth().replace("|", "@");
-                        String[] dpEndStation = dpStations.split("@");
+                        dpStations = sTypeIce.getDp().getPpth().replace("|", " -> ");
+                        String[] dpEndStation = dpStations.split(" -> ");
                         endingStation = dpEndStation[dpEndStation.length - 1];
 
-                        planedDepartureTime = sTypeIce.getDp().getPt();
+                        plannedDepartureTime = sTypeIce.getDp().getPt();
 
-                        if (sTypeIce.getDp().getCt() == null){
+                        if (sTypeIce.getDp().getCt() == null) {
                             departureTime = sTypeIce.getDp().getPt();
-                        }else{
+                        } else {
                             departureTime = sTypeIce.getDp().getCt();
                         }
 
-                        platformNumber = sTypeIce.getDp().getPp();
+                        if (reqTypeChg) {
+                            platformNumber = sTypeIce.getDp().getCp();
+                        } else {
+                            platformNumber = sTypeIce.getDp().getPp();
+                        }
                     }
 
                     if (!sTypeIce.getM().isEmpty()) {
@@ -144,8 +159,8 @@ public class ApiDataToEntities {
 
                     // Journey duration
                     timetables.add(new Timetable(startingStation, endingStation, delay, timeBuilder(estimatedTime),
-                            timeBuilder(arrivalTime), timeBuilder(departureTime), scheduledId, platformNumber, trainNumber,
-                            timeBuilder(planedArrivalTime), timeBuilder(planedDepartureTime)));
+                            timeBuilder(arrivalTime), timeBuilder(departureTime), trainNumber, platformNumber,
+                            timeBuilder(plannedArrivalTime), timeBuilder(plannedDepartureTime), arStations, dpStations, scheduledId));
                 }
             }
         }
