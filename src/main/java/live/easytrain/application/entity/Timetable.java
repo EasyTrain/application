@@ -23,13 +23,18 @@ public class Timetable {
     private String arrivalTime;
     @Column(name = "departure_time")
     private String departureTime;
-
+    @Column(name = "train_number")
     private String trainNumber;
-
+    @Column(name = "platform_number")
     private String platformNumber;
+    @Column(name = "planned_arrival_time")
+    String plannedArrivalTime ;
+    @Column(name = "planned_departure_time")
+    String plannedDepartureTime;
 
-    String planedArrivalTime ;
-    String planedDepartureTime;
+    private String previousStations;
+
+    private String nextStations;
 
     /*
     * Unique id provided by API to identify train scheduled time
@@ -42,19 +47,20 @@ public class Timetable {
     @JoinColumn(name = "station_id")
     private Station station;
 
-    public Timetable(String startingPoint, String destination, String delay, String estimatedTripTime, String arrivalTime,
-                     String departureTime, String scheduleId, String platformNumber, String trainNumber, String planedArrivalTime, String planedDepartureTime) {
+    public Timetable(String startingPoint, String destination, String delay, String estimatedTripTime, String arrivalTime, String departureTime, String trainNumber, String platformNumber, String plannedArrivalTime, String plannedDepartureTime, String previousStations, String nextStations, String scheduleId) {
         this.startingPoint = startingPoint;
         this.destination = destination;
         this.delay = delay;
         this.estimatedTripTime = estimatedTripTime;
         this.arrivalTime = arrivalTime;
         this.departureTime = departureTime;
-        this.scheduleId = scheduleId;
-        this.platformNumber = platformNumber;
         this.trainNumber = trainNumber;
-        this.planedArrivalTime = planedArrivalTime;
-        this.planedDepartureTime = planedDepartureTime;
+        this.platformNumber = platformNumber;
+        this.plannedArrivalTime = plannedArrivalTime;
+        this.plannedDepartureTime = plannedDepartureTime;
+        this.previousStations = previousStations;
+        this.nextStations = nextStations;
+        this.scheduleId = scheduleId;
     }
 
     public Timetable() {
@@ -164,19 +170,35 @@ public class Timetable {
         this.platformNumber = platformNumber;
     }
 
-    public String getPlanedArrivalTime() {
-        return planedArrivalTime;
+    public String getPlannedArrivalTime() {
+        return plannedArrivalTime;
     }
 
-    public void setPlanedArrivalTime(String planedArrivalTime) {
-        this.planedArrivalTime = planedArrivalTime;
+    public void setPlannedArrivalTime(String plannedArrivalTime) {
+        this.plannedArrivalTime = plannedArrivalTime;
     }
 
-    public String getPlanedDepartureTime() {
-        return planedDepartureTime;
+    public String getPlannedDepartureTime() {
+        return plannedDepartureTime;
     }
 
-    public void setPlanedDepartureTime(String planedDepartureTime) {
-        this.planedDepartureTime = planedDepartureTime;
+    public void setPlannedDepartureTime(String plannedDepartureTime) {
+        this.plannedDepartureTime = plannedDepartureTime;
+    }
+
+    public String getPreviousStations() {
+        return previousStations;
+    }
+
+    public void setPreviousStations(String previousStations) {
+        this.previousStations = previousStations;
+    }
+
+    public String getNextStations() {
+        return nextStations;
+    }
+
+    public void setNextStations(String nextStations) {
+        this.nextStations = nextStations;
     }
 }
