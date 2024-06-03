@@ -32,8 +32,10 @@ public class Timetable {
     @Column(name = "planned_departure_time")
     String plannedDepartureTime;
 
+    @Column(name = "previous_stations", length = 500)
     private String previousStations;
 
+    @Column(name = "next_stations", length = 500)
     private String nextStations;
 
     /*

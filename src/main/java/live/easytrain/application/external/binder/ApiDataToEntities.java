@@ -123,7 +123,7 @@ public class ApiDataToEntities {
                         endingStation = timetableType.getStation();
                         plannedDepartureTime = sTypeIce.getAr().getPt();
 
-                        if (sTypeIce.getDp().getCt() == null) {
+                        if (sTypeIce.getAr().getCt() == null) {
                             departureTime = sTypeIce.getAr().getPt();
                         } else {
                             departureTime = sTypeIce.getAr().getCt();
