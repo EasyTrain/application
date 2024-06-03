@@ -149,7 +149,7 @@ public class ApiDataToEntities {
                             platformNumber = sTypeIce.getDp().getPp();
                         }
                     }
-
+                    //
                     if (!sTypeIce.getM().isEmpty()) {
                         delay = "Delayed";
                     }
