@@ -38,6 +38,8 @@ public class Timetable {
     @Column(name = "next_stations", length = 500)
     private String nextStations;
 
+    @Column(name = "current_station", length = 60)
+    private String currentStation;
     /*
     * Unique id provided by API to identify train scheduled time
     * Is used to update the timetable requesting https://apis.deutschebahn.com/db-api-marketplace/apis/timetables/v1/rchg/{evaNo}
@@ -57,7 +59,10 @@ public class Timetable {
 //        this.estimatedTripTime = updatedTimetable.getEstimatedTripTime();
 //    }
 
-    public Timetable(String startingPoint, String destination, String delay, String estimatedTripTime, String arrivalTime, String departureTime, String trainNumber, String platformNumber, String plannedArrivalTime, String plannedDepartureTime, String previousStations, String nextStations, String scheduleId) {
+    public Timetable(String startingPoint, String destination, String delay, String estimatedTripTime, String arrivalTime,
+                     String departureTime, String trainNumber, String platformNumber, String plannedArrivalTime,
+                     String plannedDepartureTime, String previousStations, String nextStations, String scheduleId,
+                     String currentStation) {
         this.startingPoint = startingPoint;
         this.destination = destination;
         this.delay = delay;
@@ -71,6 +76,7 @@ public class Timetable {
         this.previousStations = previousStations;
         this.nextStations = nextStations;
         this.scheduleId = scheduleId;
+        this.currentStation = currentStation;
     }
 
     public Timetable() {
@@ -210,5 +216,13 @@ public class Timetable {
 
     public void setNextStations(String nextStations) {
         this.nextStations = nextStations;
+    }
+
+    public String getCurrentStation() {
+        return currentStation;
+    }
+
+    public void setCurrentStation(String currentStation) {
+        this.currentStation = currentStation;
     }
 }

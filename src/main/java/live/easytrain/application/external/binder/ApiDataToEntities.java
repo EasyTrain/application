@@ -160,7 +160,7 @@ public class ApiDataToEntities {
                     // Journey duration
                     timetables.add(new Timetable(startingStation, endingStation, delay, timeBuilder(estimatedTime),
                             timeBuilder(arrivalTime), timeBuilder(departureTime), trainNumber, platformNumber,
-                            timeBuilder(plannedArrivalTime), timeBuilder(plannedDepartureTime), arStations, dpStations, scheduledId));
+                            timeBuilder(plannedArrivalTime), timeBuilder(plannedDepartureTime), arStations, dpStations, scheduledId, timetableType.getStation()));
                 }
             }
         }
