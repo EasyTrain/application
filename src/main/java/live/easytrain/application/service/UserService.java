@@ -3,6 +3,8 @@ package live.easytrain.application.service;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.transaction.Transactional;
+import live.easytrain.application.dto.UserRegistrationDto;
+import live.easytrain.application.entity.Role;
 import live.easytrain.application.entity.User;
 import live.easytrain.application.exceptions.UserNotFoundException;
 import live.easytrain.application.repository.UserRepository;
@@ -30,10 +32,25 @@ public class UserService implements UserServiceInterface {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public void register(User user, String siteURL)
+    public void register(UserRegistrationDto userRegistrationDto, String siteURL)
             throws UnsupportedEncodingException, MessagingException {
-        String encodedPassword = passwordEncoder.encode(user.getPassword());
-        user.setPassword(encodedPassword);
+
+        // check if user is already registered
+        boolean userExists = userRepository.findByEmail(userRegistrationDto.email()).isPresent();
+
+        if (userExists) {
+            throw new IllegalStateException("User already exists");
+        }
+
+        String encodedPassword = passwordEncoder.encode(userRegistrationDto.password());
+
+        User user = new User(userRegistrationDto.firstName(),
+                userRegistrationDto.lastName(),
+                userRegistrationDto.email(),
+                userRegistrationDto.phoneNumber(),
+                encodedPassword);
+
+        Role role = new Role();
 
         String randomCode = RandomStringUtils.randomAlphabetic(64);
         user.setVerificationCode(randomCode);

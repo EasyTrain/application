@@ -2,6 +2,7 @@ package live.easytrain.application.controller;
 
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
+import live.easytrain.application.dto.UserRegistrationDto;
 import live.easytrain.application.entity.User;
 import live.easytrain.application.repository.UserRepository;
 import live.easytrain.application.service.UserService;
@@ -36,8 +37,8 @@ public class UserController {
     }
 
     @PostMapping("/process_registration")
-    public String processRegistration(User user, HttpServletRequest request) throws UnsupportedEncodingException, MessagingException {
-        userService.register(user, getSiteURL(request));
+    public String processRegistration(UserRegistrationDto userRegistrationDto, HttpServletRequest request) throws UnsupportedEncodingException, MessagingException {
+        userService.register(userRegistrationDto, getSiteURL(request));
 
         return "register_success";
     }
