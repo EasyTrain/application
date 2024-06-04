@@ -66,7 +66,6 @@ public class UserService implements UserServiceInterface {
 
         user.setRoles(Arrays.asList(role));
 
-
         sendVerificationEmail(user, siteURL);
     }
 
