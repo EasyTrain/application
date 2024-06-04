@@ -11,4 +11,9 @@ public String showFrontEndTest() {
     return "index";
 }
 
+@GetMapping("/timetabletest")
+public String showTimetableTest() {
+    return "timetable";
+}
+
 }

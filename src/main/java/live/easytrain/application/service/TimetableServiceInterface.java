@@ -19,4 +19,6 @@ public interface TimetableServiceInterface {
     List<Timetable> fetchTimetableDataFromAPI(String stationName, LocalDate date, LocalTime hour, LocalDate startDate, LocalTime startTime);
 
     List<Timetable> getAllTimetables();
+
+    //List<Timetable> checkDelays(String scheduleId);
 }

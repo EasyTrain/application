@@ -23,12 +23,13 @@
     <main class="main-background d-flex flex-column align-items-center justify-content-center">
         <h1 class="main-title text-center">Plan Your Journey</h1>
         <div class="form-container text-center mt-auto mb-5">
-            <form>
+            <form th:action="@{/timetables/save}" method="post">
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="departing-from" class="form-label">Departing From</label>
-                        <input type="text" id="departing-from" class="form-control custom-input"
-                               placeholder=" Departing From">
+                        <label for="stationName" class="form-label">Departing From</label>
+                        <select id="stationName" name="stationName" class="form-control custom-input" required>
+                            <option th:each="station : ${stations}" th:value="${station.stationName}" th:text="${station.stationName}"></option>
+                        </select>
                     </div>
                     <img th:src="@{/images/double_arrow_shadow.png}" alt="Arrow" class="arrow-img">
                     <div class="form-group">
@@ -39,9 +40,9 @@
                 <div class="form-row mt-3">
                     <div class="form-group">
                         <label for="time-select" class="form-label">Time</label>
-                        <select id="time-select" class="form-control custom-input">
+                        <select id="time-select" class="form-control custom-input" th:name="time">
                             <option value="" disabled selected hidden> Time</option>
-                            <!-- Time-Options Loaded via JavaScript -->
+                            <option value="selectedTime" th:name="time"></option>
                         </select>
                     </div>
                 </div>
