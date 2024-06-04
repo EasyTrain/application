@@ -40,10 +40,9 @@
                 <div class="form-row mt-3">
                     <div class="form-group">
                         <label for="time-select" class="form-label">Time</label>
-                        <select id="time-select" class="form-control custom-input">
+                        <select id="time-select" class="form-control custom-input" th:name="time">
                             <option value="" disabled selected hidden> Time</option>
-                            <!-- Time-Options Loaded via JavaScript -->
-                            
+                            <option value="selectedTime" th:name="time"></option>
                         </select>
                     </div>
                 </div>

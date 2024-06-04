@@ -48,14 +48,12 @@ public class TimetableStationController {
     public String saveTimetablesData(@RequestParam String stationName,
                                     // @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
                                      //  @RequestParam @DateTimeFormat(pattern = "HH:mm") LocalTime hour,
-                                     @RequestParam(required = false) String time,
+                                     @RequestParam(value = "time", required = false) String time,
                                      @RequestParam(required = false, defaultValue = "false") boolean recentChanges
                                      ,RedirectAttributes redirectAttributes) {
 //        try {
             LocalDate date = LocalDate.now();
-            System.out.println(time + " :Javascript time");
-
-            LocalTime hour = LocalTime.parse("11:00", DateTimeFormatter.ofPattern("HH:mm"));
+            LocalTime hour = LocalTime.parse(time, DateTimeFormatter.ofPattern("HH:mm"));
 
             // Save timetable data to database
             timetableService.saveTimetableData(stationName, date, hour, recentChanges);
@@ -65,10 +63,10 @@ public class TimetableStationController {
             redirectAttributes.addFlashAttribute("timetables", timetables);
             redirectAttributes.addFlashAttribute("success", "Timetables saved successfully");
             return "redirect:/timetables/timetable-list";
-        } catch (Exception e) {
+        /*} catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Error saving timetables: " + e.getMessage());
             return "redirect:/timetables/add";
-        }
+        }*/
     }
 
     @GetMapping("/timetable-list")

@@ -3,6 +3,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
     const now = new Date();
     const timeOptions = [];
 
+    let result = document.getElementById("selectedTime");
+
     for (let i = 0; i < 24; i++) {
         const optionTime = new Date(now.getTime() + i * 60 * 60 * 1000);
         const hours = String(optionTime.getHours()).padStart(2, '0');
@@ -20,4 +22,5 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     // The placeholder remains as the default value until a selection is made
     timeSelect.value = "";
+    result.innerHTML = timeSelect.value;
 });
