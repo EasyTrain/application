@@ -13,6 +13,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Controller
@@ -39,23 +40,27 @@ public class TimetableStationController {
         List<Station> stations = stationService.findAllEvaNumberByStationName("");
         model.addAttribute("stations", stations);
         model.addAttribute("timetable", new Timetable());
-        return "timetable-form";
+        return "index";
     }
 
     // Save Timetables
     @PostMapping("/save")
     public String saveTimetablesData(@RequestParam String stationName,
-                                     @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
-                                     @RequestParam @DateTimeFormat(pattern = "HH:mm") LocalTime hour,
-                                     @RequestParam(required = false, defaultValue = "false") boolean recentChanges,
-                                     RedirectAttributes redirectAttributes) {
-        try {
+                                    // @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+                                     //  @RequestParam @DateTimeFormat(pattern = "HH:mm") LocalTime hour,
+                                     @RequestParam(required = false) String time,
+                                     @RequestParam(required = false, defaultValue = "false") boolean recentChanges
+                                     ,RedirectAttributes redirectAttributes) {
+//        try {
+            LocalDate date = LocalDate.now();
+            System.out.println(time + " :Javascript time");
+
+            LocalTime hour = LocalTime.parse("11:00", DateTimeFormatter.ofPattern("HH:mm"));
+
             // Save timetable data to database
             timetableService.saveTimetableData(stationName, date, hour, recentChanges);
-
             // Fetch timetable data from the API based on the provided parameters
             List<Timetable> timetables = timetableService.fetchTimetableDataFromAPI(stationName, date, hour, date, hour);
-
             // Redirect to the timetable list page and pass necessary attributes
             redirectAttributes.addFlashAttribute("timetables", timetables);
             redirectAttributes.addFlashAttribute("success", "Timetables saved successfully");
@@ -74,4 +79,16 @@ public class TimetableStationController {
         model.addAttribute("success", successMessage);
         return "timetable-list";
     }
+
+//    @GetMapping("/delays")
+//    public String checkDelays(@RequestParam String s scheduleId, Model model) {
+//        try {
+//            List<Timetable> timetables = timetableService.checkDelays(scheduleId);
+//            model.addAttribute("timetables", timetables);
+//            return "timetable-delays";
+//        } catch (Exception e) {
+//            model.addAttribute("error", "Error checking delays: " + e.getMessage());
+//            return "timetable-error";
+//        }
+//    }
 }
