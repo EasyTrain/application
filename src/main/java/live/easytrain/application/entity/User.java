@@ -32,7 +32,7 @@ public class User {
     @Pattern(regexp = "^[A-Za-z0-9+_.-]+@(.+)$", message = "Please enter a valid email.")
     private String email;
 
-//    @Pattern(regexp = "^(\\d{3}[- .]?){2}\\d{4}$", message = "Please enter a valid phone number.")
+    //    @Pattern(regexp = "^(\\d{3}[- .]?){2}\\d{4}$", message = "Please enter a valid phone number.")
     private String phoneNumber;
 
     @NotNull(message = "Please enter the password.")

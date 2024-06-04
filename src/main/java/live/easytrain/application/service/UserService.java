@@ -7,6 +7,7 @@ import live.easytrain.application.dto.UserRegistrationDto;
 import live.easytrain.application.entity.Role;
 import live.easytrain.application.entity.User;
 import live.easytrain.application.exceptions.UserNotFoundException;
+import live.easytrain.application.repository.RoleRepository;
 import live.easytrain.application.repository.UserRepository;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,18 +17,21 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
 import java.util.Optional;
 
 @Service
 public class UserService implements UserServiceInterface {
 
     private UserRepository userRepository;
+    private RoleRepository roleRepository;
     private JavaMailSender javaMailSender;
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserService(UserRepository userRepository, JavaMailSender javaMailSender, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, RoleRepository roleRepository, JavaMailSender javaMailSender, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
         this.javaMailSender = javaMailSender;
         this.passwordEncoder = passwordEncoder;
     }
@@ -48,15 +52,20 @@ public class UserService implements UserServiceInterface {
                 userRegistrationDto.lastName(),
                 userRegistrationDto.email(),
                 userRegistrationDto.phoneNumber(),
-                encodedPassword);
-
-        Role role = new Role();
+                encodedPassword
+        );
 
         String randomCode = RandomStringUtils.randomAlphabetic(64);
         user.setVerificationCode(randomCode);
         user.setEnabled(false);
 
         userRepository.save(user);
+
+        Role role = new Role("ROLE_USER", user);
+        roleRepository.save(role);
+
+        user.setRoles(Arrays.asList(role));
+
 
         sendVerificationEmail(user, siteURL);
     }
