@@ -39,7 +39,7 @@ public class TimetableStationController {
         List<Station> stations = stationService.findAllEvaNumberByStationName("");
         model.addAttribute("stations", stations);
         model.addAttribute("timetable", new Timetable());
-        return "index";
+        return "timetable-lookup";
     }
 
     // Save Timetables

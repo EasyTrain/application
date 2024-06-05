@@ -16,4 +16,9 @@ public String showTimetableTest() {
     return "timetable";
 }
 
+@GetMapping("/timetabletest2")
+public String showTimetableTest2() {
+    return "timetable-lookup";
+}
+
 }
