@@ -150,5 +150,7 @@
     padding: 10px;
     text-align: center;
     margin: 0 auto;
-}
-
+}.text-main-custom {
+ /*matches the color of the nav bar*/
+     color: #F47950
+ }
