@@ -6,7 +6,6 @@ import live.easytrain.application.entity.Timetable;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
-
 public interface TimetableServiceInterface {
     List<Timetable> saveTimetableData(String stationName, LocalDate date, LocalTime hour, boolean recentChanges);
 

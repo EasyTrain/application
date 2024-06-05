@@ -71,4 +71,5 @@ public class TimetableStationController {
         model.addAttribute("success", successMessage);
         return "timetable";
     }
+
 }
