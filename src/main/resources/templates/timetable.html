@@ -48,7 +48,7 @@
             <div class="entry-section">
                 <p class="label">From</p>
                 <p class="place" th:text="${timetable.startingPoint}"></p>
-                <p class="label">Arrival</p>
+                <p class="label">Arrival in <span th:text="${timetable.currentStation}"></span></p>
                 <p class="time" th:text="${timetable.plannedArrivalTime}"></p>
             </div>
             <div class="entry-section arrow-section">
@@ -57,7 +57,7 @@
             <div class="entry-section">
                 <p class="label">To</p>
                 <p class="place" th:text="${timetable.destination}"></p>
-                <p class="label">Departure</p>
+                <p class="label">Departure from <span th:text="${timetable.currentStation}"></span></p>
                 <p class="time" th:text="${timetable.plannedDepartureTime}"></p>
             </div>
             <div class="entry-separator"></div>
