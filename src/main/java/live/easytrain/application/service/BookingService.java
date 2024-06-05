@@ -2,10 +2,9 @@ package live.easytrain.application.service;
 
 import jakarta.transaction.Transactional;
 import live.easytrain.application.entity.Booking;
-import live.easytrain.application.entity.Connection;
 import live.easytrain.application.entity.Timetable;
 import live.easytrain.application.exceptions.BookingNotFoundException;
-import live.easytrain.application.external.binder.ApiDataToEntities;
+import live.easytrain.application.api.binder.ApiDataToEntities;
 import live.easytrain.application.repository.BookingRepo;
 import live.easytrain.application.repository.ConnectionRepo;
 import live.easytrain.application.repository.TicketRepo;
@@ -14,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -87,14 +87,28 @@ public class BookingService implements BookingServiceInterface {
 
         System.out.println(startDate + " Date");
 
-        String startTime = modelBooking.getStartTime().toString().substring(0,2);
+        String startTime = modelBooking.getStartTime().toString().substring(0, 2);
 
         System.out.println(startTime + " hour");
 
-        List<Timetable> timetables = apiData.apiDataToTimetable(stationService.evaNumberByStationName(modelBooking.getFromLocation()),
-                startDate, startTime, false);
+        List<Timetable> timetablesToSave = new ArrayList<>();
 
-        timetableRepo.saveAll(timetables);
+        //creates 1 request for the next 3 hours according the chose hour
+        for (int wishedTime = Integer.parseInt(startTime); wishedTime < Integer.parseInt(startTime) + 3; wishedTime++) {
+            List<Timetable> timetables = apiData.apiDataToTimetable(stationService.evaNumberByStationName(modelBooking.getFromLocation()),
+                    startDate, String.valueOf(wishedTime), false);
+
+            if (!timetables.isEmpty()) {
+                timetablesToSave.addAll(timetables);
+            }
+        }
+
+        if (timetablesToSave.isEmpty()) {
+            throw new RuntimeException("No data found for entered information." +
+                    " Try to change the date to today's date or change the hour to today's hour.");
+        }
+
+        timetableRepo.saveAll(timetablesToSave);
 
         Booking booking = null;
 

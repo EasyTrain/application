@@ -1,10 +1,10 @@
-package live.easytrain.application.external.binder;
+package live.easytrain.application.api.binder;
 
 import live.easytrain.application.config.XmlResponse;
 import live.easytrain.application.entity.Timetable;
-import live.easytrain.application.external.entity.SType;
-import live.easytrain.application.external.entity.TimetableType;
-import live.easytrain.application.external.entity.TlType;
+import live.easytrain.application.api.entity.SType;
+import live.easytrain.application.api.entity.TimetableType;
+import live.easytrain.application.api.entity.TlType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

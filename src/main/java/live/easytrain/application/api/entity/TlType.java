@@ -1,5 +1,5 @@
 
-package live.easytrain.application.external.entity;
+package live.easytrain.application.api.entity;
 
 import jakarta.xml.bind.annotation.*;
 
