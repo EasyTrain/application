@@ -50,9 +50,8 @@ public class TimetableStationController {
             LocalDate date = LocalDate.now();
             LocalTime hour = LocalTime.parse(time, DateTimeFormatter.ofPattern("HH:mm"));
             // Save timetable data to database
-            timetableService.saveTimetableData(stationName, date, hour, recentChanges);
-            // Fetch timetable data from the API based on the provided parameters
-            List<Timetable> timetables = timetableService.fetchTimetableDataFromAPI(stationName, date, hour, date, hour);
+            List<Timetable> timetables = timetableService.saveTimetableData(stationName, LocalDate.now(),
+                    dateTimeParser.parseStringToLocalTime(time), recentChanges);
             // Pass necessary attributes to the model
             model.addAttribute("timetables", timetables);
             model.addAttribute("success", "Timetables saved successfully");

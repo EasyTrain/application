@@ -10,4 +10,5 @@ public interface StationRepo extends JpaRepository<Station, Long> {
 
     Station findByStationName(String stationName);
 
+    Station findByEvaNumber(String scheduleId);
 }

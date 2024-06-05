@@ -51,14 +51,6 @@ public class Timetable {
     @JoinColumn(name = "station_id")
     private Station station;
 
-//    public void updateDelayInfo(Timetable updatedTimetable) {
-//        this.delay = updatedTimetable.getDelay();
-//        this.arrivalTime = updatedTimetable.getArrivalTime();
-//        this.departureTime = updatedTimetable.getDepartureTime();
-//        this.platformNumber = updatedTimetable.getPlatformNumber();
-//        this.estimatedTripTime = updatedTimetable.getEstimatedTripTime();
-//    }
-
     public Timetable(String startingPoint, String destination, String delay, String estimatedTripTime, String arrivalTime,
                      String departureTime, String trainNumber, String platformNumber, String plannedArrivalTime,
                      String plannedDepartureTime, String previousStations, String nextStations, String scheduleId,

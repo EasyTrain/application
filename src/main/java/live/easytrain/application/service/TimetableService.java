@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 
@@ -89,19 +88,6 @@ public class TimetableService implements TimetableServiceInterface {
         return timetableRepo.findAll();
     }
 
-//    @Override
-//    public List<Timetable> checkDelays(String scheduleId) {
-//        List<Timetable> timetables = timetableRepo.findByScheduleId(scheduleId);
-//        if (timetables.isEmpty()) {
-//            throw new RuntimeException("No timetables found for the schedule ID: " + scheduleId);
-//        }
-//        for (Timetable timetable : timetables) {
-//            Timetable updatedTimetable = apiDataToEntities.fetchUpdatedTimetable(Integer.valueOf(timetable.getStation().getEvaNumber()), timetable.getScheduleId());
-//            timetable.updateDelayInfo(updatedTimetable);
-//        }
-//        timetableRepo.saveAll(timetables);
-//        return timetables;
-//    }
 }
 
 
