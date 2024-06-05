@@ -4,6 +4,8 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.transaction.Transactional;
 import live.easytrain.application.dto.UserRegistrationDto;
+import live.easytrain.application.entity.ChangePasswordRequest;
+import live.easytrain.application.entity.Email;
 import live.easytrain.application.entity.Role;
 import live.easytrain.application.entity.User;
 import live.easytrain.application.exceptions.UserNotFoundException;
@@ -144,6 +146,71 @@ public class UserService implements UserServiceInterface {
 
     @Override
     public boolean isPasswordConfirmed(User user) {
+        return false;
+    }
+
+    @Override
+    public void submitEmail(String email, String siteURL) {
+        Optional<User> user = userRepository.findByEmail(email);
+
+        if (user.isPresent()) {
+            System.out.println("User is present. Disabling account!");
+            String randomCode = RandomStringUtils.randomAlphabetic(64);
+            user.get().setVerificationCode(randomCode);
+            user.get().setEnabled(false);
+            userRepository.save(user.get());
+
+            try {
+                sendForgotEmail(user.get(), siteURL);
+            } catch (MessagingException | UnsupportedEncodingException e) {
+                System.out.println(e.fillInStackTrace());
+            }
+        }
+
+    }
+
+    private void sendForgotEmail(User user, String siteURL)
+            throws MessagingException, UnsupportedEncodingException {
+        String toAddress = user.getEmail();
+        String fromAddress = "easyice2024@gmail.com";
+        String senderName = "EasyTrain";
+        String subject = "Please reset your password";
+        String content = "Dear [[name]],<br>"
+                + "Please click the link below to reset your password:<br>"
+                + "<h3><a href=\"[[URL]]\" target=\"_self\">RESET PASSWORD</a></h3>"
+                + "Thank you,<br>"
+                + "EasyTrain Team.";
+
+        MimeMessage message = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message);
+
+        helper.setFrom(fromAddress, senderName);
+        helper.setTo(toAddress);
+        helper.setSubject(subject);
+
+        content = content.replace("[[name]]", user.getFirstName() + " " + user.getLastName());
+        String verifyURL = siteURL + "/reset_password?code=" + user.getVerificationCode();
+
+        content = content.replace("[[URL]]", verifyURL);
+
+        helper.setText(content, true);
+
+        javaMailSender.send(message);
+    }
+
+    public boolean resetPassword(Email email, ChangePasswordRequest changePasswordRequest) {
+        Optional<User> optionalUser = userRepository.findByEmail(email.getEmailAddress());
+
+        if (optionalUser.isPresent()) {
+            if (changePasswordRequest.confirmPasswords()) {
+                User user = optionalUser.get();
+                String encodedPassword = passwordEncoder.encode(changePasswordRequest.getNewPassword());
+
+                user.setPassword(encodedPassword);
+                userRepository.save(user);
+                return true;
+            }
+        }
         return false;
     }
 }

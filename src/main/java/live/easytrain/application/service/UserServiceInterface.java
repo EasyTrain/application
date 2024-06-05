@@ -11,4 +11,6 @@ public interface UserServiceInterface {
     String deleteUser(Long id);
 
     boolean isPasswordConfirmed(User user);
+
+    void submitEmail(String email, String siteURL);
 }
