@@ -7,7 +7,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 @Configuration
-public class DateTimeParser {
+public class DateTimeParserUtils {
 
     public LocalTime parseStringToLocalTime(String timeStr) {
 

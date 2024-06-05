@@ -7,7 +7,7 @@ import live.easytrain.application.entity.Timetable;
 import live.easytrain.application.service.BookingServiceInterface;
 import live.easytrain.application.service.StationServiceInterface;
 import live.easytrain.application.service.TimetableServiceInterface;
-import live.easytrain.application.utils.DateTimeParser;
+import live.easytrain.application.utils.DateTimeParserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,11 +27,11 @@ public class BookingController {
     private BookingServiceInterface bookingService;
     private StationServiceInterface stationService;
     private TimetableServiceInterface timetableService;
-    private DateTimeParser dateTimeParser;
+    private DateTimeParserUtils dateTimeParser;
 
     @Autowired
     public BookingController(BookingServiceInterface bookingService, StationServiceInterface stationService,
-                             TimetableServiceInterface timetableService, DateTimeParser dateTimeParser) {
+                             TimetableServiceInterface timetableService, DateTimeParserUtils dateTimeParser) {
         this.bookingService = bookingService;
         this.stationService = stationService;
         this.timetableService = timetableService;
