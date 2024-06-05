@@ -31,46 +31,46 @@
         </div>
 
         <!-- Content Container for the route -->
-        <div class="route-container">
-            <span class="route-text">Hamburg</span> <!-- Exchange Hamburg with Thymeleaf Expression (th:text="${station})-->
+        <div class="route-container" th:each="timetable : ${timetables}">
+            <span class="route-text" th:text="${timetable.currentStation}">Station Name></span> <!-- Exchange Hamburg with Thymeleaf Expression (th:text="${station})-->
         </div>
 
         <!-- Content Container for the Timetable Entries -->
-        <div class="timetable-entry-container"> <!-- Iterate over the timetableEntries --> <!--th:each="entry: ${timetableEntries}" -->
+        <div class="timetable-entry-container" th:each="timetable : ${timetables}"> <!-- Iterate over the timetableEntries --> <!--th:each="entry: ${timetableEntries}" -->
             <div class="entry-section logo-section">
                 <img th:src="@{/images/EasyTrain_Logo_NoText.png}" alt="EasyTrain Logo" class="train-logo"/>
-                <p class="train-number">1234</p>
+                <p class="train-number"><span th:text="${timetable.trainNumber}"></span></p>
             </div>
             <div class="entry-separator"></div>
             <div class="entry-section">
                 <p class="label">From</p>
-                <p class="place">Frankfurt</p>
+                <p class="place" th:text="${timetable.startingPoint}"></p>
                 <p class="label">Arrival</p>
-                <p class="time">12:00</p>
+                <p class="time" th:text="${timetable.plannedArrivalTime}"></p>
             </div>
             <div class="entry-section arrow-section">
                 <img th:src="@{/images/double_arrow_shadow.png}" alt="Arrow" class="arrow"/>
             </div>
             <div class="entry-section">
                 <p class="label">To</p>
-                <p class="place">Kaiserslautern</p>
+                <p class="place" th:text="${timetable.destination}"></p>
                 <p class="label">Departure</p>
-                <p class="time">12:30</p>
+                <p class="time" th:text="${timetable.plannedDepartureTime}"></p>
             </div>
             <div class="entry-separator"></div>
             <div class="entry-section">
                 <p class="label">Platform</p>
-                <p class="platform-number">12</p>
+                <p class="platform-number" th:text="${timetable.platformNumber}"></p>
             </div>
             <div class="entry-separator"></div>
             <div class="entry-section delay-section">
                 <p class="label">Delay</p>
-                <p class="delay-time">On Time</p>
+                <p class="delay-time" th:text="${timetable.delay}"></p>
                 <p class="label">Estimated Time</p>
                 <div class="delayed-times">
-                    <p class="delayed-time">12:00</p>
+                    <p class="delayed-time" th:text="${timetable.arrivalTime}"></p>
                     <img th:src="@{/images/double_arrow_shadow.png}" alt="Arrow" class="small-arrow"/>
-                    <p class="delayed-time">12:30</p>
+                    <p class="delayed-time" th:text="${timetable.departureTime}"></p>
                 </div>
             </div>
         </div>
