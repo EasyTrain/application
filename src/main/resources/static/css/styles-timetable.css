@@ -105,13 +105,14 @@
     color: #13152F;
     border-radius: 10px;
     width: 75%;
-    display: flex;
-    justify-content: space-around;
-    align-items: stretch;
+    display: grid;
+    grid-template-columns: 0.5fr 0.03fr 1.25fr 0.03fr 1.25fr 0.03fr 0.5fr 0.03fr 1fr;
+    align-items: center;
     padding: 10px;
     margin-top: 10px;
     box-sizing: border-box;
     min-height: 100px;
+    gap: 10px;
 }
 
 .entry-section {
@@ -120,12 +121,29 @@
     align-items: flex-start;
     justify-content: center;
     text-align: left;
-    position: relative;
+}
+
+.booking-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    transition: transform 0.3s ease-in-out;
+}
+
+.booking-link:hover {
+    text-decoration: none;
+    transform: scale(1.08);
+}
+
+.booking-link:hover .logo-section {
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 }
 
 .logo-section {
     align-items: center;
     text-align: center;
+    position: relative;
+    cursor: pointer;
 }
 
 .train-logo {
@@ -138,13 +156,19 @@
     margin: 5px;
 }
 
+.booking-text {
+    color: #F47950;
+    font-size: 1rem;
+    font-weight: bold;
+    text-decoration: none;
+    margin-top: 5px;
+    margin-bottom: 0;
+}
+
 .entry-separator {
     width: 3px;
     background-color: #13152F;
-    margin: 0 10px;
-    flex-shrink: 0;
-    height: auto;
-    align-self: stretch;
+    height: 100%;
 }
 
 .label {

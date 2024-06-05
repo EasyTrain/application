@@ -37,10 +37,13 @@
 
         <!-- Content Container for the Timetable Entries -->
         <div class="timetable-entry-container" th:each="timetable : ${timetables}"> <!-- Iterate over the timetableEntries --> <!--th:each="entry: ${timetableEntries}" -->
+            <a href="#" class="booking-link">
             <div class="entry-section logo-section">
                 <img th:src="@{/images/EasyTrain_Logo_NoText.png}" alt="EasyTrain Logo" class="train-logo"/>
                 <p class="train-number"><span th:text="${timetable.trainNumber}"></span></p>
+                <p class="booking-text">Book Now</p>
             </div>
+            </a>
             <div class="entry-separator"></div>
             <div class="entry-section">
                 <p class="label">From</p>
