@@ -31,8 +31,8 @@
         </div>
 
         <!-- Content Container for the route -->
-        <div class="route-container" th:each="timetable : ${timetables}">
-            <span class="route-text" th:text="${timetable.currentStation}">Station Name></span> <!-- Exchange Hamburg with Thymeleaf Expression (th:text="${station})-->
+        <div class="route-container" th:each="timetable : ${timetables}" th:if="${timetableStat.last}">
+            <span class="route-text" th:text="${timetable.currentStation}"></span> <!-- Exchange Hamburg with Thymeleaf Expression (th:text="${station})-->
         </div>
 
         <!-- Content Container for the Timetable Entries -->
