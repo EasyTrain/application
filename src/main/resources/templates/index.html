@@ -28,6 +28,7 @@
                     <div class="form-group">
                         <label for="stationName" class="form-label">Departing From</label>
                         <select id="stationName" name="stationName" class="form-control custom-input" required>
+                            <option value="" disabled selected>Select a station</option>
                             <option th:each="station : ${stations}" th:value="${station.stationName}" th:text="${station.stationName}"></option>
                         </select>
                     </div>
