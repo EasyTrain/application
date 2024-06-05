@@ -8,8 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -45,17 +43,12 @@ public class TimetableStationController {
     // Save Timetables
     @PostMapping("/save")
     public String saveTimetablesData(@RequestParam String stationName,
-                                    // @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
-                                     //  @RequestParam @DateTimeFormat(pattern = "HH:mm") LocalTime hour,
                                      @RequestParam(required = false) String time,
                                      @RequestParam(required = false, defaultValue = "false") boolean recentChanges,
                                      Model model) {
         try {
             LocalDate date = LocalDate.now();
-            System.out.println(time + " :Javascript time");
-
-            LocalTime hour = LocalTime.parse("11:00", DateTimeFormatter.ofPattern("HH:mm"));
-
+            LocalTime hour = LocalTime.parse(time, DateTimeFormatter.ofPattern("HH:mm"));
             // Save timetable data to database
             timetableService.saveTimetableData(stationName, date, hour, recentChanges);
             // Fetch timetable data from the API based on the provided parameters
@@ -66,7 +59,7 @@ public class TimetableStationController {
             return "timetable";
         } catch (Exception e) {
             model.addAttribute("error", "Error saving timetables: " + e.getMessage());
-            return "add-timetable";
+            return "index";
         }
     }
 
@@ -81,16 +74,4 @@ public class TimetableStationController {
         model.addAttribute("success", successMessage);
         return "timetable";
     }
-
-//    @GetMapping("/delays")
-//    public String checkDelays(@RequestParam String s scheduleId, Model model) {
-//        try {
-//            List<Timetable> timetables = timetableService.checkDelays(scheduleId);
-//            model.addAttribute("timetables", timetables);
-//            return "timetable-delays";
-//        } catch (Exception e) {
-//            model.addAttribute("error", "Error checking delays: " + e.getMessage());
-//            return "timetable-error";
-//        }
-//    }
 }
