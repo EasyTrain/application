@@ -4,9 +4,10 @@ import jakarta.transaction.Transactional;
 import live.easytrain.application.entity.Station;
 import live.easytrain.application.entity.Timetable;
 import live.easytrain.application.exceptions.StationNotFoundException;
-import live.easytrain.application.external.binder.ApiDataToEntities;
+import live.easytrain.application.api.binder.ApiDataToEntities;
 import live.easytrain.application.repository.StationRepo;
 import live.easytrain.application.repository.TimetableRepo;
+import live.easytrain.application.utils.DateTimeParserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,31 +22,29 @@ public class TimetableService implements TimetableServiceInterface {
     private ApiDataToEntities apiDataToEntities;
     private StationRepo stationRepo;
     private StationServiceInterface stationServiceInterface;
+    private DateTimeParserUtils dateTimeParser;
+
     @Autowired
-    public TimetableService(StationServiceInterface stationServiceInterface, StationRepo stationRepo, TimetableRepo timetableRepo, ApiDataToEntities apiDataToEntities) {
+    public TimetableService(StationServiceInterface stationServiceInterface, StationRepo stationRepo,
+                            TimetableRepo timetableRepo, ApiDataToEntities apiDataToEntities, DateTimeParserUtils dateTimeParser) {
         this.timetableRepo = timetableRepo;
         this.apiDataToEntities = apiDataToEntities;
         this.stationRepo = stationRepo;
         this.stationServiceInterface = stationServiceInterface;
+        this.dateTimeParser = dateTimeParser;
     }
 
     @Override
     @Transactional
-    public void saveTimetableData(String stationName, LocalDate date, LocalTime hour, boolean recentChanges) {
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        String[] arrDate = date.format(dateFormatter).split("-");
-        String formattedDate = arrDate[0].substring(2) + arrDate[1] + arrDate[2];
-
-        System.out.println(formattedDate + " Date");
-
-        String formattedHour = hour.toString().substring(0, 2);
-
-        System.out.println(formattedHour + " hour");
+    public List<Timetable> saveTimetableData(String stationName, LocalDate date, LocalTime hour, boolean recentChanges) {
 
         Integer evaNumber = stationServiceInterface.evaNumberByStationName(stationName);
-        List<Timetable> timetables = apiDataToEntities.apiDataToTimetable(evaNumber, formattedDate, formattedHour, recentChanges);
+        List<Timetable> timetables = apiDataToEntities.apiDataToTimetable(evaNumber, dateTimeParser.formatLocalDateToString(date),
+                dateTimeParser.formatLocalTimeToString(hour), recentChanges);
 
         timetableRepo.saveAll(timetables);
+
+        return  timetables;
     }
 
     // Find all stations whose names start with the given station name
@@ -66,8 +65,7 @@ public class TimetableService implements TimetableServiceInterface {
 
     // Fetch timetable data from the API based on the provided parameters
     @Override
-    public List<Timetable> fetchTimetableDataFromAPI(String stationName, LocalDate date, LocalTime hour,
-                                                     LocalDate startDate, LocalTime startTime) {
+    public List<Timetable> fetchTimetableDataFromAPI(String stationName, LocalDate date, LocalTime hour) {
         List<Station> stations = findAllEvaNumberByStationName(stationName);
         if (stations.isEmpty()) {
             throw new StationNotFoundException("Station not found: " + stationName);
@@ -75,13 +73,8 @@ public class TimetableService implements TimetableServiceInterface {
 
         Integer evaNumber = evaNumberByStationName(stationName);
 
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        String[] arrDate = date.format(dateFormatter).split("-");
-        String formattedDate = arrDate[0].substring(2) + arrDate[1] + arrDate[2];
-
-        String formattedHour = hour.toString().substring(0, 2);
-
-        return apiDataToEntities.apiDataToTimetable(evaNumber, formattedDate, formattedHour, false);
+        return apiDataToEntities.apiDataToTimetable(evaNumber,dateTimeParser.formatLocalDateToString(date),
+                dateTimeParser.formatLocalTimeToString(hour), false);
     }
     @Override
     public List<Timetable> getAllTimetables() {

@@ -11,8 +11,6 @@ public interface TimetableServiceInterface {
     List<Station> findAllEvaNumberByStationName(String stationName);
     // Find the EVA number directly from the repository
     Integer evaNumberByStationName(String stationName);
-
-    List<Timetable> fetchTimetableDataFromAPI(String stationName, LocalDate date, LocalTime hour, LocalDate startDate, LocalTime startTime);
-
+    List<Timetable> fetchTimetableDataFromAPI(String stationName, LocalDate date, LocalTime hour);
     List<Timetable> getAllTimetables();
 }

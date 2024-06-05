@@ -4,6 +4,7 @@ import live.easytrain.application.entity.Station;
 import live.easytrain.application.entity.Timetable;
 import live.easytrain.application.service.StationServiceInterface;
 import live.easytrain.application.service.TimetableServiceInterface;
+import live.easytrain.application.utils.DateTimeParserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,10 +17,13 @@ import java.util.List;
 public class TimetableStationController {
     private TimetableServiceInterface timetableService;
     private StationServiceInterface stationService;
+    private DateTimeParserUtils dateTimeParser;
     @Autowired
-    public TimetableStationController(TimetableServiceInterface timetableService, StationServiceInterface stationService) {
+    public TimetableStationController(TimetableServiceInterface timetableService, StationServiceInterface stationService,
+                                      DateTimeParserUtils dateTimeParser) {
         this.timetableService = timetableService;
         this.stationService = stationService;
+        this.dateTimeParser = dateTimeParser;
     }
 
     @GetMapping
@@ -45,8 +49,6 @@ public class TimetableStationController {
                                      @RequestParam(required = false, defaultValue = "false") boolean recentChanges,
                                      Model model) {
         try {
-            LocalDate date = LocalDate.now();
-            LocalTime hour = LocalTime.parse(time, DateTimeFormatter.ofPattern("HH:mm"));
             // Save timetable data to database
             List<Timetable> timetables = timetableService.saveTimetableData(stationName, LocalDate.now(),
                     dateTimeParser.parseStringToLocalTime(time), recentChanges);

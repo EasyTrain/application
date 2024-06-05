@@ -47,7 +47,8 @@ public class BookingController {
 
         LocalTime hour = dateTimeParser.parseStringToLocalTime(time);
 
-        List<Timetable> timetables = timetableService.fetchTimetableDataFromAPI(stationName, LocalDate.now(), hour, LocalDate.now(), hour);
+        List<Timetable> timetables = timetableService.fetchTimetableDataFromAPI(stationName, LocalDate.now(),
+                hour);
 
         model.addAttribute("timetables", timetables);
         return "timetable";
