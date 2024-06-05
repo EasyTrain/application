@@ -53,6 +53,7 @@ public class TimetableService implements TimetableServiceInterface {
     public List<Station> findAllEvaNumberByStationName(String stationName) {
         return stationRepo.findByStationNameStartingWith(stationName);
     }
+
     // Find the EVA number directly from the repository
     @Override
     public Integer evaNumberByStationName(String stationName) {
