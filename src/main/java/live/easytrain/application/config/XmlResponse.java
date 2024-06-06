@@ -58,7 +58,7 @@ public class XmlResponse {
             JAXBContext jaxbContext = JAXBContext.newInstance(TimetableType.class, ArType.class, DpType.class);
             Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
 
-            JAXBElement<TimetableType> typeJAXBElement = (JAXBElement<TimetableType>) unmarshaller.unmarshal( new StringReader(xmlResponse));
+            JAXBElement<TimetableType> typeJAXBElement = (JAXBElement<TimetableType>) unmarshaller.unmarshal(new StringReader(xmlResponse));
 
             return typeJAXBElement.getValue();
 
@@ -69,14 +69,14 @@ public class XmlResponse {
     }
 
     /*
-    * The pattern should receive one of the following values:
-    * 1. fchg/{evaNo}
-    * 2. plan/{evaNo}/{date}/{hour}
-    * 3. rchg/{evaNo}
-    *       - evaNo -> Station number (8011160 - Berlin)
-    *       - date -> YYMMDD
-    *       - hour -> HH
-    * */
+     * The pattern should receive one of the following values:
+     * 1. fchg/{evaNo}
+     * 2. plan/{evaNo}/{date}/{hour}
+     * 3. rchg/{evaNo}
+     *       - evaNo -> Station number (8011160 - Berlin)
+     *       - date -> YYMMDD
+     *       - hour -> HH
+     * */
     public TimetableType fetchXmlResponse(String pattern) {
 
         String xml = "";
@@ -98,6 +98,7 @@ public class XmlResponse {
             if (response.isSuccessful()) {
                 xml = response.body().string();
             }
+            response.close();
 
         } catch (IOException e) {
             // prd

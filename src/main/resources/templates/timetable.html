@@ -26,7 +26,7 @@
         <!-- Content Container for the date -->
         <div class="content-container">
             <div class="date-container">
-            <p class="text-secondary" th:text="${#dates.format(#dates.createNow(), 'MMMM d, yyyy')}"></p> <!-- Shows today's date -->
+            <p class="text-secondary" th:text="${#dates.format(#dates.createNow(), 'MMMM dd, yyyy')}"></p> <!-- Shows today's date -->
             </div>
         </div>
 
@@ -37,7 +37,7 @@
 
         <!-- Content Container for the Timetable Entries -->
         <div class="timetable-entry-container" th:each="timetable : ${timetables}"> <!-- Iterate over the timetableEntries --> <!--th:each="entry: ${timetableEntries}" -->
-            <a href="#" class="booking-link">
+            <a href="#" th:href="@{/book}" class="booking-link">
             <div class="entry-section logo-section">
                 <img th:src="@{/images/EasyTrain_Logo_NoText.png}" alt="EasyTrain Logo" class="train-logo"/>
                 <p class="train-number"><span th:text="${timetable.trainNumber}"></span></p>

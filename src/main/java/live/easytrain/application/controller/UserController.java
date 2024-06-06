@@ -28,11 +28,11 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/")
+    /*@GetMapping("/")
     public String displayHome() {
         return "index";
     }
-
+*/
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
         model.addAttribute("user", new User());

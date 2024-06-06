@@ -54,4 +54,9 @@ public class StationService implements StationServiceInterface {
         return Integer.valueOf(stationTarget.getEvaNumber());
     }
 
+    @Override
+    public List<Station> findAllStationByStationCode(String stationCode) {
+        return stationRepo.findAllByStationCode(stationCode);
+    }
+
 }

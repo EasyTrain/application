@@ -1,25 +1,21 @@
 package live.easytrain.application.controller;
 
-import jakarta.validation.Valid;
-import live.easytrain.application.entity.Booking;
-import live.easytrain.application.entity.Station;
+import jakarta.websocket.server.PathParam;
 import live.easytrain.application.entity.Timetable;
 import live.easytrain.application.service.BookingServiceInterface;
 import live.easytrain.application.service.StationServiceInterface;
 import live.easytrain.application.service.TimetableServiceInterface;
 import live.easytrain.application.utils.DateTimeParserUtils;
+import live.easytrain.application.utils.TimetableUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
 
 @Controller
 public class BookingController {
@@ -28,58 +24,53 @@ public class BookingController {
     private StationServiceInterface stationService;
     private TimetableServiceInterface timetableService;
     private DateTimeParserUtils dateTimeParser;
+    private TimetableUtils timetableUtils;
+
+    private List<Timetable> timetablesDestinations;
 
     @Autowired
     public BookingController(BookingServiceInterface bookingService, StationServiceInterface stationService,
-                             TimetableServiceInterface timetableService, DateTimeParserUtils dateTimeParser) {
+                             TimetableServiceInterface timetableService, DateTimeParserUtils dateTimeParser,
+                             TimetableUtils timetableUtils) {
         this.bookingService = bookingService;
         this.stationService = stationService;
         this.timetableService = timetableService;
         this.dateTimeParser = dateTimeParser;
+        this.timetableUtils = timetableUtils;
     }
 
     @GetMapping("/booking")
-    public String booking(@RequestParam String stationName, @RequestParam(required = false) String time,
+    public String booking(@RequestParam String stationName, @RequestParam(required = false) String goingTo,
+                          @RequestParam(required = false) String time,
                           @RequestParam(required = false, defaultValue = "false") boolean recentChanges,
                           Model model) {
 
-        Map<Integer, List<Timetable>> journeys = new HashMap<>();
-
-        LocalTime hour = dateTimeParser.parseStringToLocalTime(time);
-
         List<Timetable> timetables = timetableService.fetchTimetableDataFromAPI(stationName, LocalDate.now(),
-                hour);
+                dateTimeParser.parseStringToLocalTime(time));
 
-        model.addAttribute("timetables", timetables);
-        return "timetable";
-    }
+        timetablesDestinations = timetableUtils.journeysToDestination(timetables, goingTo);
 
-    @GetMapping("/getStationOptions")
-    public String getStations(@Valid @ModelAttribute("booking") Booking booking,
-                              BindingResult bindingResult, Model model) {
-
-        if (bindingResult.hasErrors()) {
-            return "booking/booking";
-        } else {
-
-            // create a method for this logic
-            List<Station> stationObjects = stationService.findAllEvaNumberByStationName(booking.getFromLocation());
-            List<String> stationNames = new ArrayList<>();
-            if (stationObjects != null) {
-                for (Station station : stationObjects) {
-                    stationNames.add(station.getStationName());
-                }
-            } else {
-                throw new RuntimeException("Station not found!");
-            }
-
-            model.addAttribute("stationNames", stationNames);
-
-            return "booking/booking_options";
+        if (!timetablesDestinations.isEmpty()) {
+            model.addAttribute("timetables", timetablesDestinations);
+            model.addAttribute("prices", timetableUtils.journeyPrice(timetablesDestinations));
+            model.addAttribute("booking", new Timetable());
+            return "booking/book";
         }
+
+        return "booking/book";
     }
 
-    @PostMapping("/processBooking")
+    @RequestMapping("/book")
+    public String selectTrain(@ModelAttribute("booking") Timetable timetable, @Param(value = "trainNumber") String trainNumber, Model model) {
+
+        System.out.println(timetable.getCurrentStation() + " : Current Station " + timetable.getTrainNumber() + trainNumber);
+
+
+        return "booking/book";
+    }
+
+
+    /*@PostMapping("/processBooking")
     public String processBooking(@ModelAttribute("booking") Booking booking, Model model,
                                  BindingResult bindingResult) {
 
@@ -93,5 +84,5 @@ public class BookingController {
 
             return "booking/booking_success";
         }
-    }
+    }*/
 }

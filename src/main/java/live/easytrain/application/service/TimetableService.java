@@ -66,10 +66,6 @@ public class TimetableService implements TimetableServiceInterface {
     // Fetch timetable data from the API based on the provided parameters
     @Override
     public List<Timetable> fetchTimetableDataFromAPI(String stationName, LocalDate date, LocalTime hour) {
-        List<Station> stations = findAllEvaNumberByStationName(stationName);
-        if (stations.isEmpty()) {
-            throw new StationNotFoundException("Station not found: " + stationName);
-        }
 
         Integer evaNumber = evaNumberByStationName(stationName);
 

@@ -23,28 +23,29 @@
     <main class="main-background d-flex flex-column align-items-center justify-content-center">
         <h1 class="main-title text-center">Plan Your Journey</h1>
         <div class="form-container text-center mt-auto mb-5">
-            <form th:action="@{/timetables/save}" method="post">
+            <form th:action="@{/booking}" method="get">
                 <div class="form-row">
                     <div class="form-group">
                         <label for="stationName" class="form-label">Departing From</label>
                         <select id="stationName" name="stationName" class="form-control custom-input" required>
                             <option value="" disabled selected>Select a station</option>
-                            <option th:each="station : ${stations}" th:value="${station.stationName}" th:text="${station.stationName}"></option>
+                            <option th:each="station : ${stations}" th:value="${station.stationName}"
+                                    th:text="${station.stationName}"></option>
                         </select>
                     </div>
                     <img th:src="@{/images/double_arrow_shadow.png}" alt="Arrow" class="arrow-img">
                     <div class="form-group">
                         <label for="going-to" class="form-label">Going To</label>
-                        <input type="text" id="going-to" class="form-control custom-input" placeholder=" Going To">
+                        <input type="text" id="going-to" class="form-control custom-input" th:name="goingTo"
+                               placeholder=" Going To">
                     </div>
                 </div>
                 <div class="form-row mt-3">
                     <div class="form-group">
                         <label for="time-select" class="form-label">Time</label>
-                        <select id="time-select" class="form-control custom-input">
+                        <select id="time-select" class="form-control custom-input" th:name="time">
                             <option value="" disabled selected hidden> Time</option>
-                            <!-- Time-Options Loaded via JavaScript -->
-
+                            <option value="selectedTime" th:name="time"></option>
                         </select>
                     </div>
                 </div>

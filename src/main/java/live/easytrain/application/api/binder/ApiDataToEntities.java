@@ -92,14 +92,14 @@ public class ApiDataToEntities {
                         startingStation = timetableType.getStation();
 
                         if (sTypeIce.getDp().getCt() == null) {
-                            estimatedTime = sTypeIce.getDp().getPt();
-                            arrivalTime = sTypeIce.getDp().getPt();
+                            estimatedTime = timeSub(sTypeIce.getDp().getPt());
+                            arrivalTime = timeSub(sTypeIce.getDp().getPt());
                         } else {
-                            estimatedTime = sTypeIce.getDp().getCt();
-                            arrivalTime = sTypeIce.getDp().getCt();
+                            estimatedTime = timeSub(sTypeIce.getDp().getCt());
+                            arrivalTime = timeSub(sTypeIce.getDp().getCt());
                         }
 
-                        plannedArrivalTime = sTypeIce.getDp().getPt();
+                        plannedArrivalTime = timeSub(sTypeIce.getDp().getPt());
                         platformNumber = sTypeIce.getDp().getPp();
                     } else {
                         arStations = sTypeIce.getAr().getPpth().replace("|", " -> ");
@@ -121,12 +121,12 @@ public class ApiDataToEntities {
 
                     if (sTypeIce.getDp() == null) {
                         endingStation = timetableType.getStation();
-                        plannedDepartureTime = sTypeIce.getAr().getPt();
+                        plannedDepartureTime = timePlus(sTypeIce.getAr().getPt());
 
                         if (sTypeIce.getAr().getCt() == null) {
-                            departureTime = sTypeIce.getAr().getPt();
+                            departureTime = timePlus(sTypeIce.getAr().getPt());
                         } else {
-                            departureTime = sTypeIce.getAr().getCt();
+                            departureTime = timePlus(sTypeIce.getAr().getCt());
                         }
 
                         platformNumber = sTypeIce.getAr().getPp();
@@ -177,6 +177,24 @@ public class ApiDataToEntities {
         StringBuilder sb = new StringBuilder(str);
         sb.insert(2, ':');
         return sb.toString();
+    }
+
+    private String timeSub(String time) {
+
+        if (time == null) {
+            return null;
+        }
+
+        return String.valueOf(Long.parseLong(time) - 5);
+    }
+
+    private String timePlus(String time) {
+
+        if (time == null) {
+            return null;
+        }
+
+        return String.valueOf(Long.parseLong(time) + 4);
     }
 
 }
