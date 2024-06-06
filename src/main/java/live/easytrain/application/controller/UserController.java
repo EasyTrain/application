@@ -28,11 +28,6 @@ public class UserController {
         this.userService = userService;
     }
 
-    /*@GetMapping("/")
-    public String displayHome() {
-        return "index";
-    }
-*/
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
         model.addAttribute("user", new User());
@@ -40,7 +35,9 @@ public class UserController {
     }
 
     @PostMapping("/process_registration")
-    public String processRegistration(UserRegistrationDto userRegistrationDto, HttpServletRequest request) throws UnsupportedEncodingException, MessagingException {
+    public String processRegistration(UserRegistrationDto userRegistrationDto,
+                                      HttpServletRequest request) throws UnsupportedEncodingException,
+            MessagingException {
         userService.register(userRegistrationDto, getSiteURL(request));
 
         return "register_success";
@@ -93,9 +90,8 @@ public class UserController {
     }
 
     @PostMapping("/reset_password")
-    public String resetPassword(@ModelAttribute("email") Email email, @ModelAttribute("changePasswordRequest") ChangePasswordRequest changePasswordRequest) {
-        System.out.println(email);
-        System.out.println(changePasswordRequest);
+    public String resetPassword(@ModelAttribute("email") Email email,
+                                @ModelAttribute("changePasswordRequest") ChangePasswordRequest changePasswordRequest) {
 
         boolean isPasswordReset = userService.resetPassword(email, changePasswordRequest);
 
