@@ -41,33 +41,6 @@ public class BookingService implements BookingServiceInterface {
         this.timetableRepo = timetableRepo;
     }
 
-    // Logic to calculate the price of a booking
-    @Override
-    public double calculatePrice(Long bookingId) {
-
-        Booking booking = bookingRepo.findById(bookingId)
-                .orElseThrow(() -> new RuntimeException("Booking not found!"));
-
-        double totalTravelTime = booking.getDuration();
-        double basePrice = calculateBasePrice(totalTravelTime);
-        double discountedPrice = applyDiscount(basePrice, booking.getTicket().getDiscount());
-        return discountedPrice;
-    }
-
-
-    private double calculateBasePrice(double travelTime) {
-
-        // Base price is 1 Euro per minute of travel time
-        double basePricePerMinute = 1.0;
-
-        return travelTime * basePricePerMinute;
-    }
-
-    private double applyDiscount(double basePrice, double discount) {
-
-        return basePrice * (1 - (discount / 100));
-    }
-
     // Book with connections
     @Override
     public Booking getBookingWithConnections(Long bookingId) {
@@ -80,46 +53,7 @@ public class BookingService implements BookingServiceInterface {
     @Override
     @Transactional
     public Booking createBooking(Booking modelBooking) {
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        String[] arrDate = modelBooking.getStartDate().format(formatter).split("-");
-        String startDate = arrDate[0].substring(2) + arrDate[1] + arrDate[2];
-
-        System.out.println(startDate + " Date");
-
-        String startTime = modelBooking.getStartTime().toString().substring(0, 2);
-
-        System.out.println(startTime + " hour");
-
-        List<Timetable> timetablesToSave = new ArrayList<>();
-
-        //creates 1 request for the next 3 hours according the chose hour
-        for (int wishedTime = Integer.parseInt(startTime); wishedTime < Integer.parseInt(startTime) + 3; wishedTime++) {
-            List<Timetable> timetables = apiData.apiDataToTimetable(stationService.evaNumberByStationName(modelBooking.getFromLocation()),
-                    startDate, String.valueOf(wishedTime), false);
-
-            if (!timetables.isEmpty()) {
-                timetablesToSave.addAll(timetables);
-            }
-        }
-
-        if (timetablesToSave.isEmpty()) {
-            throw new RuntimeException("No data found for entered information." +
-                    " Try to change the date to today's date or change the hour to today's hour.");
-        }
-
-        timetableRepo.saveAll(timetablesToSave);
-
-        Booking booking = null;
-
-        return booking;
-    }
-
-    // CRUD operations: Update Booking
-    @Override
-    @Transactional
-    public Booking updateBooking(Booking booking) {
-        return bookingRepo.save(booking);
+        return bookingRepo.save(modelBooking);
     }
 
     // CRUD operations: Delete Booking

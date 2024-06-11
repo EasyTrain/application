@@ -1,9 +1,12 @@
 package live.easytrain.application.utils;
 
+import live.easytrain.application.entity.Booking;
 import live.easytrain.application.entity.Timetable;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 
 import java.text.DecimalFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -11,6 +14,13 @@ import java.util.regex.Pattern;
 
 @Configuration
 public class TimetableUtils {
+
+    private DateTimeParserUtils dateTimeParser;
+
+    @Autowired
+    public TimetableUtils(DateTimeParserUtils dateTimeParser) {
+        this.dateTimeParser = dateTimeParser;
+    }
 
     // This method is to search for the trains that includes the chosen destination
     public List<Timetable> journeysToDestination(List<Timetable> timetables, String destination) {
@@ -53,4 +63,21 @@ public class TimetableUtils {
         }
         return journeyPrices;
     }
+
+    public Booking timetableToBooking(List<Timetable> timetables, String trainNumber, double price) {
+
+        Timetable selectedTrain = timetables.stream().filter(
+                m -> m.getTrainNumber().equalsIgnoreCase(trainNumber)
+        ).findFirst().orElse(null);
+
+        if (selectedTrain == null) {
+            return null;
+        }
+
+        return new Booking(selectedTrain.getCurrentStation(), selectedTrain.getDestination(), LocalDate.now(),
+                dateTimeParser.parseStringToLocalTime(selectedTrain.getArrivalTime()),
+                dateTimeParser.parseStringToLocalTime(selectedTrain.getDepartureTime()), selectedTrain.getDelay(),
+                selectedTrain.getNextStations(), price, 0.0, trainNumber, selectedTrain.getPlatformNumber());
+    }
+
 }

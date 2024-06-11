@@ -61,14 +61,14 @@ public class User {
     private List<Role> roles;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Ticket> tickets;
+    private List<Booking> bookings;
 
-    public List<Ticket> getTickets() {
-        return tickets;
+    public List<Booking> getBookings() {
+        return bookings;
     }
 
-    public void setTickets(List<Ticket> tickets) {
-        this.tickets = tickets;
+    public void setBookings(List<Booking> bookings) {
+        this.bookings = bookings;
     }
 
     //    Constructors

@@ -10,73 +10,49 @@ public class Ticket {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    private String journey;
-    private double price;
+    @Column(name = "gender", length = 20)
+    private String gender;
 
-    @OneToOne(mappedBy = "ticket")
+    @Column(name = "full_name", length = 100)
+    private String fullName;
+
+    private String toLocation;
+
+    @Column(name = "connection_stop")
+    private String connectionStop;
+
+    private int carriageClass;
+    private double finalPrice;
+
+    private boolean underAge;
+
+    private String email;
+
+    @ManyToOne
+    @JoinColumn(name = "booking_id", nullable = false)
     private Booking booking;
 
     private double discount;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
-    private Boolean roundTrip;
 
     //    Constructors
     public Ticket() {
     }
 
-
-//    Setters and Getters
-
-    public String getJourney() {
-        return journey;
-    }
-
-    public void setJourney(String journey) {
-        this.journey = journey;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public double getDiscount() {
-        return discount;
-    }
-
-    public void setDiscount(double discount) {
+    public Ticket(String gender, String fullName, String email, String toLocation, int carriageClass, double finalPrice,
+                  boolean underAge, double discount, String connectionStop) {
+        this.gender = gender;
+        this.fullName = fullName;
+        this.email = email;
+        this.toLocation = toLocation;
+        this.carriageClass = carriageClass;
+        this.finalPrice = finalPrice;
+        this.underAge = underAge;
         this.discount = discount;
+        this.connectionStop = connectionStop;
     }
 
-    public Boolean getRoundTrip() {
-        return roundTrip;
-    }
-
-    public void setRoundTrip(Boolean roundTrip) {
-        this.roundTrip = roundTrip;
-    }
-
-    public Booking getBooking() {
-        return booking;
-    }
-
-    public void setBooking(Booking booking) {
-        this.booking = booking;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
+    //    Setters and Getters
 
 
     public Long getId() {
@@ -87,4 +63,83 @@ public class Ticket {
         this.id = id;
     }
 
+    public Booking getBooking() {
+        return booking;
+    }
+
+    public void setBooking(Booking booking) {
+        this.booking = booking;
+    }
+
+    public double getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(double discount) {
+        this.discount = discount;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public String getToLocation() {
+        return toLocation;
+    }
+
+    public void setToLocation(String toLocation) {
+        this.toLocation = toLocation;
+    }
+
+    public String getConnectionStop() {
+        return connectionStop;
+    }
+
+    public void setConnectionStop(String connectionStop) {
+        this.connectionStop = connectionStop;
+    }
+
+    public int getCarriageClass() {
+        return carriageClass;
+    }
+
+    public void setCarriageClass(int carriageClass) {
+        this.carriageClass = carriageClass;
+    }
+
+    public double getFinalPrice() {
+        return finalPrice;
+    }
+
+    public void setFinalPrice(double finalPrice) {
+        this.finalPrice = finalPrice;
+    }
+
+    public boolean isUnderAge() {
+        return underAge;
+    }
+
+    public void setUnderAge(boolean underAge) {
+        this.underAge = underAge;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 }
