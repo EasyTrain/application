@@ -107,8 +107,12 @@ public class UserController {
     }
 
     @PostMapping("/reset_password")
-    public String resetPassword(@ModelAttribute("email") Email email,
+    public String resetPassword(@Valid @ModelAttribute("email") Email email, BindingResult bindingResult,
                                 @ModelAttribute("changePasswordRequest") ChangePasswordRequest changePasswordRequest) {
+
+        if (bindingResult.hasErrors()) {
+            return "reset_password_form";
+        }
 
         boolean isPasswordReset = userService.resetPassword(email, changePasswordRequest);
 
