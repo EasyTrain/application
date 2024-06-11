@@ -107,10 +107,10 @@ public class UserController {
     }
 
     @PostMapping("/reset_password")
-    public String resetPassword(@Valid @ModelAttribute("email") Email email, BindingResult bindingResult,
-                                @ModelAttribute("changePasswordRequest") ChangePasswordRequest changePasswordRequest) {
+    public String resetPassword(@Valid @ModelAttribute("email") Email email, BindingResult bindingResultEmail,
+                                @Valid @ModelAttribute("changePasswordRequest") ChangePasswordRequest changePasswordRequest, BindingResult bindingResultChangePasswordRequest) {
 
-        if (bindingResult.hasErrors()) {
+        if (bindingResultEmail.hasErrors() || bindingResultChangePasswordRequest.hasErrors()) {
             return "reset_password_form";
         }
 
