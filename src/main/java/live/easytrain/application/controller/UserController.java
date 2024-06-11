@@ -82,7 +82,12 @@ public class UserController {
     }
 
     @PostMapping("/forgot_password_confirm_email")
-    public String submitEmail(Email email, HttpServletRequest request) {
+    public String submitEmail(@Valid @ModelAttribute("email") Email email, BindingResult bindingResult, HttpServletRequest request) {
+
+        if (bindingResult.hasErrors()) {
+            return "forgot-password-email-form";
+        }
+
         userService.submitEmail(email.getEmailAddress(), getSiteURL(request));
         return "forgot-password-email-submitted";
     }

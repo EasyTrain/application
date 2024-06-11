@@ -1,7 +1,14 @@
 package live.easytrain.application.entity;
 
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+
 public class Email {
 
+    @NotNull(message = "Please enter an email address")
+    @Pattern(message = "Enter a valid email address",
+            regexp = "^(?=.{1,64}@)[\\p{L}0-9_-]+(\\.[\\p{L}0-9_-]+)*@"
+                    + "[^-][\\p{L}0-9-]+(\\.[\\p{L}0-9-]+)*(\\.[\\p{L}]{2,})$")
     private String emailAddress;
 
     public Email() {
