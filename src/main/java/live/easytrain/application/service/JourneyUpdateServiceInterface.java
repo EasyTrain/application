@@ -1,15 +1,17 @@
 package live.easytrain.application.service;
 
-import live.easytrain.application.entity.JourneyUpdate;
 
+import jakarta.transaction.Transactional;
+import live.easytrain.application.entity.JourneyUpdate;
+import live.easytrain.application.entity.Station;
+import live.easytrain.application.entity.Timetable;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
-import java.util.Optional;
 
 public interface JourneyUpdateServiceInterface {
-
-    Iterable<JourneyUpdate> getAllJourneyUpdates();
-
-    Optional<JourneyUpdate> getJourneyUpdateByScheduledId(Long id);
-
-//    List<JourneyUpdate> checkDelays(String scheduleId);
+    List<JourneyUpdate> getJourneyUpdatesByScheduleId(String scheduleId);
+    List<JourneyUpdate> saveJourneyUpdates(String stationName, boolean recentChanges);
+    List<JourneyUpdate> findAll();
 }

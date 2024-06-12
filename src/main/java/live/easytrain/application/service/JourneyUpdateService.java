@@ -1,76 +1,113 @@
 package live.easytrain.application.service;
 
-import live.easytrain.application.entity.JourneyUpdate;
-import live.easytrain.application.entity.Station;
-import live.easytrain.application.entity.Timetable;
+
+import jakarta.transaction.Transactional;
 import live.easytrain.application.api.binder.ApiDataToEntities;
+import live.easytrain.application.entity.JourneyUpdate;
+import live.easytrain.application.entity.Timetable;
 import live.easytrain.application.repository.JourneyUpdateRepo;
-import live.easytrain.application.repository.StationRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
-public class JourneyUpdateService implements JourneyUpdateServiceInterface{
-    private JourneyUpdateRepo journeyUpdateRepo;
+public class JourneyUpdateService implements JourneyUpdateServiceInterface {
     private ApiDataToEntities apiDataToEntities;
-    private StationRepo stationRepo;
-    private StationServiceInterface stationServiceInterface;
+    private JourneyUpdateRepo journeyUpdateRepo;
+    private StationServiceInterface stationService;
+
     @Autowired
-    public JourneyUpdateService(JourneyUpdateRepo journeyUpdateRepo, ApiDataToEntities apiDataToEntities, StationRepo stationRepo, StationServiceInterface stationServiceInterface) {
-        this.journeyUpdateRepo = journeyUpdateRepo;
+    public JourneyUpdateService(ApiDataToEntities apiDataToEntities, JourneyUpdateRepo journeyUpdateRepo, StationServiceInterface stationService) {
         this.apiDataToEntities = apiDataToEntities;
-        this.stationRepo = stationRepo;
-        this.stationServiceInterface = stationServiceInterface;
+        this.journeyUpdateRepo = journeyUpdateRepo;
+        this.stationService = stationService;
+    }
+
+    // Retrieve journey updates by scheduleId
+    @Override
+    public List<JourneyUpdate> getJourneyUpdatesByScheduleId(String scheduleId) {
+        // Call journeyUpdates for scheduleId
+        List<JourneyUpdate> allJourneyUpdates = journeyUpdateRepo.findByScheduleId(scheduleId);
+        // Filter journeyUpdates by changes in delay
+        List<JourneyUpdate> filteredJourneyUpdates = new ArrayList<>();
+        JourneyUpdate previousUpdate = null;
+
+        for (JourneyUpdate update : allJourneyUpdates) {
+            if (previousUpdate == null || !update.getDelay().equals(previousUpdate.getDelay())) {
+                filteredJourneyUpdates.add(update);
+            }
+            previousUpdate = update;
+        }
+        // Save and return filtered journeyUpdates in database
+        journeyUpdateRepo.saveAll(filteredJourneyUpdates);
+        return filteredJourneyUpdates;
+    }
+
+   // Save JourneyUpdates
+   @Override
+   @Transactional
+   public List<JourneyUpdate> saveJourneyUpdates(String stationName, boolean recentChanges) {
+        // Get the evaNumber for the station
+        Integer evaNumber = stationService.evaNumberByStationName(stationName);
+        // Use evaNumber to fetch data
+        List<Timetable> timetables = apiDataToEntities.apiDataToTimetable(evaNumber, null, null, recentChanges);
+        List<JourneyUpdate> journeyUpdates = new ArrayList<>();
+        // Convert Timetable objects to JourneyUpdate objects and save
+        for (Timetable timetable : timetables) {
+            // Check if the timetable entry represents a recent change
+            if (isRecentChange(timetable, recentChanges)) {
+                JourneyUpdate update = timetableToJourneyUpdate(timetable);
+//                journeyUpdateRepo.save(update);
+                journeyUpdates.add(update);
+            }
+        }
+
+        journeyUpdateRepo.saveAll(journeyUpdates);
+
+        return journeyUpdates;
+    }
+
+// Method to check if a timetable entry represents a recent change
+private boolean isRecentChange(Timetable timetable, boolean recentChanges) {
+    // Check if recentChanges flag is true and if the timetable delay has changed
+    return recentChanges && timetable.getDelay() != null;
+    }
+
+    // Method to convert a Timetable object to a JourneyUpdate object
+    private JourneyUpdate timetableToJourneyUpdate(Timetable timetable) {
+        JourneyUpdate update = new JourneyUpdate();
+        update.setScheduleId(truncateString(timetable.getScheduleId(), 255));
+        update.setDelay(timetable.getDelay());
+        update.setArrivalTime(timetable.getArrivalTime());
+        update.setDepartureTime(timetable.getDepartureTime());
+        update.setChangedPathFrom(truncateString(timetable.getStartingPoint(), 255));
+        update.setChangedPathTo(truncateString(timetable.getDestination(), 255));
+        update.setTrainNumber(truncateString(timetable.getTrainNumber(), 255));
+        update.setPlatformNumber(truncateString(timetable.getPlatformNumber(), 255));
+        return update;
+    }
+
+    private String truncateString(String value, int maxLength) {
+        if (value != null && value.length() > maxLength) {
+            return value.substring(0, maxLength);
+        }
+        return value;
     }
     @Override
-    public Iterable<JourneyUpdate> getAllJourneyUpdates() {
-        return journeyUpdateRepo.findAll();
+    public List<JourneyUpdate> findAll() {
+        // Fetch all timetable data
+        List<Timetable> allTimetables = apiDataToEntities.apiDataToTimetable(null, null, null, true);
+        // Filter out recent changes
+        List<Timetable> recentChanges = allTimetables.stream()
+                .filter(timetable -> isRecentChange(timetable, true)) // Pass the recentChanges flag
+                .collect(Collectors.toList());
+        // Convert recent changes to JourneyUpdate objects
+        List<JourneyUpdate> recentJourneyUpdates = recentChanges.stream()
+                .map(this::timetableToJourneyUpdate)
+                .collect(Collectors.toList());
+        return recentJourneyUpdates;
     }
-    @Override
-    public Optional<JourneyUpdate> getJourneyUpdateByScheduledId(Long id) {
-        return journeyUpdateRepo.findById(id);
-    }
-//    @Override
-//    public List<JourneyUpdate> checkDelays(String scheduleId) {
-//        List<JourneyUpdate> journeyUpdates = journeyUpdateRepo.findByScheduleId(scheduleId);
-//        if (journeyUpdates.isEmpty()) {
-//            throw new RuntimeException("No journey updates found for the schedule ID: " + scheduleId);
-//        }
-//
-//        // Retrieve the Station by evaNumber
-//        Station station = stationRepo.findByEvaNumber(scheduleId);
-//        if (station == null) {
-//            throw new RuntimeException("No station found for the evaNumber: " + scheduleId);
-//        }
-//
-//        // Get the stationNumber (evaNumber)
-//        Integer stationNumber = Integer.valueOf(station.getEvaNumber());
-//
-//         // Fetch timetables using the ApiDataToEntities service
-//        List<Timetable> timetables = apiDataToEntities.apiDataToTimetable(stationNumber, null, null, true);
-//
-//        for (JourneyUpdate journeyUpdate : journeyUpdates) {
-//            for (Timetable timetable : timetables) {
-//                if (journeyUpdate.getScheduleId().equals(timetable.getScheduledId())) {
-//                    updateDelayInfo(journeyUpdate, timetable);
-//                }
-//            }
-//        }
-//
-//        journeyUpdateRepo.saveAll(journeyUpdates);
-//        return journeyUpdates;
-//    }
-//
-//    private void updateDelayInfo(JourneyUpdate journeyUpdate, Timetable updatedTimetable) {
-//        journeyUpdate.setDelay(updatedTimetable.getDelay());
-//        journeyUpdate.setArrivalTime(updatedTimetable.getArrivalTime());
-//        journeyUpdate.setDepartureTime(updatedTimetable.getDepartureTime());
-//        journeyUpdate.setChangedPathFrom(updatedTimetable.getStartingPoint());
-//        journeyUpdate.setChangedPathTo(updatedTimetable.getDestination());
-//        journeyUpdate.setTrainNumber(updatedTimetable.getTrainNumber());
-//        journeyUpdate.setPlatformNumber(updatedTimetable.getPlatformNumber());
-//    }
 }

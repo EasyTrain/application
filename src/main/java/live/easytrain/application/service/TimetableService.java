@@ -15,7 +15,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
-
 @Service
 public class TimetableService implements TimetableServiceInterface {
     private TimetableRepo timetableRepo;
@@ -76,7 +75,6 @@ public class TimetableService implements TimetableServiceInterface {
     public List<Timetable> getAllTimetables() {
         return timetableRepo.findAll();
     }
-
 }
 
 

@@ -7,5 +7,4 @@ import java.util.List;
 
 public interface JourneyUpdateRepo extends JpaRepository<JourneyUpdate, Long> {
     List<JourneyUpdate> findByScheduleId(String scheduleId);
-
 }

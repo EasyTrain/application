@@ -14,7 +14,7 @@ public class JourneyUpdate {
     @Column(name = "schedule_id")
     private String scheduleId;
 
-    @Column(name = "delay")
+    @Column(name = "delay", length = 500)
     private String delay;
 
     // sTypeIce.getAr().getCt();
@@ -126,3 +126,4 @@ public class JourneyUpdate {
         this.platformNumber = platformNumber;
     }
 }
+
