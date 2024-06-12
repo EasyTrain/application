@@ -47,7 +47,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: center;
     position: relative;
     min-height: 50vh;
 }
@@ -80,11 +80,18 @@
     padding-bottom: 0;
 }
 
+.form-container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .route-container {
     background-color: #F47950;
     color: #EBEBEB;
     border-radius: 10px;
-    width: 75%;
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -104,7 +111,7 @@
     background-color: #EBEBEB;
     color: #13152F;
     border-radius: 10px;
-    width: 75%;
+    width: 100%;
     display: grid;
     grid-template-columns: 0.5fr 0.03fr 1.25fr 0.03fr 1.25fr 0.03fr 0.5fr 0.03fr 1fr;
     align-items: center;
@@ -240,52 +247,88 @@
     margin-top: 5px;
 }
 
-
+/* Styles for Form Section */
 
 .form-container {
-    background-color: rgba(235, 235, 235, 0.6);
+    background-color: #EBEBEB;
     border-radius: 10px;
     padding: 30px;
-    border: 2px solid #13152F;
-    width: 80%;
-    max-width: 500px;
+    margin-top: 20px;
+    width: 100%;
     box-sizing: border-box;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
 }
 
 .form-row {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    width: 100%;
 }
 
 
 .form-group {
-    margin-bottom: 20px;
-    text-align: left;
+    display: flex;
+    flex-direction: column;
 }
 
 .form-label {
     display: none;
 }
 
-.custom-input {
-    width: 100%;
+.form-label-visible {
+    font-weight: bold;
+}
+
+.form-label-headline {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.custom-input, .form-select {
     border: 2px solid #13152F;
     border-radius: 10px;
     padding: 10px;
     color: #13152F;
     font-size: 1rem;
+    width: 100%;
 }
 
 .custom-input::placeholder {
     color: #13152F;
 }
 
+.form-check-inline {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+    position: relative;
+}
+
+.form-check-input {
+    margin-right: 5px;
+    border: 2px solid #13152F;
+    border-radius: 5px;
+    padding: 5px;
+    position: relative;
+    width: 15px;
+    height: 15px;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.form-check-input:checked {
+    background-color: #13152F;
+    color: #EBEBEB;
+}
+
 .text-form-link {
     display: flex;
     justify-content: flex-start;
 }
+
 
 .form-link {
     color: #F47950;
@@ -303,6 +346,7 @@
 .btn-container {
     display: flex;
     justify-content: flex-end;
+    margin-top: 10px;
 }
 
 .btn-custom {
@@ -330,5 +374,6 @@
     text-align: center;
     margin: 0 auto;
 }
+
 
 

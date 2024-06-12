@@ -19,6 +19,7 @@
     <div th:replace="~{fragments/navigation :: navigation}">
     </div>
 
+    <!-- Main Content -->
     <main class="main-background d-flex flex-column align-items-center justify-content-center">
 
         <h1 class="main-title-blue text-center">Timetable</h1>
@@ -32,7 +33,7 @@
 
         <!-- Content Container for the route -->
         <div class="route-container" th:each="timetable : ${timetables}" th:if="${timetableStat.last}">
-            <span class="route-text" th:text="${timetable.currentStation}"></span> <!-- Exchange Hamburg with Thymeleaf Expression (th:text="${station})-->
+            <span class="route-text" th:text="${timetable.currentStation}"></span>
         </div>
 
         <!-- Content Container for the Timetable Entries -->
@@ -68,12 +69,12 @@
             <div class="entry-separator"></div>
             <div class="entry-section delay-section">
                 <p class="label">Delay</p>
-                <p class="delay-time" th:text="${timetable.delay}"></p>
+                <p class="price-section" th:text="${timetable.delay}"></p>
                 <p class="label">Estimated Time</p>
-                <div class="delayed-times">
-                    <p class="delayed-time" th:text="${timetable.arrivalTime}"></p>
+                <div class="train-destination">
+                    <p class="end-station" th:text="${timetable.arrivalTime}"></p>
                     <img th:src="@{/images/double_arrow_shadow.png}" alt="Arrow" class="small-arrow"/>
-                    <p class="delayed-time" th:text="${timetable.departureTime}"></p>
+                    <p class="end-station" th:text="${timetable.departureTime}"></p>
                 </div>
             </div>
         </div>

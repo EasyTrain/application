@@ -74,10 +74,10 @@
             <div class="entry-separator"></div>
             <div class="entry-section delay-section">
                 <p class="label">Price</p>
-                <p class="delay-time" th:text="${prices[timetableStat.index].doubleValue() + ' Euros'}"></p>
+                <p class="price-section" th:text="${prices[timetableStat.index].doubleValue() + ' Euros'}"></p>
                 <p class="label">Destination</p>
-                <div class="delayed-times">
-                    <p class="delayed-time" th:text="${timetable.delay}"></p>
+                <div class="train-destination">
+                    <p class="end-station" th:text="${timetable.delay}"></p>
                 </div>
             </div>
 
