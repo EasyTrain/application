@@ -26,6 +26,7 @@ public class TimetableStationController {
     private StationServiceInterface stationService;
     private DateTimeParserUtils dateTimeParser;
     private JourneyUpdateServiceInterface journeyUpdateService;
+
     @Autowired
     public TimetableStationController(JourneyUpdateServiceInterface journeyUpdateService, TimetableServiceInterface timetableService, StationServiceInterface stationService,
                                       DateTimeParserUtils dateTimeParser) {
@@ -34,19 +35,21 @@ public class TimetableStationController {
         this.dateTimeParser = dateTimeParser;
         this.journeyUpdateService = journeyUpdateService;
     }
-@GetMapping("/timetable")
-public String getTimetables(Model model) {
-    List<Timetable> timetables = timetableService.getAllTimetables();
-    List<JourneyUpdate> updates = journeyUpdateService.findAll();
-    List<JourneyUpdate> combinedUpdates = combineTimetableAndUpdates(timetables, updates);
-    // Extract current station from the first timetable (if exists)
-    String currentStation = timetables.isEmpty() ? "" : timetables.get(0).getCurrentStation();
-    model.addAttribute("currentStation", currentStation);
-    model.addAttribute("entries", combinedUpdates);
-    model.addAttribute("timetables", timetables);
-    model.addAttribute("updates", updates);
-    return "timetable";
-}
+
+    @GetMapping("/timetable")
+    public String getTimetables(Model model) {
+        List<Timetable> timetables = timetableService.getAllTimetables();
+        List<JourneyUpdate> updates = journeyUpdateService.findAll();
+        List<JourneyUpdate> combinedUpdates = combineTimetableAndUpdates(timetables, updates);
+        // Extract current station from the first timetable (if exists)
+        String currentStation = timetables.isEmpty() ? "" : timetables.get(0).getCurrentStation();
+        model.addAttribute("currentStation", currentStation);
+        model.addAttribute("entries", combinedUpdates);
+        model.addAttribute("timetables", timetables);
+        model.addAttribute("updates", updates);
+        return "timetable";
+    }
+
     private List<JourneyUpdate> combineTimetableAndUpdates(List<Timetable> timetables, List<JourneyUpdate> updates) {
         Map<String, JourneyUpdate> updateMap = updates.stream()
                 .collect(Collectors.toMap(JourneyUpdate::getScheduleId, update -> update));
@@ -72,6 +75,7 @@ public String getTimetables(Model model) {
         }
         return combinedList;
     }
+
     private JourneyUpdate timetableToJourneyUpdate(Timetable timetable) {
         JourneyUpdate journeyUpdate = new JourneyUpdate();
         journeyUpdate.setScheduleId(timetable.getScheduleId());
@@ -86,6 +90,7 @@ public String getTimetables(Model model) {
         journeyUpdate.setDepartureTime(timetable.getDepartureTime());
         return journeyUpdate;
     }
+
     // Show timetable-form
     @GetMapping()
     public String showTimetableForm(Model model) {
@@ -94,6 +99,7 @@ public String getTimetables(Model model) {
         model.addAttribute("timetable", new Timetable());
         return "timetable-lookup";
     }
+
     // Save Timetables
     @PostMapping("/display-timetable")
     public String saveTimetablesData(@RequestParam String stationName,
@@ -115,9 +121,10 @@ public String getTimetables(Model model) {
             return "timetable-lookup";
         }
     }
+
     @GetMapping("/timetable-list")
     public String showTimetableList(Model model, RedirectAttributes redirectAttributes) {
-        try{
+        try {
             // Retrieve the timetables from the model
             List<Timetable> timetables = timetableService.getAllTimetables();
             // Retrieve the journey updates from the service
@@ -129,18 +136,26 @@ public String getTimetables(Model model) {
             model.addAttribute("updates", updates);
             model.addAttribute("timetables", timetables);
             // Add a success message
-            model.addAttribute("successMessage","Timetables and Journey Updates loaded successfully.");
+            model.addAttribute("successMessage", "Timetables and Journey Updates loaded successfully.");
         } catch (Exception e) {
             // Add an error message in case of an exception
             model.addAttribute("errorMessage", "An error occurred while loading Timetables and Journey Updates: " + e.getMessage());
         }
-            return "timetable";
+        return "timetable";
     }
+
     // Retrieve journeyUpdates by scheduleId
     @GetMapping("/delays/{scheduleId}")
     public String getDelaysByScheduleId(@PathVariable String scheduleId, Model model) {
-        List<JourneyUpdate> updates= journeyUpdateService.getJourneyUpdatesByScheduleId(scheduleId);
-        model.addAttribute("updates", updates);
+        // Retrieve journey update by schedule ID
+        List<JourneyUpdate> journeyUpdate = journeyUpdateService.getJourneyUpdatesByScheduleId(scheduleId);
+        // Check if journeyUpdate is null
+        if (journeyUpdate == null) {
+            // Handle null case, maybe return an error message or redirect
+            return "journey_update_not_found";
+        }
+
+        model.addAttribute("journeyUpdate", journeyUpdate);
         return "timetable";
     }
 }
