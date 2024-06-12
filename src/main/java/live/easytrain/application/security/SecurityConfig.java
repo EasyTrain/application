@@ -8,8 +8,12 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.session.jdbc.config.annotation.web.http.EnableJdbcHttpSession;
+import org.springframework.session.security.web.authentication.SpringSessionRememberMeServices;
 
 @Configuration
+@EnableJdbcHttpSession
 public class SecurityConfig {
     private UserDetailsService userDetailsService;
 
@@ -32,7 +36,7 @@ public class SecurityConfig {
         httpSecurity.authorizeHttpRequests(
                         customizer -> customizer
                                 .requestMatchers(staticResources).permitAll()
-                                .anyRequest().permitAll()
+                                .anyRequest().authenticated()
                 )
                 .formLogin(login -> login
                         .loginPage("/login")
@@ -41,9 +45,23 @@ public class SecurityConfig {
                         .defaultSuccessUrl("/")
                         .permitAll()
                 )
-                .logout(logout -> logout.permitAll()
-                );
+                .rememberMe((rememberMe) -> rememberMe
+                        .rememberMeServices(rememberMeServices())
+                )
+                .logout()
+                .deleteCookies("SESSION")
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                .logoutSuccessUrl("/login");
 
         return httpSecurity.build();
+    }
+
+    @Bean
+    public SpringSessionRememberMeServices rememberMeServices() {
+        SpringSessionRememberMeServices rememberMeServices =
+                new SpringSessionRememberMeServices();
+        // optionally customize
+        rememberMeServices.setAlwaysRemember(true);
+        return rememberMeServices;
     }
 }
