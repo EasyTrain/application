@@ -12,7 +12,7 @@
 <div class="container">
 
     <!-- Header -->
-    <div th:replace="~{fragments/header-logo-only :: header-logo-only}">
+    <div th:replace="~{fragments/header-login-register :: header-login-register}">
     </div>
 
     <!-- Navigation -->
@@ -32,8 +32,8 @@
         </div>
 
         <!-- Content Container for the route -->
-        <div class="route-container" th:each="timetable : ${timetables}" th:if="${timetableStat.last}">
-            <span class="route-text" th:text="${timetable.currentStation}"></span>
+        <div class="orange-content-container" th:each="timetable : ${timetables}" th:if="${timetableStat.last}">
+            <span class="orange-content-text" th:text="${timetable.currentStation}"></span>
             <!-- Exchange Hamburg with Thymeleaf Expression (th:text="${station})-->
         </div>
 

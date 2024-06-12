@@ -11,7 +11,7 @@
 
 <div class="container">
     <!-- Header -->
-    <div th:replace="~{fragments/header-logo-only :: header-logo-only}">
+    <div th:replace="~{fragments/header-profile-logout :: header-profile-logout}">
     </div>
 
     <!-- Navigation -->
@@ -34,8 +34,8 @@
         <form class="booking-form" th:action="@{/processBooking/{trainNumber}/{price}(trainNumber=${booking.booking.trainNumber},
                                          price=${booking.booking.journeyPrice})}" th:object="${booking}" method="post">
             <!-- Content Container for the route -->
-            <div class="route-container">
-                <span class="route-text" th:text="*{booking.fromLocation}"></span>
+            <div class="orange-content-container">
+                <span class="orange-content-text" th:text="*{booking.fromLocation}"></span>
             </div>
 
             <!-- Content Container for the Timetable Entries -->
@@ -86,7 +86,7 @@
             <!-- Customer Information Section-->
 
             <div class="form-container">
-                <h2>Customer Information</h2>
+                <h2 class="section-title">Customer Information</h2>
 
                 <div class="form-row">
                     <div class="form-group">
@@ -143,7 +143,7 @@
             <!-- Payment Information Section-->
 
             <div class="form-container">
-                <h2>Payment Information</h2>
+                <h2 class="section-title">Payment Information</h2>
 
                 <div class="form-row">
                     <div class="form-group">

@@ -1,0 +1,168 @@
+/* Styles for header */
+/* Login and Registration text */
+.text-primary-custom {
+    color: #13152F !important;
+}
+.text-primary-custom:hover {
+    text-decoration: underline;
+}
+
+/* Logo Image */
+.logo-img {
+    height: 150px;
+}
+
+/* Styles for nav */
+.bg-custom {
+    background-color: #F47950 !important;
+}
+
+.text-custom {
+    color: #EBEBEB !important;
+    font-size: 1.50rem;
+}
+
+.nav-item .nav-link {
+    color: #EBEBEB !important;
+    font-size: 1.50rem;
+}
+
+.nav-item .nav-link.active {
+    background-color: transparent !important;
+    color: #13152F !important;
+    font-weight: bold;
+}
+
+.separator {
+    color: #EBEBEB;
+    padding: 0 10px;
+    font-size: 1.50rem;
+    line-height: 1.50;
+}
+
+/* Styles for Main Section */
+
+.main-background {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    position: relative;
+    min-height: 50vh;
+}
+
+.main-title-blue {
+    color: #13152F;
+    font-size: 3.50rem;
+    font-weight: bold;
+    margin-top: 5%;
+    margin-bottom: 4%;
+}
+
+.text-container {
+    background-color: rgba(235, 235, 235, 0.6);
+    border-radius: 10px;
+    padding: 30px;
+    border: 2px solid #13152F;
+    width: 80%;
+    max-width: 500px;
+    box-sizing: border-box;
+}
+
+.inner-text {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+}
+
+.orange-text {
+    color: #F47950;
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin: 10px;
+    padding-bottom: 0;
+}
+
+.blue-text {
+    color: #13152F;
+    font-size: 1.25rem;
+    margin: 10px 0;
+    padding-bottom: 0;
+}
+
+.orange-content-container {
+    background-color: #F47950;
+    color: #EBEBEB;
+    border-radius: 10px;
+    width: 75%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px;
+    margin-top: 60px;
+    box-sizing: border-box;
+}
+
+.orange-content-text {
+    font-size: 2.25rem;
+    font-weight: bold;
+    margin: 0;
+}
+
+/* Styles for timetable entry container */
+.timetable-entry-container {
+    background-color: #EBEBEB;
+    color: #13152F;
+    border-radius: 10px;
+    width: 75%;
+    display: flex;
+    flex-direction: column;
+    padding: 30px;
+    margin-top: 10px;
+    box-sizing: border-box;
+    gap: 10px;
+}
+
+.section {
+    display: flex;
+    justify-content: space-between;
+}
+
+.section-title {
+    color: #F47950;
+    font-weight: bold;
+    font-size: 1.25rem;
+    margin-bottom: 10px;
+}
+
+.section-break {
+    margin: 10px 0;
+}
+
+.row {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    align-items: center;
+    gap: 10px;
+}
+
+.blue-text-bold {
+    color: #13152F;
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin: 10px 0;
+    padding-bottom: 0;
+}
+
+/* Styles for footer */
+.footer-container {
+    background-color: #F47950;
+    color: #EBEBEB;
+    padding: 10px;
+    text-align: center;
+    margin: 0 auto;
+}
+
+

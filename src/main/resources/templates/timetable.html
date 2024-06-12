@@ -32,8 +32,8 @@
         </div>
 
         <!-- Content Container for the route -->
-        <div class="route-container" th:each="timetable : ${timetables}" th:if="${timetableStat.last}">
-            <span class="route-text" th:text="${timetable.currentStation}"></span>
+        <div class="orange-content-container" th:each="timetable : ${timetables}" th:if="${timetableStat.last}">
+            <span class="orange-content-text" th:text="${timetable.currentStation}"></span>
         </div>
 
         <!-- Content Container for the Timetable Entries -->
