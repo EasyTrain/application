@@ -94,8 +94,8 @@ public class TimetableStationController {
     // Show timetable-form
     @GetMapping()
     public String showTimetableForm(Model model) {
-        List<Station> stations = stationService.findAllEvaNumberByStationName("");
-        model.addAttribute("stations", stations);
+        List<Station> station = stationService.findAllStationByStationCode("ICE");
+        model.addAttribute("stations", station);
         model.addAttribute("timetable", new Timetable());
         return "timetable-lookup";
     }
@@ -110,6 +110,15 @@ public class TimetableStationController {
             // Save timetable data to database
             List<Timetable> timetables = timetableService.saveTimetableData(stationName, LocalDate.now(),
                     dateTimeParser.parseStringToLocalTime(time), recentChanges);
+            // Save the recent changes and compare with timetables.
+            List<JourneyUpdate> updates = journeyUpdateService.saveJourneyUpdates(stationName, recentChanges);
+            // Combine the timetables and journey updates
+            List<JourneyUpdate> combinedUpdates = combineTimetableAndUpdates(timetables, updates);
+            // Print saved timetables to console
+            System.out.println("Saved Timetables:");
+            for (Timetable timetable : timetables) {
+                System.out.println(timetable);
+            }
             // Pass necessary attributes to the model
             model.addAttribute("entries", combinedUpdates);
             model.addAttribute("updates", updates);
