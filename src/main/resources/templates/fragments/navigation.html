@@ -11,32 +11,33 @@
 <nav class="bg-custom py-2 mb-4" th:fragment="navigation">
     <ul class="nav justify-content-center">
         <li class="nav-item">
-            <a class="nav-link text-custom" href="#">Home</a>
+            <a class="nav-link text-custom" th:href="@{/}">Home</a>
         </li>
         <li class="nav-item d-flex align-items-center">
             <span class="separator">|</span>
         </li>
         <li class="nav-item">
-            <a class="nav-link text-custom active" href="#">Timetable</a>
+            <a class="nav-link text-custom" th:href="@{/timetables}">Timetable</a>
         </li>
         <li class="nav-item d-flex align-items-center">
             <span class="separator">|</span>
         </li>
         <li class="nav-item">
-            <a class="nav-link text-custom" href="#">Booking</a>
+            <a class="nav-link text-custom" th:href="@{/}">Booking</a>
         </li>
         <li class="nav-item d-flex align-items-center">
             <span class="separator">|</span>
         </li>
         <li class="nav-item">
-            <a class="nav-link text-custom" href="#">Travel Information</a>
+            <a class="nav-link text-custom" href="#">About Us</a>
         </li>
         <li class="nav-item d-flex align-items-center">
             <span class="separator">|</span>
         </li>
         <li class="nav-item">
-            <a class="nav-link text-custom" href="#">Stations</a>
+            <a class="nav-link text-custom" href="#">Contact Us</a>
         </li>
+    </ul>
     </ul>
 </nav>
 
