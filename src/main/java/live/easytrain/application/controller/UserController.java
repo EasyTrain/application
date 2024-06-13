@@ -52,7 +52,7 @@ public class UserController {
         } catch (UnsupportedEncodingException | MessagingException e) {
             return "registration_form";
         } catch (IllegalStateException e) {
-            bindingResult.addError(new FieldError("duplicateUser", "email", "A user with this email address has already been registered"));
+            bindingResult.addError(new FieldError("duplicateUser", "email", userRegistrationDto.email() + " already exists."));
             return "registration_form";
         }
 
