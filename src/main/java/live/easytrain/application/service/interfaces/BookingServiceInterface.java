@@ -1,4 +1,4 @@
-package live.easytrain.application.service;
+package live.easytrain.application.service.interfaces;
 
 import live.easytrain.application.entity.Booking;
 

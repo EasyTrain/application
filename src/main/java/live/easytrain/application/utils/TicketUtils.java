@@ -2,6 +2,7 @@ package live.easytrain.application.utils;
 
 import org.springframework.context.annotation.Configuration;
 
+
 @Configuration
 public class TicketUtils {
 
@@ -23,12 +24,19 @@ public class TicketUtils {
 
     public double finalPrice(double normalPrice, int carriageClass, boolean underage) {
 
+        double finalPrice = normalPrice;
+
         if (underage && carriageClass == 1) {
-            return underageTicket(normalPrice, true) * 1.25;
+            finalPrice = underageTicket(normalPrice, true) * 1.25;
         } else if (underage && carriageClass == 2) {
-            return underageTicket(normalPrice, true);
+            finalPrice = underageTicket(normalPrice, true);
         } else {
-            return firstClassTicket(normalPrice, carriageClass);
+            finalPrice = firstClassTicket(normalPrice, carriageClass);
         }
+
+        String str = String.format("%1.2f", finalPrice);
+        finalPrice = Double.parseDouble(str);
+
+        return finalPrice;
     }
 }

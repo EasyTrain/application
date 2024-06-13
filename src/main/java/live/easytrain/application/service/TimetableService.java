@@ -75,6 +75,17 @@ public class TimetableService implements TimetableServiceInterface {
     public List<Timetable> getAllTimetables() {
         return timetableRepo.findAll();
     }
+
+    @Override
+    public Timetable getJourneyFromTimetableById(Long journeyId) {
+
+        Timetable timetable = timetableRepo.findById(journeyId).orElse(null);
+
+        if (timetable == null) {
+            throw new RuntimeException("Journey not found: ");
+        }
+        return timetable;
+    }
 }
 
 

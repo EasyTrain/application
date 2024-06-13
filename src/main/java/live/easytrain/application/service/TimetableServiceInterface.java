@@ -12,4 +12,6 @@ public interface TimetableServiceInterface {
     Integer evaNumberByStationName(String stationName);
     List<Timetable> fetchTimetableDataFromAPI(String stationName, LocalDate date, LocalTime hour);
     List<Timetable> getAllTimetables();
+
+    Timetable getJourneyFromTimetableById(Long journeyId);
 }

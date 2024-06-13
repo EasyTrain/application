@@ -79,7 +79,9 @@ public class XmlResponse {
      * */
     public TimetableType fetchXmlResponse(String pattern) {
 
-        String xml = "";
+        String xml = null;
+        TimetableType timetableType = null;
+
         OkHttpClient client = new OkHttpClient();
 
         String url = String.format(_API_TIMETABLE_URL, pattern);
@@ -105,6 +107,10 @@ public class XmlResponse {
 //            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             // dev
             Logger.getLogger(this.getClass().getName()).log(Level.FINE, e.getMessage(), e);
+        }
+
+        if (xml == null) {
+            return null;
         }
 
         return parseXmlResponse(xml);

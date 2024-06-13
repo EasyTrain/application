@@ -1,20 +1,18 @@
-package live.easytrain.application.service;
+package live.easytrain.application.service.implentation;
 
 import jakarta.transaction.Transactional;
 import live.easytrain.application.entity.Booking;
-import live.easytrain.application.entity.Timetable;
 import live.easytrain.application.exceptions.BookingNotFoundException;
 import live.easytrain.application.api.binder.ApiDataToEntities;
 import live.easytrain.application.repository.BookingRepo;
 import live.easytrain.application.repository.ConnectionRepo;
 import live.easytrain.application.repository.TicketRepo;
 import live.easytrain.application.repository.TimetableRepo;
+import live.easytrain.application.service.StationServiceInterface;
+import live.easytrain.application.service.interfaces.BookingServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Service

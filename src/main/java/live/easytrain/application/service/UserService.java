@@ -169,6 +169,21 @@ public class UserService implements UserServiceInterface {
 
     }
 
+    @Override
+    public User getUserByEmail(String email) {
+
+        User user = new User();
+
+        Optional<User> optionalUser = userRepository.findByEmail(email);
+        if (optionalUser.isPresent()) {
+            user = optionalUser.get();
+        } else {
+            throw new UserNotFoundException("User not found");
+        }
+
+        return user;
+    }
+
     private void sendForgotEmail(User user, String siteURL)
             throws MessagingException, UnsupportedEncodingException {
         String toAddress = user.getEmail();

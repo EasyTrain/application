@@ -13,4 +13,6 @@ public interface UserServiceInterface {
     boolean isPasswordConfirmed(User user);
 
     void submitEmail(String email, String siteURL);
+
+    User getUserByEmail(String email);
 }
