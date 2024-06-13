@@ -18,14 +18,12 @@ public class JourneyUpdateService implements JourneyUpdateServiceInterface {
     private ApiDataToEntities apiDataToEntities;
     private JourneyUpdateRepo journeyUpdateRepo;
     private StationServiceInterface stationService;
-
     @Autowired
     public JourneyUpdateService(ApiDataToEntities apiDataToEntities, JourneyUpdateRepo journeyUpdateRepo, StationServiceInterface stationService) {
         this.apiDataToEntities = apiDataToEntities;
         this.journeyUpdateRepo = journeyUpdateRepo;
         this.stationService = stationService;
     }
-
     // Retrieve journey updates by scheduleId
     @Override
     public List<JourneyUpdate> getJourneyUpdatesByScheduleId(String scheduleId) {
@@ -34,7 +32,6 @@ public class JourneyUpdateService implements JourneyUpdateServiceInterface {
         // Filter journeyUpdates by changes in delay
         List<JourneyUpdate> filteredJourneyUpdates = new ArrayList<>();
         JourneyUpdate previousUpdate = null;
-
         for (JourneyUpdate update : allJourneyUpdates) {
             if (previousUpdate == null || !update.getDelay().equals(previousUpdate.getDelay())) {
                 filteredJourneyUpdates.add(update);
@@ -45,30 +42,28 @@ public class JourneyUpdateService implements JourneyUpdateServiceInterface {
         journeyUpdateRepo.saveAll(filteredJourneyUpdates);
         return filteredJourneyUpdates;
     }
-
-   // Save JourneyUpdates
-   @Override
-   @Transactional
-   public List<JourneyUpdate> saveJourneyUpdates(String stationName, boolean recentChanges) {
+    // Save JourneyUpdates
+    @Override
+    @Transactional
+    public List<JourneyUpdate> saveJourneyUpdates(String stationName, boolean recentChanges) {
         // Get the evaNumber for the station
         Integer evaNumber = stationService.evaNumberByStationName(stationName);
         // Use evaNumber to fetch data
         List<Timetable> timetables = apiDataToEntities.apiDataToTimetable(evaNumber, null, null, recentChanges);
         List<JourneyUpdate> journeyUpdates = new ArrayList<>();
         // Convert Timetable objects to JourneyUpdate objects and save
-        for (Timetable timetable : timetables) {
+            for (Timetable timetable : timetables) {
             // Check if the timetable entry represents a recent change
             if (isRecentChange(timetable, recentChanges)) {
                 JourneyUpdate update = timetableToJourneyUpdate(timetable);
-//                journeyUpdateRepo.save(update);
+                // journeyUpdateRepo.save(update);
                 journeyUpdates.add(update);
             }
-        }
+            }
 
-        journeyUpdateRepo.saveAll(journeyUpdates);
-
-        return journeyUpdates;
+       return journeyUpdateRepo.saveAll(journeyUpdates);
     }
+
 
 // Method to check if a timetable entry represents a recent change
 private boolean isRecentChange(Timetable timetable, boolean recentChanges) {

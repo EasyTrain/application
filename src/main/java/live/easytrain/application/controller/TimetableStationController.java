@@ -26,7 +26,6 @@ public class TimetableStationController {
     private StationServiceInterface stationService;
     private DateTimeParserUtils dateTimeParser;
     private JourneyUpdateServiceInterface journeyUpdateService;
-
     @Autowired
     public TimetableStationController(JourneyUpdateServiceInterface journeyUpdateService, TimetableServiceInterface timetableService, StationServiceInterface stationService,
                                       DateTimeParserUtils dateTimeParser) {
@@ -35,9 +34,9 @@ public class TimetableStationController {
         this.dateTimeParser = dateTimeParser;
         this.journeyUpdateService = journeyUpdateService;
     }
-
     @GetMapping("/timetable")
     public String getTimetables(Model model) {
+        System.out.println("Retrieving all timetables and journey updates");
         List<Timetable> timetables = timetableService.getAllTimetables();
         List<JourneyUpdate> updates = journeyUpdateService.findAll();
         List<JourneyUpdate> combinedUpdates = combineTimetableAndUpdates(timetables, updates);
@@ -49,48 +48,6 @@ public class TimetableStationController {
         model.addAttribute("updates", updates);
         return "timetable";
     }
-
-    private List<JourneyUpdate> combineTimetableAndUpdates(List<Timetable> timetables, List<JourneyUpdate> updates) {
-        Map<String, JourneyUpdate> updateMap = updates.stream()
-                .collect(Collectors.toMap(JourneyUpdate::getScheduleId, update -> update));
-
-        List<JourneyUpdate> combinedList = new ArrayList<>();
-        for (Timetable timetable : timetables) {
-            JourneyUpdate journeyUpdate = updateMap.get(timetable.getScheduleId());
-            if (journeyUpdate != null) {
-                // Update journeyUpdate with timetable data
-                journeyUpdate.setArrivalTime(timetable.getPlannedArrivalTime());
-                journeyUpdate.setDepartureTime(timetable.getPlannedDepartureTime());
-                journeyUpdate.setChangedPathFrom(timetable.getStartingPoint());
-                journeyUpdate.setChangedPathTo(timetable.getDestination());
-                journeyUpdate.setPlatformNumber(timetable.getPlatformNumber());
-                journeyUpdate.setDelay(timetable.getDelay());
-                journeyUpdate.setTrainNumber(timetable.getTrainNumber());
-                journeyUpdate.setArrivalTime(timetable.getArrivalTime());
-                journeyUpdate.setDepartureTime(timetable.getDepartureTime());
-                combinedList.add(journeyUpdate);
-            } else {
-                combinedList.add(timetableToJourneyUpdate(timetable));
-            }
-        }
-        return combinedList;
-    }
-
-    private JourneyUpdate timetableToJourneyUpdate(Timetable timetable) {
-        JourneyUpdate journeyUpdate = new JourneyUpdate();
-        journeyUpdate.setScheduleId(timetable.getScheduleId());
-        journeyUpdate.setTrainNumber(timetable.getTrainNumber());
-        journeyUpdate.setArrivalTime(timetable.getPlannedArrivalTime());
-        journeyUpdate.setDepartureTime(timetable.getPlannedDepartureTime());
-        journeyUpdate.setChangedPathFrom(timetable.getStartingPoint());
-        journeyUpdate.setChangedPathTo(timetable.getDestination());
-        journeyUpdate.setPlatformNumber(timetable.getPlatformNumber());
-        journeyUpdate.setDelay(timetable.getDelay());
-        journeyUpdate.setArrivalTime(timetable.getArrivalTime());
-        journeyUpdate.setDepartureTime(timetable.getDepartureTime());
-        return journeyUpdate;
-    }
-
     // Show timetable-form
     @GetMapping()
     public String showTimetableForm(Model model) {
@@ -99,7 +56,6 @@ public class TimetableStationController {
         model.addAttribute("timetable", new Timetable());
         return "timetable-lookup";
     }
-
     // Save Timetables
     @PostMapping("/display-timetable")
     public String saveTimetablesData(@RequestParam String stationName,
@@ -107,6 +63,7 @@ public class TimetableStationController {
                                      @RequestParam(required = false, defaultValue = "false") boolean recentChanges,
                                      Model model) {
         try {
+            System.out.println("Saving timetables data for station: " + stationName + ", time: " + time + ", recentChanges: " + recentChanges);
             // Save timetable data to database
             List<Timetable> timetables = timetableService.saveTimetableData(stationName, LocalDate.now(),
                     dateTimeParser.parseStringToLocalTime(time), recentChanges);
@@ -130,10 +87,10 @@ public class TimetableStationController {
             return "timetable-lookup";
         }
     }
-
     @GetMapping("/timetable-list")
     public String showTimetableList(Model model, RedirectAttributes redirectAttributes) {
         try {
+            System.out.println("Showing timetable list");
             // Retrieve the timetables from the model
             List<Timetable> timetables = timetableService.getAllTimetables();
             // Retrieve the journey updates from the service
@@ -148,23 +105,59 @@ public class TimetableStationController {
             model.addAttribute("successMessage", "Timetables and Journey Updates loaded successfully.");
         } catch (Exception e) {
             // Add an error message in case of an exception
+            System.out.println("An error occurred while loading Timetables and Journey Updates: " + e.getMessage());
+            e.printStackTrace();
             model.addAttribute("errorMessage", "An error occurred while loading Timetables and Journey Updates: " + e.getMessage());
         }
         return "timetable";
     }
-
     // Retrieve journeyUpdates by scheduleId
     @GetMapping("/delays/{scheduleId}")
     public String getDelaysByScheduleId(@PathVariable String scheduleId, Model model) {
         // Retrieve journey update by schedule ID
-        List<JourneyUpdate> journeyUpdate = journeyUpdateService.getJourneyUpdatesByScheduleId(scheduleId);
-        // Check if journeyUpdate is null
-        if (journeyUpdate == null) {
-            // Handle null case, maybe return an error message or redirect
-            return "journey_update_not_found";
+        try {
+            System.out.println("Retrieving delays for scheduleId: " + scheduleId);
+            List<JourneyUpdate> journeyUpdates = journeyUpdateService.getJourneyUpdatesByScheduleId(scheduleId);
+            model.addAttribute("journeyUpdates", journeyUpdates);
+        } catch (Exception e) {
+            System.out.println("An error occurred while retrieving delays: " + e.getMessage());
+            e.printStackTrace();
+            model.addAttribute("errorMessage", "An error occurred while retrieving delays: " + e.getMessage());
         }
-
-        model.addAttribute("journeyUpdate", journeyUpdate);
         return "timetable";
+    }
+    private List<JourneyUpdate> combineTimetableAndUpdates(List<Timetable> timetables, List<JourneyUpdate> updates) {
+        Map<String, JourneyUpdate> updateMap = updates.stream()
+                .collect(Collectors.toMap(JourneyUpdate::getScheduleId, update -> update));
+
+        List<JourneyUpdate> combinedList = new ArrayList<>();
+        for (Timetable timetable : timetables) {
+            JourneyUpdate journeyUpdate = updateMap.get(timetable.getScheduleId());
+            if (journeyUpdate != null) {
+                // Update journeyUpdate with timetable data
+                journeyUpdate.setArrivalTime(timetable.getPlannedArrivalTime());
+                journeyUpdate.setDepartureTime(timetable.getPlannedDepartureTime());
+                journeyUpdate.setChangedPathFrom(timetable.getStartingPoint());
+                journeyUpdate.setChangedPathTo(timetable.getDestination());
+                combinedList.add(journeyUpdate);
+            } else {
+                combinedList.add(timetableToJourneyUpdate(timetable));
+            }
+        }
+        return combinedList;
+    }
+    private JourneyUpdate timetableToJourneyUpdate(Timetable timetable) {
+        JourneyUpdate journeyUpdate = new JourneyUpdate();
+        journeyUpdate.setScheduleId(timetable.getScheduleId());
+        journeyUpdate.setTrainNumber(timetable.getTrainNumber());
+        journeyUpdate.setArrivalTime(timetable.getPlannedArrivalTime());
+        journeyUpdate.setDepartureTime(timetable.getPlannedDepartureTime());
+        journeyUpdate.setChangedPathFrom(timetable.getStartingPoint());
+        journeyUpdate.setChangedPathTo(timetable.getDestination());
+        journeyUpdate.setPlatformNumber(timetable.getPlatformNumber());
+        journeyUpdate.setDelay(timetable.getDelay());
+        journeyUpdate.setArrivalTime(timetable.getArrivalTime());
+        journeyUpdate.setDepartureTime(timetable.getDepartureTime());
+        return journeyUpdate;
     }
 }
