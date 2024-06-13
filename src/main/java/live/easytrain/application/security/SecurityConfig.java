@@ -36,6 +36,9 @@ public class SecurityConfig {
         httpSecurity.authorizeHttpRequests(
                         customizer -> customizer
                                 .requestMatchers(staticResources).permitAll()
+                                .requestMatchers("/").permitAll()
+                                .requestMatchers("/register").permitAll()
+                                .requestMatchers("/login").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .formLogin(login -> login
