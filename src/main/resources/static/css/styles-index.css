@@ -72,7 +72,7 @@
     box-sizing: border-box;
 }
 
-.row {
+.form-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -158,6 +158,6 @@
     text-align: center;
     margin: 0 auto;
 }.text-main-custom {
-/*matches the color of the nav bar*/
+     /*matches the color of the nav bar*/
      color: #F47950
  }
