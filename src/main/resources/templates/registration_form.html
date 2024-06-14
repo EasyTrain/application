@@ -29,7 +29,7 @@
 
         <div class="form-container text-center mt-auto mb-5">
             <form th:action="@{/process_registration}" th:object="${user}" method="POST">
-                <div class="form-row">
+                <div class="row">
                     <div class="form-group">
                         <label for="firstName" class="form-label">First Name</label>
                         <input type="text" th:field="*{firstName}" id="firstName" class="form-control custom-input"

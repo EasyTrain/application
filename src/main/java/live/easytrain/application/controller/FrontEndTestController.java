@@ -1,6 +1,8 @@
 package live.easytrain.application.controller;
 
+import live.easytrain.application.dto.BookingDto;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
@@ -20,5 +22,19 @@ public String showTimetableTest() {
 public String showTimetableTest2() {
     return "timetable-lookup";
 }
+
+@GetMapping("/profiletest")
+public String showJourneyTest(Model model) {
+
+    model.addAttribute("booking", new BookingDto());
+    return "profile/profile";
+}
+
+    @GetMapping("/edit-test")
+    public String showJourneyTest() {
+
+
+        return "profile/profile-edit";
+    }
 
 }

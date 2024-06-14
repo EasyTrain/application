@@ -88,7 +88,7 @@
             <div class="form-container">
                 <h2 class="section-title">Customer Information</h2>
 
-                <div class="form-row">
+                <div class="row">
                     <div class="form-group">
                         <label class="form-label" for="fullName">Full Name</label>
                         <input class="form-control custom-input" id="fullName" th:field="${booking.ticket.fullName}"
@@ -102,7 +102,7 @@
                     </div>
                 </div>
 
-                <div class="form-row">
+                <div class="row">
                     <div class="form-group">
                         <label for="gender" class="form-label custom-input">Gender</label>
                         <select id="gender" class="form-select" th:field="${booking.ticket.gender}">
@@ -114,7 +114,7 @@
                     </div>
                 </div>
 
-                <div class="form-row">
+                <div class="row">
                     <div class="form-group">
                         <label class="form-label-headline">Select your Class: </label>
                         <div class="form-check form-check-inline">
@@ -145,7 +145,7 @@
             <div class="form-container">
                 <h2 class="section-title">Payment Information</h2>
 
-                <div class="form-row">
+                <div class="row">
                     <div class="form-group">
                         <label for="cardHolder" class="form-label">Full Name</label>
                         <input id="cardHolder" class="form-control custom-input"
@@ -164,7 +164,7 @@
                 </div>
 
 
-                <div class="form-row">
+                <div class="row">
                     <div class="form-group">
                         <label class="form-label" for="cvc">CVC</label>
                         <input class="form-control custom-input" id="cvc" th:field="${booking.payment.cvc}"
