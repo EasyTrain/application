@@ -21,11 +21,11 @@
                 Logged in as <span th:remove="tag" sec:authentication="name"></span>
             </div>
             <form th:action="@{/logout}" method="post">
-                <input type="submit" value="Log Out"/>
+                <input type="submit" class="btn btn-link text-primary-custom" value="Log Out"/>
             </form>
 
             <!-- offcanvas link-->
-            <a href="#profile" class="d-block mt-3" data-bs-toggle="offcanvas" role="button" aria-controls="profile">
+            <a href="#profile" class="d-block mt-3 text-primary-custom" data-bs-toggle="offcanvas" role="button" aria-controls="profile">
                 Profile
             </a>
         </div>
