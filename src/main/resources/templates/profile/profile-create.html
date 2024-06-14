@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>EasyTrain :: Create Profile</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/css/styles-profile-create.css}">
+</head>
+<body>
+
+<div class="container">
+    <!-- Header -->
+    <div th:replace="~{fragments/header-profile-logout :: header-profile-logout}">
+    </div>
+
+    <!-- Navigation -->
+    <div th:replace="~{fragments/navigation :: navigation}">
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-background d-flex flex-column align-items-center justify-content-center">
+
+        <h1 class="main-title-blue text-center">Create Profile</h1>
+
+        <!-- Content Container for orange-content-container -->
+        <div class="orange-content-container">
+            <p class="orange-content-text">Peter Mayer</p> <!-- Exchange with Thymeleaf Expression firstName and lastName -->
+        </div>
+
+        <!-- Create Section -->
+
+        <div class="form-container">
+            <form method="POST" action="/profile/create">
+                <!-- Add the appropriate action URL and method -->
+
+                <h2 class="section-title">Personal Information</h2>
+
+                <div class="row">
+                    <div class="form-group">
+                        <label for="title" class="form-label">Title</label>
+                        <select id="title" class="form-control custom-input">
+                            <option value="Mr">Mr</option>
+                            <option value="Ms">Ms</option>
+                            <option value="Dr">Dr</option>
+                        </select>
+                        <!-- th:field="${profile.title}" -->
+                    </div>
+                    <div class="form-group">
+                        <!-- empty field -->
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group">
+                        <label class="form-label-headline">First Name</label>
+                        <p class="non-editable">Peter</p>
+                        <!-- th:text="${profile.firstName}" -->
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label-headline">Last Name</label>
+                        <p class="non-editable">Mayer</p>
+                        <!-- th:text="${profile.lastName}" -->
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group">
+                        <label for="age" class="form-label">Age</label>
+                        <input id="age" class="form-control custom-input" type="number" placeholder="Age"/>
+                        <!-- th:field="${profile.age}" -->
+                    </div>
+                    <div class="form-group">
+                        <!-- empty field -->
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group">
+                        <label for="streetName" class="form-label">Street Name</label>
+                        <input id="streetName" class="form-control custom-input" placeholder="Street Name"/>
+                        <!-- th:field="${profile.streetName}" -->
+                    </div>
+                    <div class="form-group">
+                        <label for="streetNumber" class="form-label">Street Number</label>
+                        <input id="streetNumber" class="form-control custom-input" placeholder="Street Number"/>
+                        <!-- th:field="${profile.streetNumber}" -->
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group">
+                        <label for="plz" class="form-label">PLZ</label>
+                        <input id="plz" class="form-control custom-input" placeholder="PLZ"/>
+                        <!-- th:field="${profile.plz}" -->
+                    </div>
+                    <div class="form-group">
+                        <label for="city" class="form-label">City</label>
+                        <input id="city" class="form-control custom-input" placeholder="City"/>
+                        <!-- th:field="${profile.city}" -->
+                    </div>
+                </div>
+
+                <!-- Section Break -->
+                <div class="section-break"></div>
+
+                <h2 class="section-title">Contact Information</h2>
+
+                <div class="row">
+                    <div class="form-group">
+                        <label class="form-label-headline">e-Mail</label>
+                        <p class="non-editable">peter.mayer@example.com</p>
+                        <!-- th:text="${profile.email}" -->
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label-headline">Phone Number</label>
+                        <p class="non-editable">0151-56258774</p>
+                        <!-- th:text="${profile.phoneNumber}" -->
+                    </div>
+                </div>
+
+                <!-- Button Container -->
+                <div class="btn-container">
+                    <button type="submit" class="btn btn-custom">Submit</button>
+                </div>
+            </form>
+        </div>
+
+    </main>
+    <!-- Footer -->
+    <div th:replace="~{fragments/footer :: footer}">
+    </div>
+</div>
+
+</body>
+</html>
