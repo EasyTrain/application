@@ -31,10 +31,17 @@ public String showJourneyTest(Model model) {
 }
 
     @GetMapping("/edit-test")
-    public String showJourneyTest() {
+    public String showEditprofileTest() {
 
 
         return "profile/profile-edit";
+    }
+
+    @GetMapping("/create-test")
+    public String showCreateProfileTest() {
+
+
+        return "profile/profile-complete";
     }
 
 }
