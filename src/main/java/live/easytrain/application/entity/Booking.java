@@ -32,6 +32,7 @@ public class Booking {
 
     private String trainsDestination;
 
+    @Column(name = "journey_details", length = 1000)
     private String journeyDetails;
 
     private double journeyPrice;

@@ -49,10 +49,9 @@ public class ApiDataToEntities {
             timetableType = xmlResponse.fetchXmlResponse("plan" + "/" + stationNumber + "/" + date + "/" + hour);
         }
 
-        if (timetableType == null) {
-//            throw new RuntimeException("No data found for entered information." +
-//                    " Try to change the date to today's date or change the hour to today's hour.");
-            return timetables;
+        if (timetableType == null || timetableType.getS() == null || timetableType.getS().isEmpty()) {
+            throw new RuntimeException("No data found for entered information." +
+                    " Try to change the date to today's date or change the hour to today's hour.");
         } else {
             for (SType sType : timetableType.getS()) {
                 TlType tlType = sType.getTl();
@@ -62,7 +61,7 @@ public class ApiDataToEntities {
             }
 
             if (sTypesICE.isEmpty()) {
-                throw new RuntimeException("No ICE found on trajectory");
+                throw new RuntimeException("No Trains found on trajectory!");
             } else {
                 for (SType sTypeIce : sTypesICE) {
 

@@ -37,6 +37,9 @@
             <!-- Exchange Hamburg with Thymeleaf Expression (th:text="${station})-->
         </div>
 
+        <div class="orange-content-container" th:if="${dbError}">
+            <div> <span class="orange-content-text" th:text="${dbError}"></span></div>
+        </div>
         <!-- Content Container for the Timetable Entries -->
 
         <div class="timetable-entry-container" th:each="timetable : ${timetables}">

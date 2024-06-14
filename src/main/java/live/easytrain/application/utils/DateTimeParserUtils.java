@@ -38,4 +38,16 @@ public class DateTimeParserUtils {
         }
         return localTime.toString().substring(0, 2);
     }
+
+    public LocalDate dayChanging(LocalTime time) {
+
+        if (isNextDay(time)) {
+            return LocalDate.now().plusDays(1);
+        }
+        return LocalDate.now();
+    }
+
+    public boolean isNextDay(LocalTime time) {
+        return time.isAfter(LocalTime.parse("23:00", DateTimeFormatter.ofPattern("HH:mm")));
+    }
 }

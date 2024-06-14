@@ -13,6 +13,7 @@ import live.easytrain.application.service.interfaces.BookingServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -71,5 +72,16 @@ public class BookingService implements BookingServiceInterface {
         }
 
         return message;
+    }
+
+    @Override
+    public List<Booking> getBookingsById(Long id) {
+
+        List<Booking> bookings = bookingRepo.findAllById(id);
+
+        if (bookings.isEmpty()) {
+            throw new BookingNotFoundException("Booking not found!");
+        }
+        return bookings;
     }
 }

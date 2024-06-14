@@ -73,18 +73,24 @@ public class BookingController {
 
         Authentication loggedUser = SecurityContextHolder.getContext().getAuthentication();
 
-        if (!loggedUser.isAuthenticated()) {
+        if (loggedUser.getName().equalsIgnoreCase("anonymousUser")) {
             return "redirect:/login";
         }
 
-        if (dateTimeParser.parseStringToLocalTime(time).isBefore(LocalTime.now())) {
-            throw new RuntimeException("Is not possible get this journey because is already departed.");
+        try {
+
+            if (dateTimeParser.parseStringToLocalTime(time).isBefore(LocalTime.now())
+                    && !dateTimeParser.isNextDay(LocalTime.now())) {
+                throw new RuntimeException("It is not possible to book this journey as the train has already left.");
+            }
+
+            List<Timetable> timetables = timetableService.fetchTimetableDataFromAPI(stationName,
+                    dateTimeParser.dayChanging(LocalTime.now()), dateTimeParser.parseStringToLocalTime(time));
+            timetablesDestinations = timetableUtils.journeysToDestination(timetables, goingTo);
+
+        } catch (RuntimeException e) {
+            model.addAttribute("dbError", e.getMessage());
         }
-
-        List<Timetable> timetables = timetableService.fetchTimetableDataFromAPI(stationName, LocalDate.now(),
-                dateTimeParser.parseStringToLocalTime(time));
-
-        timetablesDestinations = timetableUtils.journeysToDestination(timetables, goingTo);
 
         if (!timetablesDestinations.isEmpty()) {
             model.addAttribute("timetables", timetablesDestinations);
@@ -92,8 +98,6 @@ public class BookingController {
             model.addAttribute("booking", new Timetable());
             return "booking/book";
         }
-
-        model.addAttribute("journeysNotFound", "No journeys available!!");
 
         return "booking/book";
     }
@@ -144,11 +148,11 @@ public class BookingController {
 
 
     @PostMapping("/processBooking/{trainNumber}/{price}")
-    public String processBooking(@Valid @PathVariable String trainNumber, @PathVariable("price") double price,
-                                 @ModelAttribute("booking") BookingDto bookingDto, BindingResult bindingResult,
-                                 BindingResult errors, BindingResult paymentErrors, Model model) {
+    public String processBooking(@PathVariable String trainNumber, @PathVariable("price") double price,
+                                 @Valid @ModelAttribute("booking") BookingDto bookingDto, BindingResult bindingResult,
+                                 Model model) {
 
-        if (bindingResult.hasErrors() && errors.hasErrors() && paymentErrors.hasErrors()) {
+        if (bindingResult.hasErrors()) {
             return "booking/booking";
         } else {
             Booking selectedTrain = timetableUtils.timetableToBooking(timetablesDestinations, trainNumber, price);
@@ -157,13 +161,9 @@ public class BookingController {
                 return "redirect:/";
             }
 
-            System.out.println(selectedTrain.getTrainNumber() + " : " + selectedTrain.getJourneyPrice());
-
-            // User authentication logic
             Authentication loggedMember = SecurityContextHolder.getContext().getAuthentication();
             String email = loggedMember.getName();
 
-            System.out.println(email + " :email");
             User userAuth = userService.getUserByEmail(email);
 
             selectedTrain.setUser(userAuth);
@@ -195,7 +195,8 @@ public class BookingController {
                 try {
                     bookingUtils.sendTicket(bookingDto);
                 } catch (MessagingException | UnsupportedEncodingException e) {
-                    throw new RuntimeException(e);
+                    throw new RuntimeException("Something went wrong, email not sent. Please make sure that this email is valid: "
+                    + ticket.getEmail());
                 }
             } else {
 
@@ -217,7 +218,7 @@ public class BookingController {
 
         if (selectedTrain.getDepartureTime().isBefore(LocalTime.now()) ||
                 selectedTrain.getDepartureTime().equals(LocalTime.now())) {
-            
+
             throw new RuntimeException("Is not possible get this journey because is already departed.");
         }
 
@@ -226,6 +227,22 @@ public class BookingController {
         // improvement
         return "booking/booking";
 
+    }
+
+    @GetMapping("/journeys")
+    public String journeys(Model model) {
+
+        Authentication loggedUser = SecurityContextHolder.getContext().getAuthentication();
+        String email = loggedUser.getName();
+
+        User userAuth = userService.getUserByEmail(email);
+
+        List<Booking> journeys = bookingService.getBookingsById(userAuth.getId());
+
+
+        model.addAttribute("journeys", journeys);
+
+        return "profile/journeys";
     }
 
 }
