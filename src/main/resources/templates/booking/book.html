@@ -34,7 +34,6 @@
         <!-- Content Container for the route -->
         <div class="orange-content-container" th:each="timetable : ${timetables}" th:if="${timetableStat.last}">
             <span class="orange-content-text" th:text="${timetable.currentStation}"></span>
-            <!-- Exchange Hamburg with Thymeleaf Expression (th:text="${station})-->
         </div>
 
         <div class="orange-content-container" th:if="${dbError}">

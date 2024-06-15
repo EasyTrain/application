@@ -40,10 +40,10 @@
 
         <div class="timetable-entry-container" th:each="timetable : ${timetables}">
 
-                <div class="entry-section logo-section">
-                    <img th:src="@{/images/EasyTrain_Logo_NoText.png}" alt="EasyTrain Logo" class="train-logo"/>
-                    <p class="train-number"><span th:text="${timetable.trainNumber}"></span></p>
-                </div>
+            <div class="entry-section logo-section">
+                <img th:src="@{/images/EasyTrain_Logo_NoText.png}" alt="EasyTrain Logo" class="train-logo"/>
+                <p class="train-number"><span th:text="${timetable.trainNumber}"></span></p>
+            </div>
 
             <div class="entry-separator"></div>
             <div class="entry-section">
@@ -73,11 +73,17 @@
                 <p class="label">Price</p>
                 <p class="price-section" th:text="${prices[timetableStat.index].doubleValue() + '€'}"></p>
                 <div class="btn-container">
-                    <button type="submit" class="btn btn-custom">Pay Now</button>
+                    <button type="submit" class="btn btn-custom">Pay</button>
+<!--                    <button type="button" class="btn btn-custom-inactive" disabled>Paid</button>-->
                 </div>
+<!--                <div class="btn-container">-->
+<!--                    <button type="submit" class="btn btn-custom" th:if="${!finalized}">Pay</button>-->
+<!--                    <button type="button" class="btn btn-custom-inactive" th:if="${finalized}" disabled>Paid</button>-->
+<!--                </div>-->
             </div>
 
         </div>
+
     </main>
 
     <!-- Footer -->
@@ -85,5 +91,11 @@
     </div>
 
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-oBqDVmMz4fnFO9gybBogGzPEFSIw39GIeGmI1kL8/kQQ/2S3QX0VR57yG0IflbM/" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+        integrity="sha384-ho+pP+jvFU0QlgclH+gUxDTxQYd1qVtbbA3NRSZl8gD3Us3MFQUUvvx2/MaL1B9M"
+        crossorigin="anonymous"></script>
 </body>
 </html>

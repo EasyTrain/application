@@ -40,8 +40,20 @@
     line-height: 1.50;
 }
 
-/* Styles for Main Section */
+/* General Styles */
+body, html {
+    margin: 0;
+    padding: 0;
+}
 
+.container {
+    width: 100%;
+    margin: 0 auto;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Main Section */
 .main-background {
     width: 100%;
     display: flex;
@@ -54,7 +66,7 @@
 
 .main-title-blue {
     color: #13152F;
-    font-size: 3.50rem;
+    font-size: 3.5rem;
     font-weight: bold;
     margin-top: 5%;
     margin-bottom: 4%;
@@ -73,18 +85,12 @@
     align-items: center;
     margin-right: 10px;
 }
+
 .text-secondary {
     color: #13152F;
     font-size: 1.25rem;
     margin: 0;
     padding-bottom: 0;
-}
-
-.form-container {
-    width: 75%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
 .orange-content-container {
@@ -106,7 +112,7 @@
     margin: 0;
 }
 
-/* Styles for timetable entry container */
+/* Timetable Entry Container */
 .timetable-entry-container {
     background-color: #EBEBEB;
     color: #13152F;
@@ -118,7 +124,6 @@
     padding: 10px;
     margin-top: 10px;
     box-sizing: border-box;
-    min-height: 100px;
     gap: 10px;
 }
 
@@ -130,7 +135,6 @@
     text-align: left;
     width: 100%;
 }
-
 
 .logo-section {
     align-items: center;
@@ -147,15 +151,6 @@
 .train-number {
     font-size: 1.25rem;
     margin: 5px;
-}
-
-.booking-text {
-    color: #F47950;
-    font-size: 1rem;
-    font-weight: bold;
-    text-decoration: none;
-    margin-top: 5px;
-    margin-bottom: 0;
 }
 
 .entry-separator {
@@ -216,8 +211,10 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    justify-content: center;
-    width: 100px;
+    justify-content: flex-start;
+    width: 100%;
+    margin: 0;
+    padding: 0;
 }
 
 .payment-section p,
@@ -226,158 +223,18 @@
     padding: 0;
 }
 
-.payment-link {
-    text-decoration: none;
-    color: inherit;
-    display: block;
-    transition: transform 0.3s ease-in-out;
-    width: 100%
-}
-
-.payment-link:hover {
-    text-decoration: none;
-    transform: scale(1.08);
-}
-
-.payment-link:hover .payment-section {
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-}
-
-.train-destination {
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    margin-top: 5px;
-}
-
-.end-station {
-    margin: 0 5px;
-    line-height: 1.25rem;
-}
-
-.small-arrow {
-    height: 1.25rem;
-    display: inline-block;
-}
-
 .payment-section .label {
     font-size: 0.75rem;
     font-weight: bold;
     margin: 0;
 }
 
-.delay-section .price-section {
-    margin-top: 5px;
-}
-
-/* Styles for Form Section */
-
-.section-title {
-    color: #F47950;
-    font-weight: bold;
-    font-size: 1.5rem;
-    margin-bottom: 10px;
-}
-
-.form-container {
-    background-color: #EBEBEB;
-    border-radius: 10px;
-    padding: 30px;
-    margin-top: 20px;
-    width: 100%;
-    box-sizing: border-box;
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 20px;
-}
-
-.row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-    width: 100%;
-}
-
-
-.form-group {
-    display: flex;
-    flex-direction: column;
-}
-
-.form-label {
-    display: none;
-}
-
-.form-label-visible {
-    font-weight: bold;
-}
-
-.form-label-headline {
-    font-weight: bold;
-    margin-bottom: 5px;
-}
-
-.custom-input, .form-select {
-    border: 2px solid #13152F;
-    border-radius: 10px;
-    padding: 10px;
-    color: #13152F;
-    font-size: 1rem;
-    width: 100%;
-}
-
-.custom-input::placeholder {
-    color: #13152F;
-}
-
-.form-check-inline {
-    display: flex;
-    align-items: center;
-    margin-right: 10px;
-    position: relative;
-}
-
-.form-check-input {
-    margin-right: 5px;
-    border: 2px solid #13152F;
-    border-radius: 5px;
-    padding: 5px;
-    position: relative;
-    width: 15px;
-    height: 15px;
-    -webkit-appearance: none;
-    appearance: none;
-}
-
-.form-check-input:checked {
-    background-color: #13152F;
-    color: #EBEBEB;
-}
-
-.text-form-link {
-    display: flex;
-    justify-content: flex-start;
-}
-
-
-.form-link {
-    color: #F47950;
-    font-size: 1.25rem;
-    text-decoration: none;
-}
-
-.form-link:hover {
-    color: #13152F;
-    text-decoration: underline;
-}
-
 /* Styles for button */
 
 .btn-container {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     margin-top: 10px;
-    width: 100%;
 }
 
 .btn-custom {
@@ -385,7 +242,8 @@
     color: #EBEBEB;
     border: 2px solid #13152F;
     border-radius: 10px;
-    padding: 10px 30px;
+    padding: 5px 10px;
+    margin-top: 10px;
     font-size: 1.25rem;
     font-weight: bold;
     cursor: pointer;
@@ -397,6 +255,20 @@
     border: 2px solid #F47950;
 }
 
+.btn-custom-inactive {
+    background-color: #13152F; /* Background color */
+    color: #EBEBEB; /* Text color */
+    border: 2px solid #F47950; /* Border color */
+    border-radius: 10px;
+    padding: 5px 10px;
+    margin-top: 10px;
+    font-size: 1.25rem;
+    font-weight: bold;
+    cursor: not-allowed; /* Cursor style for inactive state */
+    opacity: 0.6; /* Slightly faded to indicate inactive state */
+}
+
+
 /* Styles for footer */
 .footer-container {
     background-color: #F47950;
@@ -405,6 +277,3 @@
     text-align: center;
     margin: 0 auto;
 }
-
-
-
