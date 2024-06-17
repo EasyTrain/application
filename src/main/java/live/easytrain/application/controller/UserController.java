@@ -83,25 +83,30 @@ public class UserController {
         return "login";
     }
 
-    @GetMapping("/forgot_password_email_form")
+    @GetMapping("/forgot/email_form")
     public String displayEmailForm(Model model) {
         Email email = new Email();
         model.addAttribute("email", email);
-        return "forgot-password-email-form";
+        return "forgot-email-form";
     }
 
-    @PostMapping("/forgot_password_confirm_email")
+    @GetMapping("/forgot/email_submitted")
+    public String showEmailSubmitted() {
+        return "forgot-email-submitted";
+    }
+
+    @PostMapping("/forgot/confirm_email")
     public String submitEmail(@Valid @ModelAttribute("email") Email email, BindingResult bindingResult, HttpServletRequest request) {
 
         if (bindingResult.hasErrors()) {
-            return "forgot-password-email-form";
+            return "forgot-email-form";
         }
 
         userService.submitEmail(email.getEmailAddress(), getSiteURL(request));
-        return "forgot-password-email-submitted";
+        return "redirect:/forgot/email_submitted";
     }
 
-    @GetMapping("/reset_password")
+    @GetMapping("/forgot/reset_password")
     public String verifyResetPassword(@Param("code") String code, Model model) {
         if (userService.verify(code)) {
             ChangePasswordRequest changePasswordRequest = new ChangePasswordRequest();
@@ -115,7 +120,7 @@ public class UserController {
         }
     }
 
-    @PostMapping("/reset_password")
+    @PostMapping("/forgot/reset_password")
     public String resetPassword(@Valid @ModelAttribute("email") Email email, BindingResult bindingResultEmail,
                                 @Valid @ModelAttribute("changePasswordRequest") ChangePasswordRequest changePasswordRequest, BindingResult bindingResultChangePasswordRequest) {
 
