@@ -31,32 +31,37 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/register")
+    @GetMapping("/register/form")
     public String showRegistrationForm(Model model) {
         model.addAttribute("user", new User());
-        return "registration_form";
+        return "register_form";
     }
 
-    @PostMapping("/process_registration")
+    @GetMapping("/register/success")
+    public String showRegistrationSuccess() {
+        return "register_success";
+    }
+
+    @PostMapping("/register/process")
     public String processRegistration(@Valid @ModelAttribute("user") UserRegistrationDto userRegistrationDto, BindingResult bindingResult,
                                       HttpServletRequest request
-            ) {
+    ) {
 
         if (bindingResult.hasErrors()) {
-            return "registration_form";
+            return "register_form";
         }
 
         try {
             userService.register(userRegistrationDto, getSiteURL(request));
 
         } catch (UnsupportedEncodingException | MessagingException e) {
-            return "registration_form";
+            return "register_form";
         } catch (IllegalStateException e) {
             bindingResult.addError(new FieldError("duplicateUser", "email", userRegistrationDto.email() + " already exists."));
-            return "registration_form";
+            return "register_form";
         }
 
-        return "register_success";
+        return "redirect:/register/success";
     }
 
     @GetMapping("/verify")

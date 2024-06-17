@@ -25,7 +25,8 @@
             </form>
 
             <!-- offcanvas link-->
-            <a href="#profile" class="d-block mt-3 text-primary-custom" data-bs-toggle="offcanvas" role="button" aria-controls="profile">
+            <a href="#profile" class="d-block mt-3 text-primary-custom" data-bs-toggle="offcanvas" role="button"
+               aria-controls="profile">
                 Profile
             </a>
         </div>
@@ -34,7 +35,7 @@
         <div sec:authorize="!isAuthenticated()">
             <a th:href="@{/login}" class="text-primary-custom">Log In</a>
             <span class="mx-2 text-primary-custom"> | </span>
-            <a th:href="@{/register}" class="text-primary-custom">Register</a>
+            <a th:href="@{/register/form}" class="text-primary-custom">Register</a>
         </div>
     </div>
 </header>

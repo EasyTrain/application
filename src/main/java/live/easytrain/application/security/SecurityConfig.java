@@ -37,6 +37,8 @@ public class SecurityConfig {
                         customizer -> customizer
                                 .requestMatchers(staticResources).permitAll()
                                 .requestMatchers("/").permitAll()
+                                .requestMatchers("/register/**").permitAll()
+                                .requestMatchers("/verify/**").permitAll()
                                 .requestMatchers("/register").permitAll()
                                 .requestMatchers("/timetables/**").permitAll()
                                 .requestMatchers("/login").permitAll()
