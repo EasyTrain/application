@@ -21,10 +21,16 @@
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
-            <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. In minima ducimus excepturi quasi tempore fugit
-                quis voluptatibus aut error possimus, tenetur natus magni quam voluptatem quae eligendi repudiandae
-                delectus
-                eaque!</p>
+            <a class="btn" href="#" th:href="@{/profile}">Profile</a>
+            <br>
+            <a class="btn" href="#" th:href="@{/}">Change Email</a>
+            <br>
+            <a class="btn" href="#" th:href="@{/}">Delete Account</a>
+            <br>
+            <hr>
+            <form th:action="@{/logout}" method="post">
+                <input type="submit" class="btn btn-custom text-primary-custom" value="Log Out"/>
+            </form>
         </div>
     </div>
 
