@@ -144,9 +144,11 @@
 .row {
     display: grid;
     grid-template-columns: 1fr 2fr;
-    align-items: center;
+    align-items: flex-start;
     gap: 10px;
 }
+
+
 
 .blue-text-bold {
     color: #13152F;
