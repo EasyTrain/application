@@ -1,6 +1,5 @@
 package live.easytrain.application.controller;
 
-import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import live.easytrain.application.config.*;
 import live.easytrain.application.dto.BookingDto;
@@ -17,7 +16,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.UnsupportedEncodingException;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -75,11 +73,11 @@ public class BookingController {
 
         try {
 
-          /*  if (dateTimeParser.parseStringToLocalTime(time).isBefore(LocalTime.now())
+            if (dateTimeParser.parseStringToLocalTime(time).isBefore(LocalTime.now())
                     && !dateTimeParser.isNextDay(LocalTime.now())) {
-                throw new RuntimeException("It is not possible to book this journey.\n" +
+                throw new RuntimeException("It is not possible to book this journey.<br>" +
                         "The train has already left.");
-            }*/
+            }
 
             List<Timetable> timetables = timetableService.fetchTimetableDataFromAPI(stationName,
                     dateTimeParser.dayChanging(LocalTime.now()), dateTimeParser.parseStringToLocalTime(time));
@@ -221,17 +219,29 @@ public class BookingController {
             return "redirect:/";
         }
 
-        if (selectedTrain.getDepartureTime().isBefore(LocalTime.now()) ||
-                selectedTrain.getDepartureTime().equals(LocalTime.now())) {
+        try {
 
-            throw new RuntimeException("Is not possible get this journey because is already departed.");
+            if (selectedTrain.getDepartureTime().isBefore(LocalTime.now()) ||
+                    selectedTrain.getDepartureTime().equals(LocalTime.now())) {
+
+                throw new RuntimeException("Is not possible to save this journey because is already departed.");
+            }
+
+            Authentication loggedMember = SecurityContextHolder.getContext().getAuthentication();
+            String email = loggedMember.getName();
+
+            User userAuth = userService.getUserByEmail(email);
+
+            selectedTrain.setUser(userAuth);
+
+            bookingService.createBooking(selectedTrain);
+
+        } catch (RuntimeException e) {
+            model.addAttribute("payLaterError", e.getMessage());
+            return "booking/journey_saving-failed";
         }
 
-        bookingService.createBooking(selectedTrain);
-
-        // improvement
-        return "booking/booking";
-
+        return "booking/journey_saved";
     }
 
     @GetMapping("/journeys")
@@ -241,13 +251,30 @@ public class BookingController {
         String email = loggedUser.getName();
 
         User userAuth = userService.getUserByEmail(email);
-
-        List<Booking> journeys = bookingService.getBookingsById(userAuth.getId());
+        List<Booking> journeys = bookingService.getAllBookingsById(userAuth.getId());
 
 
         model.addAttribute("journeys", journeys);
 
         return "profile/journeys";
+    }
+
+    @GetMapping("/pay-journey/{id}")
+    public String payJourney(@PathVariable Long id, Model model) {
+
+        Booking selectedTrain = bookingService.getBookingById(id);
+
+        timetablesDestinations = timetableUtils.bookingToTimetableDestinations(selectedTrain);
+
+        BookingDto bookingDto = new BookingDto();
+        bookingDto.setBooking(selectedTrain);
+        bookingDto.setTicket(new Ticket());
+        bookingDto.setPayment(new Payment());
+
+        model.addAttribute("booking", bookingDto);
+
+        return "booking/booking";
+
     }
 
 }

@@ -66,9 +66,9 @@ public class BookingService implements BookingServiceInterface {
     }
 
     @Override
-    public List<Booking> getBookingsById(Long id) {
+    public List<Booking> getAllBookingsById(Long id) {
 
-        List<Booking> bookings = bookingRepo.findAllById(id);
+        List<Booking> bookings = bookingRepo.findAllByUserId(id);
 
         if (bookings.isEmpty()) {
             throw new BookingNotFoundException("Booking not found!");
@@ -117,6 +117,18 @@ public class BookingService implements BookingServiceInterface {
             easyTrainMailSender.sendEmail(fromAddress, toAddress, subject, content, senderName);
         } catch (MessagingException | UnsupportedEncodingException e) {
             throw new RuntimeException("Something went wrong, email not sent. Please make sure that this email is valid");
+        }
+    }
+
+    @Override
+    public Booking getBookingById(Long id) {
+
+        Optional<Booking> booking = bookingRepo.findById(id);
+
+        if (booking.isPresent()) {
+            return booking.get();
+        } else {
+            throw new BookingNotFoundException("Booking not found!");
         }
     }
 }

@@ -49,7 +49,8 @@
             <div class="timetable-entry-container">
 
 
-                <a th:href="@{/payLater}" class="booking-link">
+                <a th:href="@{/payLater/{trainNumber}/{price}(trainNumber=${booking.booking.trainNumber},
+                                         price=${booking.booking.journeyPrice})}" class="booking-link">
                     <div class="entry-section logo-section">
                         <img th:src="@{/images/EasyTrain_Logo_NoText.png}" alt="EasyTrain Logo" class="train-logo"/>
                         <p class="train-number"><span th:text="*{booking.trainNumber}"></span></p>

@@ -80,4 +80,16 @@ public class TimetableUtils {
                 selectedTrain.getNextStations(), price, 0.0, trainNumber, selectedTrain.getPlatformNumber());
     }
 
+    public List<Timetable> bookingToTimetableDestinations(Booking booking) {
+        List<Timetable> timetables = new ArrayList<>();
+
+        timetables.add(new Timetable(booking.getFromLocation(), booking.getToLocation(), booking.getTrainsDestination(),
+                "N/A",booking.getArrivalTime().toString(), booking.getDepartureTime().toString(),
+                booking.getTrainNumber(), booking.getPlatformNumber(), booking.getArrivalTime().toString(),
+                booking.getDepartureTime().toString(), "N/A", booking.getJourneyDetails(),
+                "N/A", booking.getFromLocation()));
+
+        return timetables;
+    }
+
 }

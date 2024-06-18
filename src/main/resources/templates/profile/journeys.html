@@ -32,48 +32,49 @@
         </div>
 
         <!-- Content Container for the route -->
-        <div class="orange-content-container" th:each="timetable : ${timetables}" th:if="${timetableStat.last}">
+        <div class="orange-content-container" th:each="journey : ${journeys}" th:if="${journeyStat.last}">
             <p class="orange-content-text">Your Travel Plans</p>
         </div>
 
         <!-- Content Container for Journeys -->
 
-        <div class="timetable-entry-container" th:each="timetable : ${timetables}">
+        <div class="timetable-entry-container" th:each="journey : ${journeys}">
 
             <div class="entry-section logo-section">
                 <img th:src="@{/images/EasyTrain_Logo_NoText.png}" alt="EasyTrain Logo" class="train-logo"/>
-                <p class="train-number"><span th:text="${timetable.trainNumber}"></span></p>
+                <p class="train-number"><span th:text="${journey.trainNumber}"></span></p>
             </div>
 
             <div class="entry-separator"></div>
             <div class="entry-section">
                 <p class="label">From</p>
-                <p class="place" th:text="${timetable.currentStation}"></p>
-                <p class="label">Arrival in <span th:text="${timetable.currentStation}"></span></p>
-                <p class="time" th:text="${timetable.plannedArrivalTime}"></p>
+                <p class="place" th:text="${journey.fromLocation}"></p>
+                <p class="label">Arrival in <span th:text="${journey.fromLocation}"></span></p>
+                <p class="time" th:text="${journey.arrivalTime}"></p>
             </div>
             <div class="entry-section arrow-section">
                 <img th:src="@{/images/double_arrow_shadow.png}" alt="Arrow" class="arrow"/>
             </div>
             <div class="entry-section">
                 <p class="label">To</p>
-                <p class="place" th:text="${timetable.destination}"></p>
-                <p class="label">Departure from <span th:text="${timetable.currentStation}"></span></p>
-                <p class="time" th:text="${timetable.plannedDepartureTime}"></p>
+                <p class="place" th:text="${journey.toLocation}"></p>
+                <p class="label">Departure from <span th:text="${journey.fromLocation}"></span></p>
+                <p class="time" th:text="${journey.departureTime}"></p>
             </div>
             <div class="entry-separator"></div>
             <div class="entry-section">
                 <p class="label">Destination</p>
-                <p class="end-station" th:text="${timetable.delay}"></p>
+                <p class="end-station" th:text="${journey.trainsDestination}"></p>
                 <p class="label">Platform</p>
-                <p class="platform-number" th:text="${timetable.platformNumber}"></p>
+                <p class="platform-number" th:text="${journey.platformNumber}"></p>
             </div>
             <div class="entry-separator"></div>
             <div class="entry-section payment-section">
                 <p class="label">Price</p>
-                <p class="price-section" th:text="${prices[timetableStat.index].doubleValue() + '€'}"></p>
+                <p class="price-section" th:text="${journey.journeyPrice + '€'}"></p>
                 <div class="btn-container">
-                    <button type="submit" class="btn btn-custom">Pay</button>
+                    <a type="submit" class="btn btn-custom" th:href="@{/pay-journey/{id}(id=${journey.id})}"
+                    >Pay</a>
 <!--                    <button type="button" class="btn btn-custom-inactive" disabled>Paid</button>-->
                 </div>
 <!--                <div class="btn-container">-->

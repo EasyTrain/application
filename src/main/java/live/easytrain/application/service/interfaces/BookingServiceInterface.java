@@ -13,7 +13,9 @@ public interface BookingServiceInterface {
 
     String deleteBooking(Long id);
 
-    List<Booking> getBookingsById(Long id);
+    List<Booking> getAllBookingsById(Long id);
 
     void sendTicket(BookingDto bookingDto);
+
+    Booking getBookingById(Long id);
 }
