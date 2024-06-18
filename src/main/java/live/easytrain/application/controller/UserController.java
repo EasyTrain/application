@@ -34,12 +34,12 @@ public class UserController {
     @GetMapping("/register/form")
     public String showRegistrationForm(Model model) {
         model.addAttribute("user", new User());
-        return "register_form";
+        return "register/register_form";
     }
 
     @GetMapping("/register/success")
     public String showRegistrationSuccess() {
-        return "register_success";
+        return "register/register_success";
     }
 
     @PostMapping("/register/process")
@@ -48,17 +48,17 @@ public class UserController {
     ) {
 
         if (bindingResult.hasErrors()) {
-            return "register_form";
+            return "register/register_form";
         }
 
         try {
             userService.register(userRegistrationDto, getSiteURL(request));
 
         } catch (UnsupportedEncodingException | MessagingException e) {
-            return "register_form";
+            return "register/register_form";
         } catch (IllegalStateException e) {
             bindingResult.addError(new FieldError("duplicateUser", "email", userRegistrationDto.email() + " already exists."));
-            return "register_form";
+            return "register/register_form";
         }
 
         return "redirect:/register/success";
@@ -87,19 +87,19 @@ public class UserController {
     public String displayEmailForm(Model model) {
         Email email = new Email();
         model.addAttribute("email", email);
-        return "forgot-email-form";
+        return "forgot/forgot-email-form";
     }
 
     @GetMapping("/forgot/email_submitted")
     public String showEmailSubmitted() {
-        return "forgot-email-submitted";
+        return "forgot/forgot-email-submitted";
     }
 
     @PostMapping("/forgot/confirm_email")
     public String submitEmail(@Valid @ModelAttribute("email") Email email, BindingResult bindingResult, HttpServletRequest request) {
 
         if (bindingResult.hasErrors()) {
-            return "forgot-email-form";
+            return "forgot/forgot-email-form";
         }
 
         userService.submitEmail(email.getEmailAddress(), getSiteURL(request));
@@ -114,9 +114,9 @@ public class UserController {
             model.addAttribute("changePasswordRequest", changePasswordRequest);
             model.addAttribute("email", email);
 
-            return "reset_password_form";
+            return "forgot/reset_password_form";
         } else {
-            return "reset_password_fail";
+            return "forgot/reset_password_fail";
         }
     }
 
@@ -125,15 +125,15 @@ public class UserController {
                                 @Valid @ModelAttribute("changePasswordRequest") ChangePasswordRequest changePasswordRequest, BindingResult bindingResultChangePasswordRequest) {
 
         if (bindingResultEmail.hasErrors() || bindingResultChangePasswordRequest.hasErrors()) {
-            return "reset_password_form";
+            return "forgot/reset_password_form";
         }
 
         boolean isPasswordReset = userService.resetPassword(email, changePasswordRequest);
 
         if (isPasswordReset) {
-            return "password_change_success";
+            return "forgot/password_change_success";
         } else {
-            return "password_change_failure";
+            return "forgot/password_change_failure";
         }
     }
 }
