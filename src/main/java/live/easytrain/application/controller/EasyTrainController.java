@@ -1,7 +1,7 @@
 package live.easytrain.application.controller;
 
 import live.easytrain.application.entity.Station;
-import live.easytrain.application.service.StationServiceInterface;
+import live.easytrain.application.service.interfaces.StationServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

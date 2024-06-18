@@ -7,6 +7,7 @@ import live.easytrain.application.dto.BookingDto;
 import live.easytrain.application.entity.*;
 import live.easytrain.application.service.interfaces.BookingServiceInterface;
 import live.easytrain.application.service.*;
+import live.easytrain.application.service.interfaces.TimetableServiceInterface;
 import live.easytrain.application.utils.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
