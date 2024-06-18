@@ -31,10 +31,10 @@ public class ContactUsService implements ContactUsServiceInterface {
         String senderName = contactUs.getFirstName() + " " + contactUs.getLastName();
         String subject = "[Form] " + contactUs.getSubject();
         String content = "<strong>Name:</strong> " + contactUs.getFirstName() + " " + contactUs.getLastName()
-                + "\n<strong>Email:</strong> " + contactUs.getEmail()
-                + "\n<strong>Phone Number:</strong> " + contactUs.getPhone()
-                + "\n<strong>Subject:</strong> " + contactUs.getSubject()
-                + "\n<strong>Message</strong>\n" + contactUs.getContent();
+                + "<br><strong>Email:</strong> " + contactUs.getEmail()
+                + "<br><strong>Phone Number:</strong> " + contactUs.getPhone()
+                + "<br><strong>Subject:</strong> " + contactUs.getSubject()
+                + "<br><strong>Message</strong><br>" + contactUs.getContent();
 
         try {
             mailSenderUtils.sendEmail(fromAddress, toAddress, subject, content, senderName);
