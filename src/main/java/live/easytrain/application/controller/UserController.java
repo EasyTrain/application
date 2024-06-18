@@ -31,32 +31,37 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/register")
+    @GetMapping("/register/form")
     public String showRegistrationForm(Model model) {
         model.addAttribute("user", new User());
-        return "registration_form";
+        return "register/register_form";
     }
 
-    @PostMapping("/process_registration")
+    @GetMapping("/register/success")
+    public String showRegistrationSuccess() {
+        return "register/register_success";
+    }
+
+    @PostMapping("/register/process")
     public String processRegistration(@Valid @ModelAttribute("user") UserRegistrationDto userRegistrationDto, BindingResult bindingResult,
                                       HttpServletRequest request
-            ) {
+    ) {
 
         if (bindingResult.hasErrors()) {
-            return "registration_form";
+            return "register/register_form";
         }
 
         try {
             userService.register(userRegistrationDto, getSiteURL(request));
 
         } catch (UnsupportedEncodingException | MessagingException e) {
-            return "registration_form";
+            return "register/register_form";
         } catch (IllegalStateException e) {
             bindingResult.addError(new FieldError("duplicateUser", "email", userRegistrationDto.email() + " already exists."));
-            return "registration_form";
+            return "register/register_form";
         }
 
-        return "register_success";
+        return "redirect:/register/success";
     }
 
     @GetMapping("/verify")
@@ -78,25 +83,30 @@ public class UserController {
         return "login";
     }
 
-    @GetMapping("/forgot_password_email_form")
+    @GetMapping("/forgot/email_form")
     public String displayEmailForm(Model model) {
         Email email = new Email();
         model.addAttribute("email", email);
-        return "forgot-password-email-form";
+        return "forgot/forgot-email-form";
     }
 
-    @PostMapping("/forgot_password_confirm_email")
+    @GetMapping("/forgot/email_submitted")
+    public String showEmailSubmitted() {
+        return "forgot/forgot-email-submitted";
+    }
+
+    @PostMapping("/forgot/confirm_email")
     public String submitEmail(@Valid @ModelAttribute("email") Email email, BindingResult bindingResult, HttpServletRequest request) {
 
         if (bindingResult.hasErrors()) {
-            return "forgot-password-email-form";
+            return "forgot/forgot-email-form";
         }
 
         userService.submitEmail(email.getEmailAddress(), getSiteURL(request));
-        return "forgot-password-email-submitted";
+        return "redirect:/forgot/email_submitted";
     }
 
-    @GetMapping("/reset_password")
+    @GetMapping("/forgot/reset_password")
     public String verifyResetPassword(@Param("code") String code, Model model) {
         if (userService.verify(code)) {
             ChangePasswordRequest changePasswordRequest = new ChangePasswordRequest();
@@ -104,26 +114,26 @@ public class UserController {
             model.addAttribute("changePasswordRequest", changePasswordRequest);
             model.addAttribute("email", email);
 
-            return "reset_password_form";
+            return "forgot/reset_password_form";
         } else {
-            return "reset_password_fail";
+            return "forgot/reset_password_fail";
         }
     }
 
-    @PostMapping("/reset_password")
+    @PostMapping("/forgot/reset_password")
     public String resetPassword(@Valid @ModelAttribute("email") Email email, BindingResult bindingResultEmail,
                                 @Valid @ModelAttribute("changePasswordRequest") ChangePasswordRequest changePasswordRequest, BindingResult bindingResultChangePasswordRequest) {
 
         if (bindingResultEmail.hasErrors() || bindingResultChangePasswordRequest.hasErrors()) {
-            return "reset_password_form";
+            return "forgot/reset_password_form";
         }
 
         boolean isPasswordReset = userService.resetPassword(email, changePasswordRequest);
 
         if (isPasswordReset) {
-            return "password_change_success";
+            return "forgot/password_change_success";
         } else {
-            return "password_change_failure";
+            return "forgot/password_change_failure";
         }
     }
 }

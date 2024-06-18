@@ -28,7 +28,7 @@
         <h1 class="main-title-blue text-center">Register</h1>
 
         <div class="form-container text-center mt-auto mb-5">
-            <form th:action="@{/process_registration}" th:object="${user}" method="POST">
+            <form th:action="@{/register/process}" th:object="${user}" method="POST">
                 <div class="row">
                     <div class="form-group">
                         <label for="firstName" class="form-label">First Name</label>
@@ -52,7 +52,8 @@
                         <label for="phoneNumber" class="form-label">First Name</label>
                         <input type="text" th:field="*{phoneNumber}" id="phoneNumber" class="form-control custom-input"
                                placeholder="Phone Number">
-                        <span th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}" class="error"></span>
+                        <span th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"
+                              class="error"></span>
                     </div>
                     <div class="form-group">
                         <label for="password" class="form-label">First Name</label>

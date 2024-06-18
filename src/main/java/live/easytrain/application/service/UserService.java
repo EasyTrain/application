@@ -204,7 +204,7 @@ public class UserService implements UserServiceInterface {
         helper.setSubject(subject);
 
         content = content.replace("[[name]]", user.getFirstName() + " " + user.getLastName());
-        String verifyURL = siteURL + "/reset_password?code=" + user.getVerificationCode();
+        String verifyURL = siteURL + "/forgot/reset_password?code=" + user.getVerificationCode();
 
         content = content.replace("[[URL]]", verifyURL);
 

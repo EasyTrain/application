@@ -50,7 +50,7 @@ public class ApiDataToEntities {
         }
 
         if (timetableType == null || timetableType.getS() == null || timetableType.getS().isEmpty()) {
-            throw new RuntimeException("No data found for entered information." +
+            throw new RuntimeException("No data found for entered information.\n" +
                     " Try to change the date to today's date or change the hour to today's hour.");
         } else {
             for (SType sType : timetableType.getS()) {

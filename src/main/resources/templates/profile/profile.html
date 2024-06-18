@@ -11,7 +11,7 @@
 
 <div class="container">
     <!-- Header -->
-    <div th:replace="~{fragments/header-profile-logout :: header-profile-logout}">
+    <div th:replace="~{fragments/header-login-register :: header-login-register}">
     </div>
 
     <!-- Navigation -->
@@ -26,8 +26,9 @@
         <!-- Profile Information -->
 
         <!-- Content Container for orange-content-container -->
-        <div class="orange-content-container">
-            <p class="orange-content-text">Kai Prager</p> <!-- Exchange with Thymeleaf Expression firstName and lastName -->
+        <div th:object="${user}" class="orange-content-container">
+            <p class="orange-content-text"><span th:text="${user.firstName} + ' ' + ${user.lastName}"/></p>
+            <!-- Exchange with Thymeleaf Expression firstName and lastName -->
         </div>
 
         <!-- Profile Information Details -->
@@ -38,23 +39,30 @@
             </div>
             <div class="row">
                 <p class="blue-text-bold">Title:</p>
-                <p class="blue-text">Herr</p> <!-- Exchange with Thymeleaf Expression title -->
+                <p class="blue-text"><span th:text="${user.title}? ${user.title} : ''"/></p>
+                <!-- Exchange with Thymeleaf Expression title -->
             </div>
             <div class="row">
                 <p class="blue-text-bold">Name:</p>
-                <p class="blue-text">Kai Prager</p> <!-- Exchange with Thymeleaf Expression firstName and lastName -->
+                <p class="blue-text"><span th:text="${user.firstName} + ' ' + ${user.lastName}"/></p>
+                <!-- Exchange with Thymeleaf Expression firstName and lastName -->
             </div>
             <div class="row">
                 <p class="blue-text-bold">Age:</p>
-                <p class="blue-text">34</p> <!-- Exchange with Thymeleaf Expression age -->
+                <p class="blue-text"><span th:text="${user.age}? ${user.age} : ''"/></p>
+                <!-- Exchange with Thymeleaf Expression age -->
             </div>
             <div class="row">
                 <p class="blue-text-bold">Street Name:</p>
-                <p class="blue-text">Musterstraße 123</p> <!-- Exchange with Thymeleaf Expression street and street number -->
+                <p class="blue-text"><span th:text="${user.streetName}? ${user.streetName} : ''"/></p>
+                <!-- Exchange with Thymeleaf Expression street and street number -->
             </div>
             <div class="row">
                 <p class="blue-text-bold">City:</p>
-                <p class="blue-text">12345 Frankfurt</p> <!-- Exchange with Thymeleaf Expression zipCode and city -->
+                <p class="blue-text"><span
+                        th:text="${user.postalCode}? ${user.postalCode} : ''"/>&nbsp&nbsp&nbsp&nbsp<span
+                        th:text="' ' + ${user.city}? ${user.city} : ''"/></p>
+                <!-- Exchange with Thymeleaf Expression zipCode and city -->
             </div>
 
             <!-- Section Break -->
@@ -66,11 +74,13 @@
             </div>
             <div class="row">
                 <p class="blue-text-bold">Email:</p>
-                <p class="blue-text">kai.prager@example.com</p> <!-- Exchange with Thymeleaf Expression email -->
+                <p class="blue-text"><span th:text="${user.email}? ${user.email} : ''"/></p>
+                <!-- Exchange with Thymeleaf Expression email -->
             </div>
             <div class="row">
                 <p class="blue-text-bold">Phone Number:</p>
-                <p class="blue-text">0151-56258774</p> <!-- Exchange with Thymeleaf Expression phoneNumber -->
+                <p class="blue-text"><span th:text="${user.phoneNumber}? ${user.phoneNumber} : ''"/></p>
+                <!-- Exchange with Thymeleaf Expression phoneNumber -->
             </div>
         </div>
 

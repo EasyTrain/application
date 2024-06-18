@@ -6,6 +6,12 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" th:href="@{/css/styles-booking.css}">
+
+    <style>
+        .error {
+            color: red;
+        }
+    </style>
 </head>
 <body>
 
@@ -93,12 +99,16 @@
                         <label class="form-label" for="fullName">Full Name</label>
                         <input class="form-control custom-input" id="fullName" th:field="${booking.ticket.fullName}"
                                placeholder="Full Name*"/>
+                        <span th:if="${#fields.hasErrors('${booking.ticket.fullName}')}"
+                              th:errors="${booking.ticket.fullName}" class="error"></span>
                     </div>
 
                     <div class="form-group">
                         <label class="form-label" for="email">Email</label>
                         <input class="form-control custom-input" id="email" th:field="${booking.ticket.email}"
                                placeholder="Email address*"/>
+                        <span th:if="${#fields.hasErrors('${booking.ticket.email}')}"
+                              th:errors="${booking.ticket.email}" class="error"></span>
                     </div>
                 </div>
 
@@ -162,7 +172,6 @@
                               th:errors="${booking.payment.cardNumber}" class="error"></span>
                     </div>
                 </div>
-
 
                 <div class="row">
                     <div class="form-group">

@@ -37,10 +37,15 @@ public class SecurityConfig {
                         customizer -> customizer
                                 .requestMatchers(staticResources).permitAll()
                                 .requestMatchers("/").permitAll()
+                                .requestMatchers("/register/**").permitAll()
+                                .requestMatchers("/verify/**").permitAll()
+                                .requestMatchers("/forgot/**").permitAll()
                                 .requestMatchers("/register").permitAll()
                                 .requestMatchers("/timetables/**").permitAll()
+                                .requestMatchers("/process_registration").permitAll()
                                 .requestMatchers("/login").permitAll()
-                                .anyRequest().authenticated()
+                                .anyRequest().permitAll()
+//                                .anyRequest().authenticated()
                 )
                 .formLogin(login -> login
                         .loginPage("/login")
