@@ -55,27 +55,33 @@ public class TimetableStationController {
                                      Model model) {
         try {
             System.out.println("Saving timetables data for station: " + stationName + ", time: " + time + ", recentChanges: " + recentChanges);
-            // Save timetable data to database
+            // Save the recent changes and compare with timetables.
+            List<JourneyUpdate> updates = journeyUpdateService.saveJourneyUpdates(stationName, true);
+            model.addAttribute("success", "Journey updates saved successfully");
+            // Save timetables
             List<Timetable> timetables = timetableService.saveTimetableData(stationName, LocalDate.now(),
                     dateTimeParser.parseStringToLocalTime(time), recentChanges);
-            model.addAttribute("timetables", timetables);
-            try {
-                // Save the recent changes and compare with timetables.
-                List<JourneyUpdate> updates = journeyUpdateService.saveJourneyUpdates(stationName, true);
-                model.addAttribute("success", "Timetables saved successfully");
-            } catch (RuntimeException e) {
-                System.out.println("No journey updates found: " + e.getMessage());
-                model.addAttribute("success", "Timetables saved successfully, but no journey updates found");
+            if (timetables.isEmpty()) {
+                // Handle the scenario where no trains are found
+                model.addAttribute("error", "No trains found for the specified station and time.");
+                return "timetable-error";
+            } else {
+                model.addAttribute("timetables", timetables);
+                return "timetable";
             }
+        } catch (RuntimeException e) {
+            // Handle runtime exceptions (e.g., no journey updates found)
+            System.out.println("No journey updates found: " + e.getMessage());
+            model.addAttribute("error", "No journey updates found: " + e.getMessage());
+            return "timetable-error";
         } catch (Exception e) {
+            // Handle other exceptions if necessary
             System.out.println("An error occurred while saving timetables: " + e.getMessage());
             e.printStackTrace();
             model.addAttribute("error", "Error saving timetables: " + e.getMessage());
-            return "timetable-lookup";
+            return "timetable-error"; // Or redirect to an error page
         }
-        return "timetable";
     }
-
     @GetMapping("/timetable-list")
     public String showTimetableList(@RequestParam String stationName, Model model) {
         try {
