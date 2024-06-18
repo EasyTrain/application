@@ -2,18 +2,12 @@ package live.easytrain.application.controller;
 
 import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
-import live.easytrain.application.config.PaymentResponse;
-import live.easytrain.application.config.PaymentsEncryptConfig;
+import live.easytrain.application.config.*;
 import live.easytrain.application.dto.BookingDto;
 import live.easytrain.application.entity.*;
 import live.easytrain.application.service.interfaces.BookingServiceInterface;
-import live.easytrain.application.service.TicketServiceInterface;
-import live.easytrain.application.service.TimetableServiceInterface;
-import live.easytrain.application.service.UserServiceInterface;
-import live.easytrain.application.utils.BookingUtils;
-import live.easytrain.application.utils.DateTimeParserUtils;
-import live.easytrain.application.utils.TicketUtils;
-import live.easytrain.application.utils.TimetableUtils;
+import live.easytrain.application.service.*;
+import live.easytrain.application.utils.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,7 +17,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.UnsupportedEncodingException;
-import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +33,7 @@ public class BookingController {
     private PaymentsEncryptConfig paymentsEncrypt;
     private TicketServiceInterface ticketService;
     private TicketUtils ticketUtils;
-    private BookingUtils bookingUtils;
+    private EasyTrainMailSenderUtils bookingUtils;
 
     private UserServiceInterface userService;
 
@@ -51,7 +44,7 @@ public class BookingController {
                              DateTimeParserUtils dateTimeParser, TimetableUtils timetableUtils,
                              PaymentResponse paymentResponse, PaymentsEncryptConfig paymentsEncrypt,
                              TicketServiceInterface ticketService, TicketUtils ticketUtils, UserServiceInterface userService,
-                             BookingUtils bookingUtils) {
+                             EasyTrainMailSenderUtils bookingUtils) {
 
         this.bookingService = bookingService;
         this.timetableService = timetableService;
@@ -67,8 +60,10 @@ public class BookingController {
 
     @GetMapping("/booking")
     public String booking(@RequestParam String stationName,
-                          @RequestParam(required = false) String goingTo, @RequestParam(required = false) String time,
-                          @RequestParam(required = false, defaultValue = "false") boolean recentChanges,
+                          @RequestParam(required = false) String goingTo,
+                          @RequestParam(required = false) String time,
+                          @RequestParam(required = false, defaultValue = "false")
+                          boolean recentChanges,
                           Model model) {
 
         Authentication loggedUser = SecurityContextHolder.getContext().getAuthentication();
@@ -79,31 +74,36 @@ public class BookingController {
 
         try {
 
-            if (dateTimeParser.parseStringToLocalTime(time).isBefore(LocalTime.now())
+          /*  if (dateTimeParser.parseStringToLocalTime(time).isBefore(LocalTime.now())
                     && !dateTimeParser.isNextDay(LocalTime.now())) {
-                throw new RuntimeException("It is not possible to book this journey as the train has already left.");
-            }
+                throw new RuntimeException("It is not possible to book this journey.\n" +
+                        "The train has already left.");
+            }*/
 
             List<Timetable> timetables = timetableService.fetchTimetableDataFromAPI(stationName,
                     dateTimeParser.dayChanging(LocalTime.now()), dateTimeParser.parseStringToLocalTime(time));
             timetablesDestinations = timetableUtils.journeysToDestination(timetables, goingTo);
 
+
+            if (!timetablesDestinations.isEmpty()) {
+                model.addAttribute("timetables", timetablesDestinations);
+                model.addAttribute("prices", timetableUtils.journeyPrice(timetablesDestinations));
+                model.addAttribute("booking", new Timetable());
+                return "booking/book";
+            } else {
+                throw new RuntimeException("No journeys found for the given time.");
+            }
+
         } catch (RuntimeException e) {
             model.addAttribute("dbError", e.getMessage());
-        }
-
-        if (!timetablesDestinations.isEmpty()) {
-            model.addAttribute("timetables", timetablesDestinations);
-            model.addAttribute("prices", timetableUtils.journeyPrice(timetablesDestinations));
-            model.addAttribute("booking", new Timetable());
-            return "booking/book";
         }
 
         return "booking/book";
     }
 
     @GetMapping("/book/{trainNumber}/{price}")
-    public String selectTrain(@PathVariable String trainNumber, @PathVariable("price") double price, Model model) {
+    public String selectTrain(@PathVariable String trainNumber,
+                              @PathVariable("price") double price, Model model) {
 
         Booking selectedTrain = timetableUtils.timetableToBooking(timetablesDestinations, trainNumber, price);
 
@@ -148,8 +148,10 @@ public class BookingController {
 
 
     @PostMapping("/processBooking/{trainNumber}/{price}")
-    public String processBooking(@PathVariable String trainNumber, @PathVariable("price") double price,
-                                 @Valid @ModelAttribute("booking") BookingDto bookingDto, BindingResult bindingResult,
+    public String processBooking(@PathVariable String trainNumber,
+                                 @PathVariable("price") double price,
+                                 @Valid @ModelAttribute("booking") BookingDto bookingDto,
+                                 BindingResult bindingResult,
                                  Model model) {
 
         if (bindingResult.hasErrors()) {
@@ -182,27 +184,29 @@ public class BookingController {
                     bookingDto.getPayment().getCardNumber() + bookingDto.getPayment().getExpiryDate() +
                             bookingDto.getPayment().getCvc(), "Eisenbahn");
 
-            // Payment API request
-            String paymentStatus = paymentResponse.fetchPaymentResponse(encryptedData, ticket.getFinalPrice());
+            try {
+                // Payment API request
+                String paymentStatus = paymentResponse.fetchPaymentResponse(encryptedData, ticket.getFinalPrice());
 
-            if (paymentStatus.equalsIgnoreCase("success")) {
-                selectedTrain.setFinalized(true);
-                ticket.setBooking(selectedTrain);
-                Ticket savedTicket = ticketService.createTicket(ticket);
+                if (paymentStatus.equalsIgnoreCase("success")) {
+                    selectedTrain.setFinalized(true);
+                    bookingService.createBooking(selectedTrain);
 
-                bookingDto.setTicket(savedTicket);
+                    ticket.setBooking(selectedTrain);
+                    Ticket savedTicket = ticketService.createTicket(ticket);
 
-                try {
-                    bookingUtils.sendTicket(bookingDto);
-                } catch (MessagingException | UnsupportedEncodingException e) {
-                    throw new RuntimeException("Something went wrong, email not sent. Please make sure that this email is valid: "
-                    + ticket.getEmail());
+                    bookingDto.setTicket(savedTicket);
+
+                    bookingService.sendTicket(bookingDto);
+
+                } else {
+                    throw new RuntimeException("Payment failed. Please double check your card data!");
                 }
-            } else {
-
-                model.addAttribute("booking", bookingDto);
-                return "booking/booking";
+            } catch (RuntimeException e) {
+                model.addAttribute("paymentError", e.getMessage());
+                return "booking/booking_failed";
             }
+
             return "booking/booking_success";
         }
     }

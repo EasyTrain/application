@@ -1,5 +1,6 @@
 package live.easytrain.application.service.interfaces;
 
+import live.easytrain.application.dto.BookingDto;
 import live.easytrain.application.entity.Booking;
 
 import java.util.List;
@@ -13,4 +14,6 @@ public interface BookingServiceInterface {
     String deleteBooking(Long id);
 
     List<Booking> getBookingsById(Long id);
+
+    void sendTicket(BookingDto bookingDto);
 }

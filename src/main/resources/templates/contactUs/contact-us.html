@@ -29,46 +29,60 @@
 
         <!-- Contact Form Details -->
         <div class="profile-entry-container">
-            <form action="/submitContactForm" method="POST">
+            <form th:action="@{/contact-us/send-form}"  th:object="${contactUs}" method="post">
                 <!-- First Name and Last Name -->
                 <div class="row">
                     <div class="form-group">
                         <label for="firstName" class="form-label">First Name</label>
-                        <input type="text" id="firstName" class="form-control custom-input" placeholder="First Name*">
+                        <input type="text" id="firstName" class="form-control custom-input" th:field="*{firstName}"
+                               placeholder="First Name*">
+                        <span th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" class="error"></span>
                     </div>
                     <div class="form-group">
                         <label for="lastName" class="form-label">Last Name</label>
-                        <input type="text" id="lastName" class="form-control custom-input" placeholder="Last Name*">
+                        <input type="text" id="lastName" class="form-control custom-input" th:field="*{lastName}"
+                               placeholder="Last Name*">
+                        <span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class="error"></span>
                     </div>
                 </div>
                 <!-- Email and Phone Number -->
                 <div class="row">
                     <div class="form-group">
                         <label for="email" class="form-label">Email</label>
-                        <input type="email" id="email" class="form-control custom-input" placeholder="Email*">
+                        <input type="email" id="email" class="form-control custom-input" th:field="*{email}"
+                               placeholder="Email*">
+                        <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="error"></span>
                     </div>
                     <div class="form-group">
                         <label for="phoneNumber" class="form-label">Phone Number</label>
-                        <input type="tel" id="phoneNumber" class="form-control custom-input" placeholder="Phone Number">
+                        <input type="tel" id="phoneNumber" class="form-control custom-input" th:field="*{phone}"
+                               placeholder="Phone Number">
                     </div>
                 </div>
                 <!-- Subject -->
                 <div class="row">
                     <div class="form-group full-width">
                         <label for="subject" class="form-label">Subject</label>
-                        <input type="text" id="subject" class="form-control custom-input" placeholder="Subject*">
+                        <input type="text" id="subject" class="form-control custom-input" th:field="*{subject}"
+                               placeholder="Subject*">
+                        <span th:if="${#fields.hasErrors('subject')}" th:errors="*{subject}" class="error"></span>
                     </div>
                 </div>
                 <!-- Message -->
                 <div class="row">
                     <div class="form-group full-width">
                         <label for="message" class="form-label">Message</label>
-                        <textarea id="message" class="form-control custom-input" placeholder="Enter your message*" rows="4"></textarea>
+                        <textarea id="message" class="form-control custom-input" th:field="*{content}"
+                                  placeholder="Enter your message*" rows="4"></textarea>
+                        <span th:if="${#fields.hasErrors('content')}" th:errors="*{content}" class="content"></span>
                     </div>
                 </div>
                 <!-- Required Text -->
                 <div class="required-text">
                     <p>* Required</p>
+                    <p>
+                        Terms: By sending this email you accept our privacy policy. Your data will be stored and used for
+                        EasyTrain related purposes and will not be passed on to third parties or used for advertising purposes.</p>
                 </div>
                 <!-- Submit Buttons -->
                 <div class="btn-container">

@@ -42,8 +42,10 @@ public class SecurityConfig {
                                 .requestMatchers("/forgot/**").permitAll()
                                 .requestMatchers("/register").permitAll()
                                 .requestMatchers("/timetables/**").permitAll()
+                                .requestMatchers("/process_registration").permitAll()
                                 .requestMatchers("/login").permitAll()
-                                .anyRequest().authenticated()
+                                .anyRequest().permitAll()
+//                                .anyRequest().authenticated()
                 )
                 .formLogin(login -> login
                         .loginPage("/login")

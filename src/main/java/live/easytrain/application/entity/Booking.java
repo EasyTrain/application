@@ -16,8 +16,8 @@ public class Booking {
     @Column(name = "id", nullable = false)
     private Long id;
     //@Column(name = "\"from\"")
-    @NotNull(message = "Please enter the departure station name.")
-    @Size(min = 1, message = "Please enter the departure station name.")
+//    @NotNull(message = "Please enter the departure station name.")
+//    @Size(min = 1, message = "Please enter the departure station name.")
     @Column(name = "from_location")
     private String fromLocation;
 

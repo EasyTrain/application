@@ -6,8 +6,13 @@ import jakarta.validation.constraints.Size;
 
 public class Payment {
 
+    @NotNull(message = "Please enter the card holder's name.")
+    @Size(min = 1, message = "Please enter the card holder's name.")
     private String cardHolder;
 
+    @NotNull(message = "Invalid card number format.")
+    @Size(min = 16, max = 20, message = "Invalid card number format.")
+//    @Pattern(regexp = "^[0-9]+(\\.[0-9]+)?$", message = "Invalid card number format.")
     private String cardNumber;
 
     @NotNull(message = "CVC must be a numeric value.")

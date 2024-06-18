@@ -1,6 +1,7 @@
 package live.easytrain.application.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
 @Entity
 @Table(name = "tickets")
@@ -13,6 +14,8 @@ public class Ticket {
     @Column(name = "gender", length = 20)
     private String gender;
 
+    @NotNull(message = "Please enter the name of the passenger.")
+    @Size(min = 1, message = "Please enter the name of the passenger.")
     @Column(name = "full_name", length = 100)
     private String fullName;
 
@@ -21,11 +24,16 @@ public class Ticket {
     @Column(name = "connection_stop")
     private String connectionStop;
 
-    private int carriageClass;
+//    @Min(value = 1, message = "must be greater than or equal to 1")
+//    @Max(value = 2, message = "must be less than or equal to 2")
+    private Integer carriageClass;
     private double finalPrice;
 
     private boolean underAge;
 
+    @NotNull(message = "Please enter the email.")
+    @Size(min = 1, message = "Please enter the email.")
+    @Pattern(regexp = "^[A-Za-z0-9+_.-]+@(.+)$", message = "Please enter a valid email.")
     private String email;
 
     @ManyToOne
@@ -39,7 +47,7 @@ public class Ticket {
     public Ticket() {
     }
 
-    public Ticket(String gender, String fullName, String email, String toLocation, int carriageClass, double finalPrice,
+    public Ticket(String gender, String fullName, String email, String toLocation, Integer carriageClass, double finalPrice,
                   boolean underAge, double discount, String connectionStop) {
         this.gender = gender;
         this.fullName = fullName;
@@ -111,11 +119,11 @@ public class Ticket {
         this.connectionStop = connectionStop;
     }
 
-    public int getCarriageClass() {
+    public Integer getCarriageClass() {
         return carriageClass;
     }
 
-    public void setCarriageClass(int carriageClass) {
+    public void setCarriageClass(Integer carriageClass) {
         this.carriageClass = carriageClass;
     }
 
