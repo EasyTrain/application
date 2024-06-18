@@ -1,4 +1,4 @@
-package live.easytrain.application.service;
+package live.easytrain.application.service.interfaces;
 
 import live.easytrain.application.entity.Station;
 import live.easytrain.application.entity.Timetable;
@@ -12,6 +12,6 @@ public interface TimetableServiceInterface {
     Integer evaNumberByStationName(String stationName);
     List<Timetable> fetchTimetableDataFromAPI(String stationName, LocalDate date, LocalTime hour);
     List<Timetable> getAllTimetables();
-
     Timetable getJourneyFromTimetableById(Long journeyId);
+
 }

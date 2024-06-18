@@ -1,4 +1,4 @@
-package live.easytrain.application.service;
+package live.easytrain.application.service.implentation;
 
 import jakarta.transaction.Transactional;
 import live.easytrain.application.entity.Station;
@@ -7,6 +7,8 @@ import live.easytrain.application.exceptions.StationNotFoundException;
 import live.easytrain.application.api.binder.ApiDataToEntities;
 import live.easytrain.application.repository.StationRepo;
 import live.easytrain.application.repository.TimetableRepo;
+import live.easytrain.application.service.interfaces.StationServiceInterface;
+import live.easytrain.application.service.interfaces.TimetableServiceInterface;
 import live.easytrain.application.utils.DateTimeParserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,9 +42,7 @@ public class TimetableService implements TimetableServiceInterface {
         Integer evaNumber = stationServiceInterface.evaNumberByStationName(stationName);
         List<Timetable> timetables = apiDataToEntities.apiDataToTimetable(evaNumber, dateTimeParser.formatLocalDateToString(date),
                 dateTimeParser.formatLocalTimeToString(hour), recentChanges);
-
         timetableRepo.saveAll(timetables);
-
         return  timetables;
     }
 

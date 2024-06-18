@@ -1,8 +1,9 @@
-package live.easytrain.application.service;
+package live.easytrain.application.service.implentation;
 
 import live.easytrain.application.entity.Station;
 import live.easytrain.application.exceptions.StationNotFoundException;
 import live.easytrain.application.repository.StationRepo;
+import live.easytrain.application.service.interfaces.StationServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
