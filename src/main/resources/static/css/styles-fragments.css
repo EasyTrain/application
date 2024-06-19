@@ -12,6 +12,24 @@
     height: 150px;
 }
 
+/* User Info and Header Links */
+.user-info svg {
+    margin-right: 10px;
+}
+
+.user-info span {
+    font-size: 1.25rem;
+}
+
+.login .d-flex.align-items-center a {
+    font-size: 1.25rem;
+}
+
+.login .d-flex.align-items-center form input {
+    font-size: 1.25rem;
+}
+
+
 
 /* Styles for nav */
 .bg-custom {
