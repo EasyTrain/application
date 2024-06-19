@@ -101,7 +101,7 @@
     text-decoration: none;
 }
 
-.btn-custom {
+.btn-offcanvas {
     background-color: #F47950;
     color: #EBEBEB;
     border: 2px solid #13152F;
@@ -114,7 +114,7 @@
     width: 100%;
 }
 
-.btn-custom:hover {
+.btn-offcanvas:hover {
     background-color: #EBEBEB;
     color: #13152F;
     border: 2px solid #F47950;
