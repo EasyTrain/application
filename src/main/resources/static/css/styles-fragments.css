@@ -39,14 +39,16 @@
 .text-custom {
     color: #EBEBEB !important;
     font-size: 1.50rem;
+    font-weight: bold;
 }
 
 .nav-item .nav-link {
     color: #EBEBEB !important;
     font-size: 1.50rem;
+    font-weight: bold;
 }
 
-.nav-item .nav-link.active {
+.nav-item .nav-link:hover {
     background-color: transparent !important;
     color: #13152F !important;
     font-weight: bold;
@@ -56,6 +58,7 @@
     color: #EBEBEB;
     padding: 0 10px;
     font-size: 1.50rem;
+    font-weight: bold;
     line-height: 1.50;
 }
 
