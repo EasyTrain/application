@@ -1,0 +1,70 @@
+/* Styles for header */
+/* Login and Registration text */
+.text-primary-custom {
+    color: #13152F !important;
+}
+.text-primary-custom:hover {
+    text-decoration: underline;
+}
+
+/* Logo Image */
+.logo-img {
+    height: 150px;
+}
+
+
+/* Styles for nav */
+.bg-custom {
+    background-color: #F47950 !important;
+}
+
+.text-custom {
+    color: #EBEBEB !important;
+    font-size: 1.50rem;
+}
+
+.nav-item .nav-link {
+    color: #EBEBEB !important;
+    font-size: 1.50rem;
+}
+
+.nav-item .nav-link.active {
+    background-color: transparent !important;
+    color: #13152F !important;
+    font-weight: bold;
+}
+
+.separator {
+    color: #EBEBEB;
+    padding: 0 10px;
+    font-size: 1.50rem;
+    line-height: 1.50;
+}
+
+/* Styles for Nav without navigation */
+.bg-custom-no-nav {
+    background-color: #F47950 !important;
+    height: 60px;
+}
+
+/* Styles for footer */
+.footer-container {
+    background-color: #F47950;
+    color: #EBEBEB;
+    padding: 10px;
+    text-align: center;
+    margin: 0 auto;
+}
+
+.text-main-custom {
+    /*matches the color of the nav bar*/
+    color: #F47950
+}
+
+/* Styles for error */
+
+.error {
+    color: #EF4347;
+    font-size: 1rem;
+    margin-top: 20px;
+}
