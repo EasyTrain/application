@@ -61,6 +61,71 @@
     color: #F47950
 }
 
+/* Styles for offcanvas */
+.offcanvas-header {
+    justify-content: flex-end;
+}
+
+.offcanvas-body {
+    padding: 20px;
+    color: #13152F;
+}
+
+.offcanvas-body .text-center {
+    margin-bottom: 10px;
+}
+
+.offcanvas-body svg {
+    margin-top: -20px;
+}
+
+.section-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #13152F;
+    margin-top: 20px;
+    margin-bottom: 15px;
+}
+
+.link {
+    color: #13152F;
+    font-size: 1.25rem;
+    text-decoration: none;
+    display: block;
+    margin-bottom: 5px;
+    padding: 5px 0;
+}
+
+.link:hover {
+    color: #F47950;
+    text-decoration: none;
+}
+
+.btn-custom {
+    background-color: #F47950;
+    color: #EBEBEB;
+    border: 2px solid #13152F;
+    border-radius: 10px;
+    padding: 10px 20px;
+    font-size: 1.25rem;
+    font-weight: bold;
+    cursor: pointer;
+    display: block;
+    width: 100%;
+}
+
+.btn-custom:hover {
+    background-color: #EBEBEB;
+    color: #13152F;
+    border: 2px solid #F47950;
+}
+
+.btn-close {
+    font-size: 1.25rem;
+    color: #13152F;
+}
+
+
 /* Styles for error */
 
 .error {
