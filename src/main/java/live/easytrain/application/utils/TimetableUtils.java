@@ -54,10 +54,11 @@ public class TimetableUtils {
 
         for (Timetable timetable : timetablesDestinations) {
             String[] nextStations = timetable.getNextStations().split(" -> ");
+            double tempPrice = 0;
             for (int i = 0; i < nextStations.length; i++) {
                 if (timetable.getDestination().equals(nextStations[i])) {
-                    journeyPrice =Double.parseDouble( df.format(journeyPrice * (i + 1)));
-                    journeyPrices.add(journeyPrice);
+                    tempPrice = Double.parseDouble( df.format(journeyPrice * (i + 1)));
+                    journeyPrices.add(tempPrice);
                 }
             }
         }
