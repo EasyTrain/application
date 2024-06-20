@@ -1,25 +1,32 @@
 package live.easytrain.application.controller;
 
+import live.easytrain.application.entity.User;
 import live.easytrain.application.service.UserService;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
-@ControllerAdvice
+import java.security.Principal;
+
+@ControllerAdvice("live.easytrain.application.controller")
 public class CommonDataController {
 
     private final UserService userService;
-    private ProfileController profileController;
 
-    public CommonDataController(UserService userService, ProfileController profileController) {
+    public CommonDataController(UserService userService) {
         this.userService = userService;
-        this.profileController = profileController;
     }
 
-    @ModelAttribute("username")
-    public String getTest() {
-        String firstName = profileController.getUser().getFirstName();
-        String lastName =  profileController.getUser().getLastName();
+    @ModelAttribute("attributeName")
+    public String getAttributeName(Principal principal) {
 
-        return firstName + " " + lastName;
+        if (principal != null) {
+            User user = userService.getUserByEmail(principal.getName());
+
+            String firstName = user.getFirstName();
+            String lastName = user.getLastName();
+            return firstName + " " + lastName;
+
+        }
+        return null;
     }
 }
