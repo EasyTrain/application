@@ -21,15 +21,13 @@ public class TimetableStationController {
     private TimetableServiceInterface timetableService;
     private StationServiceInterface stationService;
     private DateTimeParserUtils dateTimeParser;
-    private JourneyUpdateServiceInterface journeyUpdateService;
 
     @Autowired
-    public TimetableStationController(JourneyUpdateServiceInterface journeyUpdateService, TimetableServiceInterface timetableService, StationServiceInterface stationService,
+    public TimetableStationController(TimetableServiceInterface timetableService, StationServiceInterface stationService,
                                       DateTimeParserUtils dateTimeParser) {
         this.timetableService = timetableService;
         this.stationService = stationService;
         this.dateTimeParser = dateTimeParser;
-        this.journeyUpdateService = journeyUpdateService;
     }
 
     // Show timetable-form
@@ -40,7 +38,6 @@ public class TimetableStationController {
             model.addAttribute("stations", station);
             model.addAttribute("timetable", new Timetable());
         } catch (Exception e) {
-            System.out.println("An error occurred while showing timetable form: " + e.getMessage());
             e.printStackTrace();
             model.addAttribute("error", "Error showing timetable form: " + e.getMessage());
         }
@@ -54,10 +51,6 @@ public class TimetableStationController {
                                      @RequestParam(required = false, defaultValue = "false") boolean recentChanges,
                                      Model model) {
         try {
-            System.out.println("Saving timetables data for station: " + stationName + ", time: " + time + ", recentChanges: " + recentChanges);
-            // Save the recent changes and compare with timetables.
-            List<JourneyUpdate> updates = journeyUpdateService.saveJourneyUpdates(stationName, true);
-            model.addAttribute("success", "Journey updates saved successfully");
             // Save timetables
             List<Timetable> timetables = timetableService.saveTimetableData(stationName, LocalDate.now(),
                     dateTimeParser.parseStringToLocalTime(time), recentChanges);
@@ -69,63 +62,11 @@ public class TimetableStationController {
                 model.addAttribute("timetables", timetables);
                 return "timetable";
             }
-        } catch (RuntimeException e) {
-            // Handle runtime exceptions (e.g., no journey updates found)
-            System.out.println("No journey updates found: " + e.getMessage());
-            model.addAttribute("error", "No journey updates found: " + e.getMessage());
-            return "timetable-error";
         } catch (Exception e) {
             // Handle other exceptions if necessary
-            System.out.println("An error occurred while saving timetables: " + e.getMessage());
             e.printStackTrace();
             model.addAttribute("error", "Error saving timetables: " + e.getMessage());
             return "timetable-error"; // Or redirect to an error page
         }
-    }
-    @GetMapping("/timetable-list")
-    public String showTimetableList(@RequestParam String stationName, Model model) {
-        try {
-            System.out.println("Showing timetable list for station: " + stationName);
-            // Retrieve the timetables from the model
-            List<Timetable> timetables = timetableService.getAllTimetables();
-            // Retrieve the journey updates from the service
-            List<JourneyUpdate> updates = journeyUpdateService.findAll(stationName);
-
-            for(Timetable tb : timetables){
-                for(JourneyUpdate ja : updates){
-                    if(tb.getScheduleId().equalsIgnoreCase(ja.getScheduleId())){
-                        tb.setDelay(ja.getDelay());
-                        tb.setArrivalTime(ja.getArrivalTime());
-                        tb.setArrivalTime(ja.getDepartureTime());
-                        tb.setPlatformNumber(ja.getPlatformNumber());
-                        tb.setNextStations(ja.getChangedPathTo());
-                    }
-                }
-            }
-            model.addAttribute("timetables", timetables);
-            // Add a success message
-            model.addAttribute("successMessage", "Timetables and Journey Updates loaded successfully.");
-        } catch (Exception e) {
-            System.out.println("An error occurred while loading Timetables and Journey Updates: " + e.getMessage());
-            e.printStackTrace();
-            model.addAttribute("errorMessage", "An error occurred while loading Timetables and Journey Updates: " + e.getMessage());
-        }
-        return "timetable";
-    }
-
-    // Retrieve journeyUpdates by scheduleId
-    @GetMapping("/delays/{scheduleId}")
-    public String getDelaysByScheduleId(@PathVariable String scheduleId, Model model) {
-        // Retrieve journey update by schedule ID
-        try {
-            System.out.println("Retrieving delays for scheduleId: " + scheduleId);
-            List<JourneyUpdate> journeyUpdates = journeyUpdateService.getJourneyUpdatesByScheduleId(scheduleId);
-            model.addAttribute("journeyUpdates", journeyUpdates);
-        } catch (Exception e) {
-            System.out.println("An error occurred while retrieving delays: " + e.getMessage());
-            e.printStackTrace();
-            model.addAttribute("errorMessage", "An error occurred while retrieving delays: " + e.getMessage());
-        }
-        return "timetable";
     }
 }

@@ -42,13 +42,8 @@ public class TimetableService implements TimetableServiceInterface {
         Integer evaNumber = stationServiceInterface.evaNumberByStationName(stationName);
         List<Timetable> timetables = apiDataToEntities.apiDataToTimetable(evaNumber, dateTimeParser.formatLocalDateToString(date),
                 dateTimeParser.formatLocalTimeToString(hour), recentChanges);
-        if (timetables.isEmpty()) {
-            // Handle the scenario where no trains are found
-            System.out.println("No trains found for station: " + stationName);
-        } else {
-            timetableRepo.saveAll(timetables);
-        }
 
+        timetableRepo.saveAll(timetables);
         return timetables;
     }
 
@@ -74,9 +69,10 @@ public class TimetableService implements TimetableServiceInterface {
 
         Integer evaNumber = evaNumberByStationName(stationName);
 
-        return apiDataToEntities.apiDataToTimetable(evaNumber,dateTimeParser.formatLocalDateToString(date),
+        return apiDataToEntities.apiDataToTimetable(evaNumber, dateTimeParser.formatLocalDateToString(date),
                 dateTimeParser.formatLocalTimeToString(hour), false);
     }
+
     @Override
     public List<Timetable> getAllTimetables() {
         return timetableRepo.findAll();

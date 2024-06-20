@@ -124,6 +124,12 @@ public class BookingController {
     @GetMapping("/book/{id}")
     public String book(@PathVariable Long id, Model model) {
 
+        Authentication loggedUser = SecurityContextHolder.getContext().getAuthentication();
+
+        if (loggedUser.getName().equalsIgnoreCase("anonymousUser")) {
+            return "redirect:/login";
+        }
+
         Timetable timetable = timetableService.getJourneyFromTimetableById(id);
         String trainNumber = timetable.getTrainNumber();
 
