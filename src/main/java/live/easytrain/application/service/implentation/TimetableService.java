@@ -44,6 +44,7 @@ public class TimetableService implements TimetableServiceInterface {
                 dateTimeParser.formatLocalTimeToString(hour), recentChanges);
 
         timetableRepo.saveAll(timetables);
+
         return timetables;
     }
 
