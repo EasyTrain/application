@@ -52,7 +52,7 @@ public class ProfileController {
         return "redirect:/profile";
     }
 
-    private User getUser() {
+    User getUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String principalName = authentication.getName();
 
