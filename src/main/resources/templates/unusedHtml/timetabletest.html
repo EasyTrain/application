@@ -1,165 +1,165 @@
-<!--<!DOCTYPE html>-->
-<!--<html lang="en" xmlns:th="http://www.thymeleaf.org">-->
-<!--<head>-->
-<!--    <meta charset="UTF-8">-->
-<!--    <title>Timetable Test</title>-->
-<!--</head>-->
-<!--<body>-->
-
-<!--<h1>Timetable Test</h1>-->
-
-<!--<div th:if="${error}">-->
-<!--    <p style="color:red;" th:text="${error}"></p>-->
-<!--</div>-->
-<!--<div th:if="${success}">-->
-<!--    <p style="color:green;" th:text="${success}"></p>-->
-<!--</div>-->
-<!--<div th:if="${errorMessage}">-->
-<!--    <p style="color:red;" th:text="${errorMessage}"></p>-->
-<!--</div>-->
-
-<!--&lt;!&ndash; Display Timetables &ndash;&gt;-->
-<!--<div th:each="timetable : ${timetables}">-->
-<!--    <div>-->
-<!--        <h3>Timetable</h3>-->
-<!--        <p>Schedule ID: <span th:text="${timetable.scheduleId}"></span></p>-->
-<!--        <p>Train Number: <span th:text="${timetable.trainNumber}"></span></p>-->
-<!--        <p>Starting Point: <span th:text="${timetable.startingPoint}"></span></p>-->
-<!--        <p>Destination: <span th:text="${timetable.destination}"></span></p>-->
-<!--        <p>Delay: <span th:text="${timetable.delay}"></span></p>-->
-<!--        <p>Estimated Trip Time: <span th:text="${timetable.estimatedTripTime}"></span></p>-->
-<!--        <p>Arrival Time: <span th:text="${timetable.arrivalTime}"></span></p>-->
-<!--        <p>Departure Time: <span th:text="${timetable.departureTime}"></span></p>-->
-<!--        <p>Platform Number: <span th:text="${timetable.platformNumber}"></span></p>-->
-<!--        <p>Planned Arrival Time: <span th:text="${timetable.plannedArrivalTime}"></span></p>-->
-<!--        <p>Planned Departure Time: <span th:text="${timetable.plannedDepartureTime}"></span></p>-->
-<!--        <p>Previous Stations: <span th:text="${timetable.previousStations}"></span></p>-->
-<!--        <p>Next Stations: <span th:text="${timetable.nextStations}"></span></p>-->
-<!--        <p>Current Station: <span th:text="${timetable.currentStation}"></span></p>-->
-<!--    </div>-->
-<!--</div>-->
-
-<!--&lt;!&ndash; Conditionally display Journey Updates if present &ndash;&gt;-->
-<!--<div th:if="${!#lists.isEmpty(updates)}">-->
-<!--    <div th:each="update : ${updates}">-->
-<!--        <h3>Journey Update</h3>-->
-<!--        <p>Schedule ID: <span th:text="${update.scheduleId}"></span></p>-->
-<!--        <p>Train Number: <span th:text="${update.trainNumber}"></span></p>-->
-<!--        <p>Delay: <span th:text="${update.delay}"></span></p>-->
-<!--        <p>Arrival Time: <span th:text="${update.arrivalTime}"></span></p>-->
-<!--        <p>Departure Time: <span th:text="${update.departureTime}"></span></p>-->
-<!--        <p>Changed Path From: <span th:text="${update.changedPathFrom}"></span></p>-->
-<!--        <p>Changed Path To: <span th:text="${update.changedPathTo}"></span></p>-->
-<!--        <p>Platform Number: <span th:text="${update.platformNumber}"></span></p>-->
-<!--    </div>-->
-<!--</div>-->
-
-<!--&lt;!&ndash; Conditionally display Combined Timetable and Journey Updates if present &ndash;&gt;-->
-<!--<div th:if="${!#lists.isEmpty(entries)}">-->
-<!--    <div th:each="combined : ${entries}">-->
-<!--        <h3>Combined Timetable and Journey Update</h3>-->
-<!--        <p>Schedule ID: <span th:text="${combined.scheduleId}"></span></p>-->
-<!--        <p>Train Number: <span th:text="${combined.trainNumber}"></span></p>-->
-<!--        <p>Delay: <span th:text="${combined.delay}"></span></p>-->
-<!--        <p>Starting Point: <span th:text="${combined.changedPathFrom}"></span></p>-->
-<!--        <p>Destination: <span th:text="${combined.changedPathTo}"></span></p>-->
-<!--        <p>Platform Number: <span th:text="${combined.platformNumber}"></span></p>-->
-<!--        <p>Arrival Time: <span th:text="${combined.arrivalTime}"></span></p>-->
-<!--        <p>Departure Time: <span th:text="${combined.departureTime}"></span></p>-->
-<!--    </div>-->
-<!--</div>-->
-
-<!--</body>-->
-<!--</html>-->
-
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>EasyTrain :: Timetable</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" th:href="@{/css/styles-timetable.css}">
-    <link rel="stylesheet" th:href="@{/css/styles-fragments.css}">
+    <title>Timetable Test</title>
 </head>
 <body>
 
-<div class="container">
+<h1>Timetable Test</h1>
 
-    <!-- Header -->
-    <div th:replace="~{fragments/header-login-register :: header-login-register}">
-    </div>
-
-    <!-- Navigation -->
-    <div th:replace="~{fragments/navigation :: navigation}">
-    </div>
-
-    <!-- Main Content -->
-    <main class="main-background d-flex flex-column align-items-center justify-content-center">
-
-        <h1 class="main-title-blue text-center">Timetable</h1>
-
-        <!-- Content Container for the date -->
-        <div class="content-container">
-            <div class="date-container">
-                <p class="text-secondary" th:text="${#dates.format(#dates.createNow(), 'MMMM dd, yyyy')}"></p> <!-- Shows today's date -->
-            </div>
-        </div>
-
-        <!-- Content Container for the route -->
-        <div class="orange-content-container" th:each="timetable : ${timetables}" th:if="${timetableStat.last}">
-            <span class="orange-content-text" th:text="${timetable.currentStation}"></span>
-        </div>
-
-        <!-- Content Container for the Timetable Entries -->
-        <div class="timetable-entry-container" th:each="combinedData : ${entries}"> <!-- Iterate over the timetableEntries --> <!--th:each="entry: ${timetableEntries}" -->
-            <a th:href="@{/book/{id}(id=${combinedData.timetable.id})}" class="booking-link">
-                <div class="entry-section logo-section">
-                    <img th:src="@{/images/EasyTrain_Logo_NoText.png}" alt="EasyTrain Logo" class="train-logo"/>
-                    <p class="train-number"><span th:text="${combinedData.timetable.trainNumber}"></span></p>
-                    <p class="booking-text">Book Now</p>
-                </div>
-            </a>
-            <div class="entry-separator"></div>
-            <div class="entry-section">
-                <p class="label">From</p>
-                <p class="place" th:text="${combinedData.timetable.startingPoint}"></p>
-                <p class="label">Arrival in <span th:text="${combinedData.timetable.currentStation}"></span></p>
-                <p class="time" th:text="${combinedData.timetable.plannedArrivalTime}"></p>
-            </div>
-            <div class="entry-section arrow-section">
-                <img th:src="@{/images/double_arrow_shadow.png}" alt="Arrow" class="arrow"/>
-            </div>
-            <div class="entry-section">
-                <p class="label">To</p>
-                <p class="place" th:text="${combinedData.timetable.destination}"></p>
-                <p class="label">Departure from <span th:text="${combinedData.timetable.currentStation}"></span></p>
-                <p class="time" th:text="${combinedData.timetable.plannedDepartureTime}"></p>
-            </div>
-            <div class="entry-separator"></div>
-            <div class="entry-section">
-                <p class="label">Platform</p>
-                <p class="platform-number" th:text="${combinedData.timetable.platformNumber}"></p>
-            </div>
-            <div class="entry-separator"></div>
-            <div class="entry-section delay-section">
-                <p class="label">Delay</p>
-                <p class="price-section" th:text="${combinedData.journeyUpdate != null ? combinedData.journeyUpdate.delay : combinedData.timetable.delay}"></p>
-                <p class="label">Estimated Time</p>
-                <div class="train-destination">
-                    <p class="end-station" th:text="${combinedData.journeyUpdate != null ? combinedData.journeyUpdate.arrivalTime : combinedData.timetable.arrivalTime}"></p>
-                    <img th:src="@{/images/double_arrow_shadow.png}" alt="Arrow" class="small-arrow"/>
-                    <p class="end-station"  th:text="${combinedData.journeyUpdate != null ? combinedData.journeyUpdate.departureTime : combinedData.timetable.departureTime}"></p>
-                </div>
-            </div>
-        </div>
-
-    </main>
-
-    <!-- Footer -->
-    <div th:replace="~{fragments/footer :: footer}">
-    </div>
-
+<div th:if="${error}">
+    <p style="color:red;" th:text="${error}"></p>
 </div>
+<div th:if="${success}">
+    <p style="color:green;" th:text="${success}"></p>
+</div>
+<div th:if="${errorMessage}">
+    <p style="color:red;" th:text="${errorMessage}"></p>
+</div>
+
+<!-- Display Timetables -->
+<div th:each="timetable : ${timetables}">
+    <div>
+        <h3>Timetable</h3>
+        <p>Schedule ID: <span th:text="${timetable.scheduleId}"></span></p>
+        <p>Train Number: <span th:text="${timetable.trainNumber}"></span></p>
+        <p>Starting Point: <span th:text="${timetable.startingPoint}"></span></p>
+        <p>Destination: <span th:text="${timetable.destination}"></span></p>
+        <p>Delay: <span th:text="${timetable.delay}"></span></p>
+        <p>Estimated Trip Time: <span th:text="${timetable.estimatedTripTime}"></span></p>
+        <p>Arrival Time: <span th:text="${timetable.arrivalTime}"></span></p>
+        <p>Departure Time: <span th:text="${timetable.departureTime}"></span></p>
+        <p>Platform Number: <span th:text="${timetable.platformNumber}"></span></p>
+        <p>Planned Arrival Time: <span th:text="${timetable.plannedArrivalTime}"></span></p>
+        <p>Planned Departure Time: <span th:text="${timetable.plannedDepartureTime}"></span></p>
+        <p>Previous Stations: <span th:text="${timetable.previousStations}"></span></p>
+        <p>Next Stations: <span th:text="${timetable.nextStations}"></span></p>
+        <p>Current Station: <span th:text="${timetable.currentStation}"></span></p>
+    </div>
+</div>
+
+<!-- Conditionally display Journey Updates if present -->
+<div th:if="${!#lists.isEmpty(updates)}">
+    <div th:each="update : ${updates}">
+        <h3>Journey Update</h3>
+        <p>Schedule ID: <span th:text="${update.scheduleId}"></span></p>
+        <p>Train Number: <span th:text="${update.trainNumber}"></span></p>
+        <p>Delay: <span th:text="${update.delay}"></span></p>
+        <p>Arrival Time: <span th:text="${update.arrivalTime}"></span></p>
+        <p>Departure Time: <span th:text="${update.departureTime}"></span></p>
+        <p>Changed Path From: <span th:text="${update.changedPathFrom}"></span></p>
+        <p>Changed Path To: <span th:text="${update.changedPathTo}"></span></p>
+        <p>Platform Number: <span th:text="${update.platformNumber}"></span></p>
+    </div>
+</div>
+
+<!-- Conditionally display Combined Timetable and Journey Updates if present -->
+<div th:if="${!#lists.isEmpty(entries)}">
+    <div th:each="combined : ${entries}">
+        <h3>Combined Timetable and Journey Update</h3>
+        <p>Schedule ID: <span th:text="${combined.scheduleId}"></span></p>
+        <p>Train Number: <span th:text="${combined.trainNumber}"></span></p>
+        <p>Delay: <span th:text="${combined.delay}"></span></p>
+        <p>Starting Point: <span th:text="${combined.changedPathFrom}"></span></p>
+        <p>Destination: <span th:text="${combined.changedPathTo}"></span></p>
+        <p>Platform Number: <span th:text="${combined.platformNumber}"></span></p>
+        <p>Arrival Time: <span th:text="${combined.arrivalTime}"></span></p>
+        <p>Departure Time: <span th:text="${combined.departureTime}"></span></p>
+    </div>
+</div>
+
 </body>
 </html>
+
+<!--<!DOCTYPE html>-->
+<!--<html lang="en" xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>EasyTrain :: Timetable</title>-->
+<!--    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"-->
+<!--          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">-->
+<!--    <link rel="stylesheet" th:href="@{/css/styles-timetable.css}">-->
+<!--    <link rel="stylesheet" th:href="@{/css/styles-fragments.css}">-->
+<!--</head>-->
+<!--<body>-->
+
+<!--<div class="container">-->
+
+<!--    &lt;!&ndash; Header &ndash;&gt;-->
+<!--    <div th:replace="~{fragments/header-login-register :: header-login-register}">-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash; Navigation &ndash;&gt;-->
+<!--    <div th:replace="~{fragments/navigation :: navigation}">-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash; Main Content &ndash;&gt;-->
+<!--    <main class="main-background d-flex flex-column align-items-center justify-content-center">-->
+
+<!--        <h1 class="main-title-blue text-center">Timetable</h1>-->
+
+<!--        &lt;!&ndash; Content Container for the date &ndash;&gt;-->
+<!--        <div class="content-container">-->
+<!--            <div class="date-container">-->
+<!--                <p class="text-secondary" th:text="${#dates.format(#dates.createNow(), 'MMMM dd, yyyy')}"></p> &lt;!&ndash; Shows today's date &ndash;&gt;-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash; Content Container for the route &ndash;&gt;-->
+<!--        <div class="orange-content-container" th:each="timetable : ${timetables}" th:if="${timetableStat.last}">-->
+<!--            <span class="orange-content-text" th:text="${timetable.currentStation}"></span>-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash; Content Container for the Timetable Entries &ndash;&gt;-->
+<!--        <div class="timetable-entry-container" th:each="combinedData : ${entries}"> &lt;!&ndash; Iterate over the timetableEntries &ndash;&gt; &lt;!&ndash;th:each="entry: ${timetableEntries}" &ndash;&gt;-->
+<!--            <a th:href="@{/book/{id}(id=${combinedData.timetable.id})}" class="booking-link">-->
+<!--                <div class="entry-section logo-section">-->
+<!--                    <img th:src="@{/images/EasyTrain_Logo_NoText.png}" alt="EasyTrain Logo" class="train-logo"/>-->
+<!--                    <p class="train-number"><span th:text="${combinedData.timetable.trainNumber}"></span></p>-->
+<!--                    <p class="booking-text">Book Now</p>-->
+<!--                </div>-->
+<!--            </a>-->
+<!--            <div class="entry-separator"></div>-->
+<!--            <div class="entry-section">-->
+<!--                <p class="label">From</p>-->
+<!--                <p class="place" th:text="${combinedData.timetable.startingPoint}"></p>-->
+<!--                <p class="label">Arrival in <span th:text="${combinedData.timetable.currentStation}"></span></p>-->
+<!--                <p class="time" th:text="${combinedData.timetable.plannedArrivalTime}"></p>-->
+<!--            </div>-->
+<!--            <div class="entry-section arrow-section">-->
+<!--                <img th:src="@{/images/double_arrow_shadow.png}" alt="Arrow" class="arrow"/>-->
+<!--            </div>-->
+<!--            <div class="entry-section">-->
+<!--                <p class="label">To</p>-->
+<!--                <p class="place" th:text="${combinedData.timetable.destination}"></p>-->
+<!--                <p class="label">Departure from <span th:text="${combinedData.timetable.currentStation}"></span></p>-->
+<!--                <p class="time" th:text="${combinedData.timetable.plannedDepartureTime}"></p>-->
+<!--            </div>-->
+<!--            <div class="entry-separator"></div>-->
+<!--            <div class="entry-section">-->
+<!--                <p class="label">Platform</p>-->
+<!--                <p class="platform-number" th:text="${combinedData.timetable.platformNumber}"></p>-->
+<!--            </div>-->
+<!--            <div class="entry-separator"></div>-->
+<!--            <div class="entry-section delay-section">-->
+<!--                <p class="label">Delay</p>-->
+<!--                <p class="price-section" th:text="${combinedData.journeyUpdate != null ? combinedData.journeyUpdate.delay : combinedData.timetable.delay}"></p>-->
+<!--                <p class="label">Estimated Time</p>-->
+<!--                <div class="train-destination">-->
+<!--                    <p class="end-station" th:text="${combinedData.journeyUpdate != null ? combinedData.journeyUpdate.arrivalTime : combinedData.timetable.arrivalTime}"></p>-->
+<!--                    <img th:src="@{/images/double_arrow_shadow.png}" alt="Arrow" class="small-arrow"/>-->
+<!--                    <p class="end-station"  th:text="${combinedData.journeyUpdate != null ? combinedData.journeyUpdate.departureTime : combinedData.timetable.departureTime}"></p>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--    </main>-->
+
+<!--    &lt;!&ndash; Footer &ndash;&gt;-->
+<!--    <div th:replace="~{fragments/footer :: footer}">-->
+<!--    </div>-->
+
+<!--</div>-->
+<!--</body>-->
+<!--</html>-->
