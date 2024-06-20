@@ -1,9 +1,7 @@
 package live.easytrain.application.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 
 import java.util.List;
 
@@ -17,29 +15,42 @@ public class User {
 
     private String title;
 
-    @NotNull(message = "Please enter the first name.")
+    @NotNull //(message = "Please enter a first name")
     @Size(min = 1, message = "Please enter the first name.")
     private String firstName;
 
-    @NotNull(message = "Please enter the last name.")
-    @Size(min = 1, message = "Please enter the last name.")
+    @NotNull(message = "Please enter a last name")
+    @Size(min = 1, message = "Please enter a last name.")
     private String lastName;
+
+
+    @NotNull
+    @Size(min = 1, message = "Please enter an email address")
+    @Pattern(regexp = "^[A-Za-z0-9+_.-]+@(.+)$", message = "Please enter a valid email address")
+    private String email;
 
     private int age;
 
-    @NotNull(message = "Please enter the email.")
-    @Size(min = 1, message = "Please enter the email.")
-    @Pattern(regexp = "^[A-Za-z0-9+_.-]+@(.+)$", message = "Please enter a valid email.")
-    private String email;
-
     //    @Pattern(regexp = "^(\\d{3}[- .]?){2}\\d{4}$", message = "Please enter a valid phone number.")
+    @Size(min = 1, message = "Please enter a street name")
+    private String streetName;
+
+    @Size(min = 1, message = "Please enter a street number")
+    private String streetNumber;
+
+    @Size(min = 1, message = "Please enter a city name")
+    private String city;
+
+    @Size(min = 1, message = "Please enter a postal code")
+    private String postalCode;
+
     private String phoneNumber;
 
-    @NotNull(message = "Please enter the password.")
-/*    @Pattern(
-            regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]+$",
-            message = "Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character."
-    )*/
+    //    @NotNull(message = "Please enter the password.")
+    /*    @Pattern(
+                regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]+$",
+                message = "Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character."
+        )*/
     private String password;
 
     private Boolean enabled;
@@ -47,20 +58,11 @@ public class User {
     @Column(name = "verification_code", length = 64)
     private String verificationCode;
 
-    @Size(min = 1, message = "Please enter the street name.")
-    private String streetName;
-
-    private String streetNumber;
-
-    private String city;
-
-    @Size(min = 1, message = "Please enter the postal code.")
-    private String postalCode;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Role> roles;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Booking> bookings;
 
     public List<Booking> getBookings() {

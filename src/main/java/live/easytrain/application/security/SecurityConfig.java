@@ -43,6 +43,7 @@ public class SecurityConfig {
                                 .requestMatchers("/register").permitAll()
                                 .requestMatchers("/timetables/**").permitAll()
                                 .requestMatchers("/process_registration").permitAll()
+                                .requestMatchers("/profile/**").permitAll()
                                 .requestMatchers("/login").permitAll()
                                 .anyRequest().permitAll()
 //                                .anyRequest().authenticated()

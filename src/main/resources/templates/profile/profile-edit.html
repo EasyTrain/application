@@ -12,7 +12,7 @@
 
 <div class="container">
     <!-- Header -->
-    <div th:replace="~{fragments/header-profile-logout :: header-profile-logout}">
+    <div th:replace="~{fragments/header-login-register :: header-login-register}">
     </div>
 
     <!-- Navigation -->
@@ -26,15 +26,14 @@
 
         <!-- Content Container for orange-content-container -->
         <div class="orange-content-container">
-            <p class="orange-content-text">Peter Mayer</p> <!-- Exchange with Thymeleaf Expression firstName and lastName -->
+            <p class="orange-content-text"><span th:text="${user.firstName} + ' ' + ${user.lastName}"/></p>
         </div>
 
-
-        <!-- Edit Section -->
-
         <div class="form-container">
-            <form method="POST" action="/profile/update">
-                <!-- Add the appropriate action URL and method -->
+            <form th:action="@{/profile/edit}" th:object="${user}" method="POST">
+
+                <input th:field="*{id}" id="id" name="id" type="hidden"/>
+                <input th:field="*{password}" id="password" name="password" type="hidden"/>
 
                 <h2 class="section-title">Personal Information</h2>
 
@@ -42,12 +41,12 @@
                     <div class="form-group">
                         <label for="title" class="form-label">Title</label>
                         <select id="title" class="form-control custom-input">
+                            <option value="" disabled selected>Select Title</option>
                             <option value="Mr">Mr</option>
                             <option value="Ms">Ms</option>
                             <option value="Dr">Dr</option>
                             <option value="Prof">Prof</option>
                         </select>
-                        <!-- th:field="${profile.title}" -->
                     </div>
                     <div class="form-group">
                         <!-- empty field -->
@@ -57,53 +56,72 @@
                 <div class="row">
                     <div class="form-group">
                         <label for="firstName" class="form-label">First Name</label>
-                        <input id="firstName" class="form-control custom-input" placeholder="First Name" value="Peter"/>
-                        <!-- th:field="${profile.firstName}" -->  <!-- Take out the value - also for the other fields below -->
+                        <input th:field="*{firstName}" id="firstName" class="form-control custom-input"
+                               placeholder="First Name"/>
+                        <span th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" class="error"></span>
                     </div>
                     <div class="form-group">
                         <label for="lastName" class="form-label">Last Name</label>
-                        <input id="lastName" class="form-control custom-input" placeholder="Last Name" value="Mayer"/>
-                        <!-- th:field="${profile.lastName}" -->
+                        <input th:field="*{lastName}" id="lastName" class="form-control custom-input"
+                               placeholder="Last Name"/>
+                        <span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class="error"></span>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="form-group">
                         <label for="age" class="form-label">Age</label>
-                        <input id="age" class="form-control custom-input" type="number" placeholder="Age" value="34"/>
-                        <!-- th:field="${profile.age}" -->
+                        <input th:if="${user.age > 0}" id="age" name="age" type="number" th:field="${user.age}"
+                               class="form-control custom-input"/>
+                        <input th:if="${user.age == 0}" type="number" class="form-control custom-input"
+                               placeholder="Age"/>
+                        <span th:if="${#fields.hasErrors('age')}" th:errors="*{age}" class="error"></span>
                     </div>
                     <div class="form-group">
-                        <!-- empty field -->
+                        <!-- empty field required for maintaining form field spacing -->
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="form-group">
                         <label for="streetName" class="form-label">Street Name</label>
-                        <input id="streetName" class="form-control custom-input" placeholder="Street Name" value="Musterstraße"/>
-                        <!-- th:field="${profile.streetName}" -->
+                        <input th:if="${user.streetName != null}" type="text" th:field="${user.streetName}"
+                               class="form-control custom-input"/>
+                        <span th:if="${#fields.hasErrors('streetName')}" th:errors="*{streetName}" class="error"></span>
+                        <input th:if="${user.streetName == null}" class="form-control custom-input" id="streetName"
+                               name="streetName" placeholder="Street Name"/>
                     </div>
+
                     <div class="form-group">
                         <label for="streetNumber" class="form-label">Street Number</label>
-                        <input id="streetNumber" class="form-control custom-input" placeholder="Street Number" value="123"/>
-                        <!-- th:field="${profile.streetNumber}" -->
+                        <input th:if="${user.streetNumber != null}" type="text" th:field="${user.streetNumber}"
+                               class="form-control custom-input"/>
+                        <span th:if="${#fields.hasErrors('streetNumber')}" th:errors="*{streetNumber}"
+                              class="error"></span>
+                        <input th:if="${user.streetNumber == null}" class="form-control custom-input" id="streetNumber"
+                               name="streetNumber" placeholder="Street Number"/>
+
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="form-group">
-                        <label for="plz" class="form-label">PLZ</label>
-                        <input id="plz" class="form-control custom-input" placeholder="PLZ" value="12345"/>
-                        <!-- th:field="${profile.plz}" -->
+                        <label for="postalCode" class="form-label">PLZ</label>
+                        <input th:if="${user.postalCode != null}" type="text" th:field="${user.postalCode}"
+                               class="form-control custom-input"/>
+                        <span th:if="${#fields.hasErrors('postalCode')}" th:errors="*{postalCode}" class="error"></span>
+                        <input th:if="${user.postalCode == null}" class="form-control custom-input" id="postalCode"
+                               name="postalCode" placeholder="Postal Code"/>
                     </div>
                     <div class="form-group">
                         <label for="city" class="form-label">City</label>
-                        <input id="city" class="form-control custom-input" placeholder="City" value="Frankfurt"/>
-                        <!-- th:field="${profile.city}" -->
+                        <input th:if="${user.city != null}" type="text" th:field="${user.city}"
+                               class="form-control custom-input"/>
+                        <span th:if="${#fields.hasErrors('city')}" th:errors="*{city}" class="error"></span>
+                        <input th:if="${user.city == null}" class="form-control custom-input" id="city"
+                               name="city" placeholder="City"/>
                     </div>
                 </div>
-
 
                 <!-- Section Break -->
                 <div class="section-break"></div>
@@ -113,13 +131,16 @@
                 <div class="row">
                     <div class="form-group">
                         <label for="email" class="form-label">e-Mail</label>
-                        <input id="email" class="form-control custom-input" type="email" placeholder="e-Mail" value="peter.mayer@example.com"/>
-                        <!-- th:field="${profile.email}" -->
+                        <input th:field="*{email}" id="email" class="form-control custom-input" type="email"
+                               name="email" placeholder="user@email.com"/>
                     </div>
+
                     <div class="form-group">
                         <label for="phoneNumber" class="form-label">Phone Number</label>
-                        <input id="phoneNumber" class="form-control custom-input" placeholder="Phone Number" value="0151-56258774"/>
-                        <!-- th:field="${profile.phoneNumber}" -->
+                        <input th:if="${user.phoneNumber != null}" type="text" th:field="${user.phoneNumber}"
+                               class="form-control custom-input"/>
+                        <input th:if="${user.phoneNumber == null}" class="form-control custom-input" id="phoneNumber"
+                               name="phoneNumber" placeholder="Phone Number"/>
                     </div>
                 </div>
 
@@ -135,7 +156,6 @@
     <div th:replace="~{fragments/footer :: footer}">
     </div>
 </div>
-
 
 </body>
 </html>

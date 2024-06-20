@@ -30,7 +30,6 @@ public class JourneyUpdateService implements JourneyUpdateServiceInterface {
     // Retrieve journey updates by scheduleId
     @Override
     public List<JourneyUpdate> getJourneyUpdatesByScheduleId(String scheduleId) {
-        System.out.println("Fetching JourneyUpdates for scheduleId: " + scheduleId);
         // Call journeyUpdates for scheduleId
         List<JourneyUpdate> allJourneyUpdates = journeyUpdateRepo.findByScheduleId(scheduleId);
         // Filter journeyUpdates by changes in delay
@@ -42,7 +41,6 @@ public class JourneyUpdateService implements JourneyUpdateServiceInterface {
             }
             previousUpdate = update;
         }
-        System.out.println("Filtered JourneyUpdates: " + filteredJourneyUpdates);
         // Save and return filtered journeyUpdates in database
         journeyUpdateRepo.saveAll(filteredJourneyUpdates);
         return filteredJourneyUpdates;
@@ -51,7 +49,6 @@ public class JourneyUpdateService implements JourneyUpdateServiceInterface {
     @Override
     @Transactional
     public List<JourneyUpdate> saveJourneyUpdates(String stationName, boolean recentChanges) {
-        System.out.println("Saving JourneyUpdates for station: " + stationName + " with recentChanges: " + recentChanges);
         // Get the evaNumber for the station
         Integer evaNumber = stationService.evaNumberByStationName(stationName);
         // Use evaNumber to fetch data
@@ -70,7 +67,6 @@ public class JourneyUpdateService implements JourneyUpdateServiceInterface {
             }
         }
         journeyUpdateRepo.saveAll(journeyUpdates);
-        System.out.println("Saved JourneyUpdates: " + journeyUpdates);
         return journeyUpdates;
     }
     // Method to check if a timetable entry represents a recent change
@@ -78,7 +74,6 @@ public class JourneyUpdateService implements JourneyUpdateServiceInterface {
         // Check if recentChanges flag is true and if the timetable delay has changed
         return recentChanges && timetable.getDelay() != null;
     }
-
     @Override
     public List<JourneyUpdate> findAll(String stationName) {
         // Get the evaNumber for the station

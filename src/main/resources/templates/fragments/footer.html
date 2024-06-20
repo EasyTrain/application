@@ -17,6 +17,7 @@
     <!-- offcanvas -->
     <div class="offcanvas offcanvas-end" tabindex="-1" id="profile" aria-labelledby="profile-label">
         <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="profile-label">Profile</h5>
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
@@ -32,7 +33,7 @@
             <hr>
             <h4 class="section-title">Settings</h4>
             <a class="link" th:href="@{/profile}">Complete Profile</a>
-            <a class="link" th:href="@{/profile}">Edit Profile</a>
+            <a class="link" th:href="@{/profile/edit}">Edit Profile</a>
             <a class="link" th:href="@{/}">Change Email</a>
             <a class="link" th:href="@{/}">Delete Account</a>
             <hr>
