@@ -40,8 +40,8 @@
                 <div class="row">
                     <div class="form-group">
                         <label for="title" class="form-label">Title</label>
-                        <select id="title" class="form-control custom-input">
-                            <option value="" disabled selected>Select Title</option>
+                        <select th:field="*{title}" id="title" name="title" class="form-control custom-input">
+                            <option value="">Select Title</option>
                             <option value="Mr">Mr</option>
                             <option value="Ms">Ms</option>
                             <option value="Dr">Dr</option>
@@ -73,7 +73,7 @@
                         <label for="age" class="form-label">Age</label>
                         <input th:if="${user.age > 0}" id="age" name="age" type="number" th:field="${user.age}"
                                class="form-control custom-input"/>
-                        <input th:if="${user.age == 0}" type="number" class="form-control custom-input"
+                        <input th:if="${user.age == 0}" name="age" type="number" class="form-control custom-input"
                                placeholder="Age"/>
                         <span th:if="${#fields.hasErrors('age')}" th:errors="*{age}" class="error"></span>
                     </div>
@@ -100,7 +100,6 @@
                               class="error"></span>
                         <input th:if="${user.streetNumber == null}" class="form-control custom-input" id="streetNumber"
                                name="streetNumber" placeholder="Street Number"/>
-
                     </div>
                 </div>
 
