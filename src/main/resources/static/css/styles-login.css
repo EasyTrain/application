@@ -1,21 +1,20 @@
 /* Styles for Main Section */
 
 .main-background {
-
-    height: 70vh;
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
     position: relative;
+    min-height: 50vh;
 }
 
 .main-title-blue {
     color: #13152F;
     font-size: 3.50rem;
     font-weight: bold;
-    margin-top: 15%;
+    margin-top: 5%;
     margin-bottom: 4%;
 }
 
@@ -80,6 +79,23 @@
 
 .form-link:hover {
     color: #13152F;
+    text-decoration: underline;
+}
+
+.text-form-link-blue {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.form-link-blue {
+    color: #13152F;
+    font-size: 1.25rem;
+    text-decoration: none;
+}
+
+.form-link-blue:hover {
+    color: #F47950;
     text-decoration: underline;
 }
 
