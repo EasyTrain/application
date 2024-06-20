@@ -3,9 +3,9 @@
 .text-primary-custom {
     color: #13152F !important;
 }
-.text-primary-custom:hover {
-    text-decoration: underline;
-}
+/*.text-primary-custom:hover {*/
+/*    text-decoration: underline;*/
+/*}*/
 
 /* Logo Image */
 .logo-img {

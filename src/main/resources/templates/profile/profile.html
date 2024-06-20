@@ -54,14 +54,14 @@
                 <!-- Exchange with Thymeleaf Expression age -->
             </div>
             <div class="row">
-                <p class="blue-text-bold">Street Name:</p>
+                <p class="blue-text-bold">Street:</p>
                 <p class="blue-text"><span th:text="${user.streetName}? ${user.streetName} : ''"/></p>
                 <!-- Exchange with Thymeleaf Expression street and street number -->
             </div>
             <div class="row">
                 <p class="blue-text-bold">City:</p>
                 <p class="blue-text"><span
-                        th:text="${user.postalCode}? ${user.postalCode} : ''"/>&nbsp&nbsp&nbsp&nbsp<span
+                        th:text="${user.postalCode}? ${user.postalCode} : ''"/>&nbsp<span
                         th:text="' ' + ${user.city}? ${user.city} : ''"/></p>
                 <!-- Exchange with Thymeleaf Expression zipCode and city -->
             </div>
