@@ -101,4 +101,4 @@ You are free to use, modify, and distribute this software under the terms of the
 
 ## Acknowledgements
 
-The project was created as a final project for DCI - Digital Career Institute. Special thanks to our teachers Bardha Islami, Nootan Vijapure, and our mentor Safwan Kher.
+The project was created as a final project for DCI - Digital Career Institute. Special thanks to our teachers Bardha Islami, Nootan Vijapure, and our mentor Safwan Kherallah.
