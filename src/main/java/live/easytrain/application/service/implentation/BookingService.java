@@ -70,9 +70,9 @@ public class BookingService implements BookingServiceInterface {
 
         List<Booking> bookings = bookingRepo.findAllByUserId(id);
 
-        if (bookings.isEmpty()) {
-            throw new BookingNotFoundException("Booking not found!");
-        }
+//        if (bookings.isEmpty()) {
+//            throw new BookingNotFoundException("Booking not found!");
+//        }
         return bookings;
     }
 

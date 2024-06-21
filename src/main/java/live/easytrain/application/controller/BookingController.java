@@ -259,8 +259,25 @@ public class BookingController {
         User userAuth = userService.getUserByEmail(email);
         List<Booking> journeys = bookingService.getAllBookingsById(userAuth.getId());
 
+        List<Booking> journeyBookings = new ArrayList<>();
 
-        model.addAttribute("journeys", journeys);
+        if (journeys.isEmpty()) {
+            model.addAttribute("journeys", "No journeys found!");
+        } else {
+
+            for (Booking booking : journeys) {
+                if (!booking.isFinalized()) {
+                    journeyBookings.add(booking);
+                }
+            }
+
+            if (journeyBookings.isEmpty()) {
+                model.addAttribute("journeys", journeys);
+                return "profile/journeys-history";
+            } else{
+                model.addAttribute("journeys", journeyBookings);
+            }
+        }
 
         return "profile/journeys";
     }
