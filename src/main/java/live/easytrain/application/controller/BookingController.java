@@ -271,7 +271,7 @@ public class BookingController {
                 }
             }
 
-            if (journeyBookings.isEmpty()) {
+            if (!journeyBookings.isEmpty()) {
                 model.addAttribute("journeys", journeys);
                 return "profile/journeys-history";
             } else{
