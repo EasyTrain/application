@@ -83,6 +83,11 @@ public class UserController {
         return "login";
     }
 
+    @GetMapping("/logout-page")
+    public String displayLogout() {
+        return "logout";
+    }
+
     @GetMapping("/forgot/email_form")
     public String displayEmailForm(Model model) {
         Email email = new Email();

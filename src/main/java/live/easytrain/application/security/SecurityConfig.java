@@ -61,7 +61,7 @@ public class SecurityConfig {
                 .logout()
                 .deleteCookies("SESSION")
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .logoutSuccessUrl("/login");
+                .logoutSuccessUrl("/logout-page");
 
         return httpSecurity.build();
     }
