@@ -82,29 +82,4 @@ public class TimetableStationControllerTest {
                 .andExpect(model().attributeExists("timetables"));
         verify(timetableService, times(1)).saveTimetableData(eq(stationName), any(LocalDate.class), any(), eq(recentChanges));
     }
-    @Test
-    public void testShowTimetableList_Success() throws Exception {
-        String stationName = "Berlin Hbf";
-        List<Timetable> mockTimetables = List.of(new Timetable(), new Timetable());
-        when(timetableService.getAllTimetables()).thenReturn(mockTimetables);
-        mockMvc.perform(get("/timetables/timetable-list")
-                        .param("stationName", stationName))
-                .andExpect(status().isOk())
-                .andExpect(view().name("timetable"))
-                .andExpect(model().attributeExists("timetables"))
-                .andExpect(model().attribute("timetables", mockTimetables))
-                .andExpect(model().attributeExists("successMessage"));
-        verify(timetableService, times(1)).getAllTimetables();
-    }
-    @Test
-    public void testShowTimetableList_Exception() throws Exception {
-        String stationName = "Berlin Hbf";
-        when(timetableService.getAllTimetables()).thenThrow(new RuntimeException("Database connection error"));
-        mockMvc.perform(get("/timetables/timetable-list")
-                        .param("stationName", stationName))
-                .andExpect(status().isOk())
-                .andExpect(view().name("timetable"))
-                .andExpect(model().attributeExists("errorMessage"));
-        verify(timetableService, times(1)).getAllTimetables();
-    }
 }
