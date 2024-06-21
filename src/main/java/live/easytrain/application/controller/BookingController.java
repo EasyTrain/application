@@ -37,6 +37,8 @@ public class BookingController {
     private UserServiceInterface userService;
 
     private List<Timetable> timetablesDestinations = new ArrayList<>();
+    private boolean journeyById = false;
+    private Long journeyId;
 
     @Autowired
     public BookingController(BookingServiceInterface bookingService, TimetableServiceInterface timetableService,
@@ -173,9 +175,11 @@ public class BookingController {
 
             User userAuth = userService.getUserByEmail(email);
 
+            // Not work
             selectedTrain.setUser(userAuth);
-            bookingService.createBooking(selectedTrain);
-
+//            if (selectedTrain.getId() == 0L) {
+//                bookingService.createBooking(selectedTrain);
+//            }
             bookingDto.setBooking(selectedTrain);
 
             Ticket ticket = new Ticket(bookingDto.getTicket().getGender(), bookingDto.getTicket().getFullName(),
@@ -194,8 +198,17 @@ public class BookingController {
                 String paymentStatus = paymentResponse.fetchPaymentResponse(encryptedData, ticket.getFinalPrice());
 
                 if (paymentStatus.equalsIgnoreCase("success")) {
-                    selectedTrain.setFinalized(true);
-                    bookingService.createBooking(selectedTrain);
+
+                    if (journeyById) {
+                        Booking b = bookingService.getBookingById(journeyId);
+                        b.setFinalized(true);
+                        selectedTrain = bookingService.createBooking(b);
+                        journeyId = 0L;
+                        journeyById = false;
+                    } else {
+                        selectedTrain.setFinalized(true);
+                        bookingService.createBooking(selectedTrain);
+                    }
 
                     ticket.setBooking(selectedTrain);
                     Ticket savedTicket = ticketService.createTicket(ticket);
@@ -271,10 +284,10 @@ public class BookingController {
                 }
             }
 
-            if (!journeyBookings.isEmpty()) {
+            if (journeyBookings.isEmpty()) {
                 model.addAttribute("journeys", journeys);
                 return "profile/journeys-history";
-            } else{
+            } else {
                 model.addAttribute("journeys", journeyBookings);
             }
         }
@@ -294,10 +307,11 @@ public class BookingController {
         bookingDto.setTicket(new Ticket());
         bookingDto.setPayment(new Payment());
 
+        journeyById = true;
+        journeyId = selectedTrain.getId();
         model.addAttribute("booking", bookingDto);
 
         return "booking/booking";
-
     }
 
 }
