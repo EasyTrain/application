@@ -118,6 +118,10 @@ public class UserController {
     public String verifyResetPassword(@Param("code") String code, Model model) {
         if (userService.verify(code)) {
             ChangePasswordRequest changePasswordRequest = new ChangePasswordRequest();
+
+            // required to bypass validation on reset_password_form.html
+            changePasswordRequest.setPassword("********");
+
             Email email = new Email();
             model.addAttribute("changePasswordRequest", changePasswordRequest);
             model.addAttribute("email", email);
@@ -146,7 +150,7 @@ public class UserController {
     }
 
     @GetMapping("/change_password")
-    public String displayChangePasswordForm(Model model ) {
+    public String displayChangePasswordForm(Model model) {
 
         model.addAttribute("changePasswordRequest", new ChangePasswordRequest());
 
