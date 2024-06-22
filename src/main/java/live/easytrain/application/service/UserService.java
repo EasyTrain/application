@@ -8,6 +8,8 @@ import live.easytrain.application.entity.ChangePasswordRequest;
 import live.easytrain.application.entity.Email;
 import live.easytrain.application.entity.Role;
 import live.easytrain.application.entity.User;
+import live.easytrain.application.exceptions.IncorrectPasswordException;
+import live.easytrain.application.exceptions.PasswordsDontMatchException;
 import live.easytrain.application.exceptions.UserNotFoundException;
 import live.easytrain.application.repository.RoleRepository;
 import live.easytrain.application.repository.UserRepository;
@@ -19,6 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
+import java.security.Principal;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -81,7 +84,7 @@ public class UserService implements UserServiceInterface {
                 + "Please click the link below to verify your registration:<br>"
                 + "<h3><a href=\"[[URL]]\" target=\"_self\">VERIFY</a></h3>"
                 + "Thank you,<br>"
-                + "EasyTrain Team.";
+                + "EasyTrain Team";
 
         MimeMessage message = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
@@ -154,7 +157,6 @@ public class UserService implements UserServiceInterface {
         Optional<User> user = userRepository.findByEmail(email);
 
         if (user.isPresent()) {
-            System.out.println("User is present. Disabling account!");
             String randomCode = RandomStringUtils.randomAlphabetic(64);
             user.get().setVerificationCode(randomCode);
             user.get().setEnabled(false);
@@ -194,7 +196,7 @@ public class UserService implements UserServiceInterface {
                 + "Please click the link below to reset your password:<br>"
                 + "<h3><a href=\"[[URL]]\" target=\"_self\">RESET PASSWORD</a></h3>"
                 + "Thank you,<br>"
-                + "EasyTrain Team.";
+                + "EasyTrain Team";
 
         MimeMessage message = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
@@ -228,4 +230,55 @@ public class UserService implements UserServiceInterface {
         }
         return false;
     }
+
+    public void changePassword(Principal principal, ChangePasswordRequest changePasswordRequest, String siteURL) throws Exception {
+        User user = getUserByEmail(principal.getName());
+        String currentPassword = user.getPassword();
+
+        if (!passwordEncoder.matches(changePasswordRequest.getPassword(), currentPassword)) {
+            throw new IncorrectPasswordException("You entered the wrong password.");
+        } else if (!changePasswordRequest.confirmPasswords()) {
+            throw new PasswordsDontMatchException("The passwords you entered don't match.");
+        } else {
+            String encodedPassword = passwordEncoder.encode(changePasswordRequest.getNewPassword());
+            user.setPassword(encodedPassword);
+            userRepository.save(user);
+
+            try {
+                sendEmailChanged(user, siteURL);
+            } catch (MessagingException | UnsupportedEncodingException e) {
+                System.out.println(e.fillInStackTrace());
+            }
+        }
+    }
+
+    private void sendEmailChanged(User user, String siteURL)
+            throws MessagingException, UnsupportedEncodingException {
+        String toAddress = user.getEmail();
+        String fromAddress = "easyice2024@gmail.com";
+        String senderName = "EasyTrain";
+        String subject = "Password Changed";
+        String content = "Dear [[name]],<br><br>"
+                + "Your password has been changed.<br>"
+                + "<h3><a href=\"[[URL]]\" target=\"_self\">Easytrain</a></h3>"
+                + "Thank you,<br><br>"
+                + "EasyTrain Team";
+
+        MimeMessage message = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message);
+
+        helper.setFrom(fromAddress, senderName);
+        helper.setTo(toAddress);
+        helper.setSubject(subject);
+
+        content = content.replace("[[name]]", user.getFirstName() + " " + user.getLastName());
+        String path = siteURL + "/";
+
+        content = content.replace("[[URL]]", path);
+
+        helper.setText(content, true);
+
+        javaMailSender.send(message);
+    }
+
 }

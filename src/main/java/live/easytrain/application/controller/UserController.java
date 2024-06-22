@@ -7,6 +7,8 @@ import live.easytrain.application.dto.UserRegistrationDto;
 import live.easytrain.application.entity.ChangePasswordRequest;
 import live.easytrain.application.entity.Email;
 import live.easytrain.application.entity.User;
+import live.easytrain.application.exceptions.IncorrectPasswordException;
+import live.easytrain.application.exceptions.PasswordsDontMatchException;
 import live.easytrain.application.repository.UserRepository;
 import live.easytrain.application.service.UserService;
 import org.springframework.data.repository.query.Param;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.io.UnsupportedEncodingException;
+import java.security.Principal;
 
 @Controller
 public class UserController {
@@ -140,5 +143,37 @@ public class UserController {
         } else {
             return "forgot/password_change_failure";
         }
+    }
+
+    @GetMapping("/change_password")
+    public String displayChangePasswordForm(Model model ) {
+
+        model.addAttribute("changePasswordRequest", new ChangePasswordRequest());
+
+        return "change_password/change_password_form";
+    }
+
+    @PostMapping("/change_password")
+    public String changePassword(Principal principal, @Valid @ModelAttribute("changePasswordRequest") ChangePasswordRequest changePasswordRequest, BindingResult bindingResult, HttpServletRequest request) {
+
+        if (bindingResult.hasErrors()) {
+            return "change_password/change_password_form";
+        }
+
+        try {
+            userService.changePassword(principal, changePasswordRequest, getSiteURL(request));
+
+        } catch (IncorrectPasswordException e) {
+            bindingResult.addError(new FieldError("incorrectPassword", "password", e.getMessage()));
+            return "change_password/change_password_form";
+        } catch (PasswordsDontMatchException e) {
+            bindingResult.addError(new FieldError("passwordsDontMatch", "newPassword", ""));
+            bindingResult.addError(new FieldError("passwordsDontMatch", "confirmationPassword", e.getMessage()));
+            return "change_password/change_password_form";
+        } catch (Exception e) {
+            return "register/register_form";
+        }
+
+        return "change_password/password_change_success";
     }
 }

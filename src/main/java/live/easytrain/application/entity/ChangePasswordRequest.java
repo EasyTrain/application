@@ -5,24 +5,27 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 
 public class ChangePasswordRequest {
-    private String currentPassword;
+    @NotEmpty(message = "Enter current password")
+    @Size(min = 8, message = "")
+    private String password;
 
-    @NotEmpty
-    @Size(min = 8, message = "Password must be at least 8 characters long")
+    @NotEmpty(message = "New password must be at least 8 characters long")
+    @Size(min = 8, message = "")
     private String newPassword;
 
-    @NotEmpty
-    @Size(min = 8, message = "Password must be at least 8 characters long")
+    @NotEmpty(message = "Password must be at least 8 characters long")
+    @Size(min = 8, message = "")
     private String confirmationPassword;
 
     public ChangePasswordRequest() {
     }
-    public String getCurrentPassword() {
-        return currentPassword;
+
+    public String getPassword() {
+        return password;
     }
 
-    public void setCurrentPassword(String currentPassword) {
-        this.currentPassword = currentPassword;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getNewPassword() {
@@ -41,6 +44,10 @@ public class ChangePasswordRequest {
         this.confirmationPassword = confirmationPassword;
     }
 
+    public boolean confirmPassword(String passwordToCheck) {
+        return passwordToCheck.equals(password);
+    }
+
     public boolean confirmPasswords() {
         return newPassword.equals(confirmationPassword);
     }
@@ -49,7 +56,7 @@ public class ChangePasswordRequest {
     @Override
     public String toString() {
         return "ChangePasswordRequest{" +
-                "currentPassword='" + currentPassword + '\'' +
+                "currentPassword='" + password + '\'' +
                 ", newPassword='" + newPassword + '\'' +
                 ", confirmationPassword='" + confirmationPassword + '\'' +
                 '}';

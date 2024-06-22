@@ -44,6 +44,7 @@ public class SecurityConfig {
                                 .requestMatchers("/timetables/**").permitAll()
                                 .requestMatchers("/process_registration").permitAll()
                                 .requestMatchers("/profile/**").permitAll()
+                                .requestMatchers("/change_password/**").permitAll()
                                 .requestMatchers("/login").permitAll()
                                 .anyRequest().permitAll()
 //                                .anyRequest().authenticated()
