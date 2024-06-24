@@ -143,10 +143,20 @@ public class UserController {
         boolean isPasswordReset = userService.resetPassword(email, changePasswordRequest);
 
         if (isPasswordReset) {
-            return "forgot/password_change_success";
+            return "redirect:/forgot/change_success";
         } else {
-            return "forgot/password_change_failure";
+            return "redirect:/forgot/change_failure";
         }
+    }
+
+    @GetMapping("/forgot/change_success")
+    public String displayChangeSuccess() {
+        return "forgot/password_change_success";
+    }
+
+    @GetMapping("/forgot/change_failure")
+    public String displayChangeFailure() {
+        return "forgot/password_change_failure";
     }
 
     @GetMapping("/change_password")
