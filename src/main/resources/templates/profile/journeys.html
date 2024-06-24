@@ -38,6 +38,9 @@
             <p class="orange-content-text">Your Travel Plans</p>
         </div>
 
+        <div class="orange-content-container" th:if="${journeyError}">
+            <div> <span class="orange-content-text" th:text="${journeyError}"></span></div>
+        </div>
         <!-- Content Container for Journeys -->
 
         <div class="timetable-entry-container" th:each="journey : ${journeys}">

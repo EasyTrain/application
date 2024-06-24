@@ -274,22 +274,26 @@ public class BookingController {
 
         List<Booking> journeyBookings = new ArrayList<>();
 
-        if (journeys.isEmpty()) {
-            model.addAttribute("journeys", "No journeys found!");
-        } else {
+        try {
+            if (journeys.isEmpty()) {
+                throw new RuntimeException("No journeys found!");
+            } else {
 
-            for (Booking booking : journeys) {
-                if (!booking.isFinalized()) {
-                    journeyBookings.add(booking);
+                for (Booking booking : journeys) {
+                    if (!booking.isFinalized()) {
+                        journeyBookings.add(booking);
+                    }
+                }
+
+                if (journeyBookings.isEmpty()) {
+                    model.addAttribute("journeys", journeys);
+                    return "profile/journeys-history";
+                } else {
+                    model.addAttribute("journeys", journeyBookings);
                 }
             }
-
-            if (journeyBookings.isEmpty()) {
-                model.addAttribute("journeys", journeys);
-                return "profile/journeys-history";
-            } else {
-                model.addAttribute("journeys", journeyBookings);
-            }
+        } catch (RuntimeException e) {
+            model.addAttribute("journeyError", e.getMessage());
         }
 
         return "profile/journeys";
