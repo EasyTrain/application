@@ -61,7 +61,7 @@ public class ApiDataToEntities {
             }
 
             if (sTypesICE.isEmpty()) {
-                throw new RuntimeException("No Trains found on trajectory!");
+                throw new RuntimeException("No Trains found for this journey!");
             } else {
                 for (SType sTypeIce : sTypesICE) {
 
