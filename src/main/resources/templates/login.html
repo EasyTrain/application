@@ -29,7 +29,7 @@
         <h1 class="main-title-blue text-center">Please Log In</h1>
 
         <!-- Check for login error -->
-        <div th:if="${param.error}">
+        <div class="error" th:if="${param.error}">
             <em>Please enter a valid username and password!</em>
         </div>
 
@@ -38,7 +38,7 @@
         </div>
 
         <div class="form-container text-center mt-auto mb-5">
-            <form action="#" th:action="@{/authenticate_user}" method="POST">
+            <form th:action="@{/authenticate_user}" method="POST">
                 <div class="row">
                     <div class="form-group">
                         <label for="email" class="form-label">Email</label>
