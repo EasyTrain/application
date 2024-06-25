@@ -1,4 +1,7 @@
+![Easytrain home page](pictures/easytrain-home-2024-06-25-08-31-10.png)
+
 # EasyTrain: Train Booking Application
+
 
 ## A project by
 
