@@ -94,7 +94,12 @@ In today's fast-paced world, travelers face numerous challenges when booking tra
 - Jakarta EE (JAX-WS)
 
 ### Cloud Services
-- AWS Cloud
+
+- Amazon Web Services
+- Terraform
+- Packer
+
+![AWS Architecture](pictures/easytrain.drawio.png)
 
 ## License
 
