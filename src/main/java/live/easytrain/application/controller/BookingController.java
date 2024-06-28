@@ -1,6 +1,7 @@
 package live.easytrain.application.controller;
 
 import jakarta.validation.Valid;
+import live.easytrain.application.api.payments.service.PaymentServiceInterface;
 import live.easytrain.application.config.*;
 import live.easytrain.application.dto.BookingDto;
 import live.easytrain.application.entity.*;
@@ -40,12 +41,16 @@ public class BookingController {
     private boolean journeyById = false;
     private Long journeyId;
 
+    // Payment simulator
+    //Uncomment the line below to test the app without api connection
+    //private PaymentServiceInterface paymentService;
+
     @Autowired
     public BookingController(BookingServiceInterface bookingService, TimetableServiceInterface timetableService,
                              DateTimeParserUtils dateTimeParser, TimetableUtils timetableUtils,
                              PaymentResponse paymentResponse, PaymentsEncryptConfig paymentsEncrypt,
                              TicketServiceInterface ticketService, TicketUtils ticketUtils, UserServiceInterface userService,
-                             EasyTrainMailSenderUtils bookingUtils) {
+                             EasyTrainMailSenderUtils bookingUtils/*, PaymentServiceInterface paymentService*/) {
 
         this.bookingService = bookingService;
         this.timetableService = timetableService;
@@ -57,6 +62,8 @@ public class BookingController {
         this.ticketUtils = ticketUtils;
         this.bookingUtils = bookingUtils;
         this.userService = userService;
+        //Uncomment the line below to test the app without api connection
+//        this.paymentService = paymentService;
     }
 
     @GetMapping("/booking")
@@ -175,11 +182,8 @@ public class BookingController {
 
             User userAuth = userService.getUserByEmail(email);
 
-            // Not work
             selectedTrain.setUser(userAuth);
-//            if (selectedTrain.getId() == 0L) {
-//                bookingService.createBooking(selectedTrain);
-//            }
+
             bookingDto.setBooking(selectedTrain);
 
             Ticket ticket = new Ticket(bookingDto.getTicket().getGender(), bookingDto.getTicket().getFullName(),
@@ -196,6 +200,10 @@ public class BookingController {
             try {
                 // Payment API request
                 String paymentStatus = paymentResponse.fetchPaymentResponse(encryptedData, ticket.getFinalPrice());
+
+                // Payment simulator
+                //Uncomment the line below to test the app without api connection
+                //paymentService.getPaymentId(encryptedData, ticket.getFinalPrice());
 
                 if (paymentStatus.equalsIgnoreCase("success")) {
 
