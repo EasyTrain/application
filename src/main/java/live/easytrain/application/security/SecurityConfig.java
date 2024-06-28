@@ -46,6 +46,7 @@ public class SecurityConfig {
                                 .requestMatchers("/logout-page").permitAll()
                                 .requestMatchers("/about-us").permitAll()
                                 .requestMatchers("/contact-us/**").permitAll()
+                                .requestMatchers("/api/**").permitAll()
                                 .requestMatchers("/login").permitAll()
                                 .anyRequest().authenticated()
                 )

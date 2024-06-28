@@ -10,15 +10,18 @@ import java.io.IOException;
 @Configuration
 public class PaymentResponse {
 
-    private static String _API_PAYMENT_URL = "http://localhost:8082/api-payments/pay?encryptedData=%s&billValue=%f";
-    private final static String ip_address = System.getenv("PUBLIC_IP");
+//    private static String _API_PAYMENT_URL = "http://localhost:8082/api-payments/pay?encryptedData=%s&billValue=%f";
+
+    // Application api
+    private static String _API_PAYMENT_URL = "http://localhost:8081/easytrain/api/pay?encryptedData=%s&billValue=%f";
+    // private final static String ip_address = System.getenv("PUBLIC_IP");
 
     public String fetchPaymentResponse(String encryptedData, double amount) {
 
-        if (ip_address != null) {
+       /* if (ip_address != null) {
             _API_PAYMENT_URL = "http://" + ip_address + ":8082/api-payments/pay?encryptedData=%s&billValue=%f";
             System.out.println(_API_PAYMENT_URL);
-        }
+        }*/
 
         String paymentStatus = "";
         OkHttpClient client = new OkHttpClient();
