@@ -96,9 +96,27 @@ In today's fast-paced world, travelers face numerous challenges when booking tra
 
 ### Cloud Services
 
-- Amazon Web Services
-- Terraform
-- Packer
+#### Amazon Web Services
+
+The EasyTrain application is deployed to AWS using a basic architecture pictured in the diagram below.
+
+#### Packer
+
+A custom Amazon Machine Image (AMI) was built using Ubuntu Server 24.04 LTS as the base image.
+Packer installs Open-JDK 21, PostgreSQL and the EasyTrain Spring Boot application. It then packages
+application and enables a Systemd service that starts the application when the instance starts up. The
+repo for the Packer template can be found at [easytrain/pakcer](https://github.com/EasyTrain/easytrain-packer).
+
+#### Terraform
+
+Terraform templates are used to provision all of the required AWS resources. A custom VPC is launched
+in the `eu-central-1` AWS region. Within the custom VPC, a public subnet is created in the `eu-central-1a`
+availability zone. A routing table directs traffic within and outside of the VPC via an internet gateway. The
+repo for the Terraform templates is can be found at [easytrain/terraform](https://github.com/EasyTrain/easytrain-terraform).
+
+A Route53 hosted zone resolves the [easytrain.live](https://easytrain.live/) domain which was purchased through
+Namecheap to load balancer. The load balancer sends all traffic to an EC2 instance that runs on a custom
+AMI build with Packer. A CA certificate is attached to the load balancer which secures traffic to the load balancer. 
 
 ![AWS Architecture](pictures/easytrain.drawio.png)
 
