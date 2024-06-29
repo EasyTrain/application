@@ -89,7 +89,7 @@ In today's fast-paced world, travelers face numerous challenges when booking tra
 - pgAdmin
 - MySQL
 - MySQL Workbench
-- DB Timetables API
+- [DB Timetables API](https://developers.deutschebahn.com/db-api-marketplace/apis/product/timetables)
 
 ### Web Services
 - Jakarta EE (JAX-WS)
