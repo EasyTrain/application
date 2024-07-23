@@ -91,6 +91,15 @@ In today's fast-paced world, travelers face numerous challenges when booking tra
 - MySQL Workbench
 - [DB Timetables API](https://developers.deutschebahn.com/db-api-marketplace/apis/product/timetables)
 
+### Security
+
+All communication between clients and the server is encrypted from end-to-end. Additionally, all passwords are hashed using the bcrypt algorithm before they are stored in the database.
+
+A valid email address is required to register an EasyTrain user account. After successfully creating an account, the user will receive and email with a verification email. Before a user can login they must enable their account by clicking the verification email.
+
+
+
+
 ### Web Services
 - Jakarta EE (JAX-WS)
 
@@ -100,9 +109,13 @@ In today's fast-paced world, travelers face numerous challenges when booking tra
 
 The EasyTrain application is deployed to AWS using a basic architecture pictured in the diagram below.
 
+A Route53 hosted zone resolves DNS inquiries to the load balancer. The load balancer then forwards requests to the application which runs on an EC2 instance.
+
+![AWS Architecture](pictures/easytrain.drawio.png)
+
 #### Packer
 
-A custom Amazon Machine Image (AMI) was built using Ubuntu Server 24.04 LTS as the base image.
+A custom Amazon Machine Image (AMI) is built using Ubuntu Server 24.04 LTS as the base image.
 Packer installs Open-JDK 21, PostgreSQL and the EasyTrain Spring Boot application. It then packages
 application and enables a Systemd service that starts the application when the instance starts up.
 
@@ -119,8 +132,6 @@ Namecheap to load balancer. The load balancer sends all traffic to an EC2 instan
 AMI build with Packer. A CA certificate is attached to the load balancer which secures traffic to the load balancer.
 
 The repo for the Terraform templates is can be found at [easytrain/terraform](https://github.com/EasyTrain/easytrain-terraform).
-
-![AWS Architecture](pictures/easytrain.drawio.png)
 
 ## License
 
